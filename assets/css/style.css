@@ -1,0 +1,20 @@
+body {
+
+    background-image: url(../imgs/background.svg);
+
+}
+
+.containerOfGame {
+
+    width: 600px;
+    margin: auto;
+    padding-top: 8%;
+
+}
+
+.gameBoard {
+
+    border: 10px solid rgb(153, 97, 38);
+    margin-top: 20px;
+
+}
