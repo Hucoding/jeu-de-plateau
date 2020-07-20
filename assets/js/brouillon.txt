@@ -1,0 +1,200 @@
+this.obstacles = numberOfObstacles;
+console.log('obstacles');
+
+for (let i = 0; i < this.obstacles; i++){
+
+    let numberCell = randomNumber();
+    let avaibleCell = $('td#'+numberCell);
+
+    // Si la class de l'element courant n'est ni obstacle ni weapons
+    if(!avaibleCell.hasClass('obstacle') && !avaibleCell.hasClass('weapons')) {
+        $('td#'+numberCell).addClass("obstacle"); // On le génère
+    } else {
+        i--; // Sinon on enlève 1 à la variable de parcourt pour garder le même nombre de génération 
+    }
+    
+} 
+
+this.weapons = numberOfWeapons;
+console.log('weapons');
+
+for(let i = 0; i < this.weapons; i++) {
+
+    let numberCell = randomNumber();
+    let avaibleCell = $('td#'+numberCell);
+
+    if(!avaibleCell.hasClass('obstacle') && !avaibleCell.hasClass('weapons')) {
+        $('td#'+numberCell).addClass("weapons");
+    } else {
+        i--;
+    } 
+    
+}
+
+let tableOfObstacles = new Array();
+let obstacleIsHere = "obstacle";
+let weaponIsHere = "weapons";
+
+$('TD').each(function() {
+    if($(this).hasClass('obstacle')) {
+        tableOfObstacles.push(obstacleIsHere);
+    } else if ($(this).hasClass('weapons')) {
+        tableOfObstacles.push(weaponIsHere);
+    } else {
+        tableOfObstacles.push("0");
+    }
+});
+
+console.log('Plateau de jeu:', tableOfObstacles);
+
+/*
+for (let i = 0; i < this.obstacles; i++){
+    let numberCell = randomNumber();
+    $('td#'+numberCell).addClass("obstacle");
+    this.position = false;
+    cellsIndex.push(this.position);
+    console.log(cellsIndex);
+}
+
+
+//fonction qui marche !
+    generateObstacles() {
+
+        this.obstacles = numberOfObstacles;
+        let i = 0;
+        do {
+            let numberCell = randomNumber();
+            let avaibleCell = $('td#'+numberCell);
+            if(!avaibleCell.hasClass('obstacle') && !avaibleCell.hasClass('weapons')) {
+                $('td#'+numberCell).addClass("obstacle") + i;
+            } else {
+                i--;
+            }
+            this.position = false;
+            cellsIndex.push(this.position); 
+            i++;
+        } while (i < this.obstacles);
+
+    }  
+
+
+
+*/
+
+    generateWeapons() {
+        
+        this.weapons = numberOfWeapons;
+        let i = 0;
+        do {
+            i++;
+            let numberCell = randomNumber();
+            let avaibleCell = $('td#'+numberCell);
+            if(!avaibleCell.hasClass('obstacle') && !avaibleCell.hasClass('weapons')) {
+                $('td#'+numberCell).addClass("weapons");
+                cellsWeapons[numberCell] = "false";
+            } else {
+                i--;
+            }            
+            console.log(cellsWeapons);
+
+        } while (i < this.weapons);
+    }  
+
+    /*gameBoard.checkConfig();*/
+
+    /*
+    checkConfig() {
+        let items = numberOfObstacles + numberOfWeapons;
+        
+        if(numberOfGameBox < items) {
+            alert("la somme d'obstacles et d'armes doit etre inférieur au nombres de cellules");
+            exit;
+        }
+
+    }
+    */
+
+    //this.firstPlayerPosition = firstPlayerPosition;
+    //this.secondPlayerPosition = secondPlayerPosition;
+
+
+            /////////////////////////////////////////////////////////////////////////////////////   ///////////////
+        // -> Si Vrai                                                                           // -> Alors la case n'est pas dispo
+
+        //console.log("isfree:", isfree);
+
+
+        //etape 1 : ajout des skins
+
+        //créer joueur 
+
+        //gestion visuel joueur
+
+        // créer arme pour chacun de joueurs
+
+        // créer joueur + arme
+
+        // Prévoir joueur et arme sur meme cellule
+        // Le joueur commence avec une arme 
+        // arme portée par id du player 
+        // ancienne arme et nouvelle arme du joueur
+        // puissance de degat egale à puissance de l'arme
+        // anticipé joueur à une position + un nom + une puissance + une vie + un visuel
+        // skin des armes par le biais d'une classe css
+        // background url -> joueur -> via une classe -> pour la cellule //pas possible de remettre arme dessus
+        // <span> avec la classe arme -> z-index 
+
+        // génération des skin différents des armes
+        // génération des joueur avec leur skin 
+        // vérif sur cellule libre pour inserer joueur
+        // verif cellule dispo ou pas 
+        // crée arme de base -> meme position que le joueur -> insertion tableau armes
+        // création de l'arme et du joueur
+        // récupération dune nouvelle arme en remplacement de l'ancienne 
+
+        // skin arme et obstcale OK
+        // skin joueur  OK
+        //
+
+
+                    //let imageUrl = "assets/imgs/players/"+ playerSkin +".png";
+            //this.skin = imageUrl;
+            //element.css("background-image", "url(" + this.skin + ")"); 
+
+                        //let imageUrl = "assets/imgs/players/"+ playerSkin +".png";
+            //this.skin = imageUrl;
+            //element.css("background-image", "url(" + this.skin + ")");  
+
+                        //players.skinForThePlayer($( "td#"+playerIndex));
+           // weapons.skinForTheWeapon($( "td#"+playerIndex), 0);
+            //weapons.skinForTheWeapon($( "td#"+weaponIndex), id_weapon);
+
+
+/*
+.weapons {
+
+    background-repeat: no-repeat;
+    padding: 5px;
+    /*margin: 0 auto;*/
+
+}
+*/
+/*
+.player {
+    z-index: 1;
+    background-repeat: no-repeat;
+    position: relative;
+}
+*/
+
+/*
+skinForTheWeapon(element, random) {
+    if(cellsWeapons.indexOf(Weapon)) {
+        let imageUrl = "assets/imgs/weapons/"+ random +".png";
+        this.skin = imageUrl;
+        element.css("background-image", "url(" + this.skin + ")");
+    } 
+}*/
+
+            //$( "td#"+playerIndex).addClass("player");
+            //$( "td#"+weaponIndex).addClass("weaponRandom");

@@ -1,74 +1,136 @@
-//------ MAP DU JEU ------//
-
-//Génération de la map du jeu
-function createTheGameBoard() {
-
-    context.fillStyle = "#BF7930";
-    context.fillRect(0, 0, gameBoardMaxWidth, gameBoardMaxHeight);
-
-    let column = 0;
-    let row = 0;
-
-    for(let i = 0; i < numberOfGameBox; i++) {
-
-        //définition d'une couleur de contour pour les cases 
-        context.strokeStyle = "#996126";
-
-        //création d'une case
-        context.strokeRect(sizeOfGameBox * column, sizeOfGameBox * row, sizeOfGameBox, sizeOfGameBox);
-
-        //Chaque cases de la map est un objet qui comprends les paramètres suivants :
-        allGameBox[i] = {
-            GameBoxnumber: i,
-            id: "empty",
-            columnPosition: sizeOfGameBox * column + 1, //position -> X
-            rowPosition: sizeOfGameBox * row + 1 //position -> Y
-        };
-
-        column++;
-
-        if(column === numberOfGameBoxWidth) {
-            column = 0;
-            row++;
-        }
+class Gameboard {
+    constructor(rows, columns) {
+        this.rows = rows;
+        this.columns = columns;
+        this.numberOfCell = 0;
+        this.obstacles = cellsObsctacles;
+        this.weapons = cellsWeapons;
+        this.players = cellsPlayers;
     }
-}
 
-createTheGameBoard();
+    createTheGameBoard() {
 
-//Génération d'un nombre aléatoire entre 0 et 99
-function randomNumber() {
-    return Math.floor(Math.random() * (numberOfGameBox - 1));
-}
+        let gameboard = document.getElementById("gameBoard");
 
-for(let i = 0; i < numberOfObstacles; i++) {
+        for (let i = 0; i < this.rows; i++) {
+            let tr = document.createElement("tr");
+            tr.setAttribute("class", "row");
+            gameboard.appendChild(tr);
+
+            for(let i = 0; i < this.columns; i++) {
+                let td = document.createElement("td");
+                td.setAttribute("id", this.numberOfCell);
+                td.setAttribute("class", "cell");
+                tr.appendChild(td);
+                this.numberOfCell++;
+                cellsIndex.push(this.numberOfCell-1);
+            }
+        }  
+    }
     
-    let numberOfRandomGameBox = randomNumber();
+    generateObstacles() {
 
-    if(allGameBox[numberOfRandomGameBox].id !== "empty") {
-        i--;
-    } else {
-        allGameBox[numberOfRandomGameBox].id = "obstacle";
+        let maxIndex = rowGameBoard * columnGameBoard - 1;
+
+        let obstacleIndex = -1;
+
+        for(let i = 0; i < numberOfObstacles; i++) {            
+
+            do {
+
+                obstacleIndex = Math.round(Math.random() * maxIndex);
+
+            } while(!this.cellIsFree(obstacleIndex));
+
+            $("td#"+obstacleIndex).addClass("obstacle");
+            let obstacle = new Obstacle(obstacleIndex);
+            this.obstacles.push(obstacle);
+        }
+
     } 
+    
+    generateWeapons() {
 
-}
+        let maxIndex = rowGameBoard * columnGameBoard - 1;
 
-for(let i = 0; i < numberOfGameBox; i++) {
+        let weaponIndex = -1;
 
-    (function(i) {  
+        for (let i = 0; i < numberOfWeapons; i++) {
+            
+            do {
 
-        if(allGameBox[i].id === "obstacle") {
+                weaponIndex = Math.round(Math.random() * maxIndex);
 
-            let obstacle = new Image();
-            obstacle.src = "assets/imgs/obstacle.svg";
+            } while(!this.cellIsFree(weaponIndex));
+            
+            let randomWeapon = randomNumberWeapon();
+            let weapon = new Weapon(weaponIndex, randomWeapon);
+            this.weapons.push(weapon);
 
-            obstacle.addEventListener('load', 
-                () => {
-                    context.drawImage(obstacle, allGameBox[i].columnPosition, allGameBox[i].rowPosition);
-            }, false);
+            let imgWeapon = $("<img />");
+            let imgWeaponUrl = "assets/imgs/weapons/"+ randomWeapon +".png";
+            imgWeapon.attr("class", "weaponRandom");
+            imgWeapon.attr("src", imgWeaponUrl);    
+            imgWeapon.appendTo("td#"+weaponIndex, randomWeapon);            
+        }
+
+    }    
+
+    addPlayers() {
+
+        let maxIndex = rowGameBoard * columnGameBoard - 1;
+
+        let playerIndex = -1;
+
+        for (let i = 0; i < numberOfPlayers; i++) {
+
+            do { 
+
+                playerIndex = Math.round(Math.random() * maxIndex);
+
+            } while(!this.cellIsFree(playerIndex));
+
+            let player = new Player(playerIndex);
+            let weapon = new Weapon(playerIndex, 0);
+
+            this.players.push(player);
+            this.weapons.push(weapon);
+
+            let imgWeapon = $("<img />");
+            let imgWeaponUrl = "assets/imgs/weapons/"+ 0 +".png";
+
+            imgWeapon.attr("class", "weaponStartThePlayer");
+            imgWeapon.attr("src", imgWeaponUrl);    
+            imgWeapon.appendTo("td#"+playerIndex, 0);     
+
+            let imgPlayer = $("<img />");
+            let imgPlayerUrl = "assets/imgs/players/alien.png";
+
+            imgPlayer.attr("class", "playerWithStartWeapon");
+            imgPlayer.attr("src", imgPlayerUrl);  
+            imgPlayer.appendTo("td#"+playerIndex, 0);
 
         }
 
-    })(i);
 
-}
+    }
+
+    cellIsFree(index) {
+
+        console.log(this.weapons);
+        console.log(this.obstacles);
+        console.log(this.players);
+
+        let isfree = true;
+
+        isfree = this.obstacles.filter(ob => ob.position === index).length > 0 ? false : isfree;
+
+        isfree = this.weapons.filter(wp => wp.position === index).length > 0 ? false : isfree;
+
+        isfree = this.players.filter(pl => pl.position === index).length > 0 ? false : isfree;
+
+        return isfree;
+
+    }   
+
+} 

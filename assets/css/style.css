@@ -1,20 +1,66 @@
-body {
+
+
+html, body {
 
     background-image: url(../imgs/background.svg);
-
-}
-
-.containerOfGame {
-
-    width: 600px;
-    margin: auto;
-    padding-top: 8%;
-
+    background-size: cover;
+    height: 100%;
+    
 }
 
 .gameBoard {
 
-    border: 10px solid rgb(153, 97, 38);
-    margin-top: 20px;
+    border: 10px solid #BF7930;
+    border-spacing: 0;
+    border-collapse: collapse;
+    background-color: #BF7930;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+.cell {
+
+    margin: 0;
+    border: 2px solid #BF7930;
+    background-color: rgb(153, 97, 38);
+    width: 60px;
+    height: 60px;
+
+}
+
+.row {
+
+    border: 2px solid #BF7930;
+
+}
+
+.obstacle {
+
+    background-image: url(../imgs/obstacle.svg);
+    background-repeat: no-repeat;
+    
+}
+
+.weaponRandom {
+    padding: 10px;
+}
+
+.weaponStartThePlayer {
+    z-index: 1;
+    width: 20px;
+    margin-left: 10px;
+    position: absolute;
+    margin-top: 0;
+    transform: scaleX(-1);
+}
+
+.playerWithStartWeapon {
+    z-index: 1;
+    background-repeat: no-repeat;
+    position: relative;
 
 }
