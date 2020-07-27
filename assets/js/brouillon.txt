@@ -198,3 +198,144 @@ skinForTheWeapon(element, random) {
 
             //$( "td#"+playerIndex).addClass("player");
             //$( "td#"+weaponIndex).addClass("weaponRandom");
+
+
+        let obstacleIsPossible0 = cellsObsctacles[0].position;
+        let obstacleIsPossible1 = cellsObsctacles[1].position;
+        let obstacleIsPossible2 = cellsObsctacles[2].position;
+        let obstacleIsPossible3 = cellsObsctacles[3].position;
+        let obstacleIsPossible4 = cellsObsctacles[4].position;
+        let obstacleIsPossible5 = cellsObsctacles[5].position;
+        let obstacleIsPossible6 = cellsObsctacles[6].position;
+        let obstacleIsPossible7 = cellsObsctacles[7].position;
+        let obstacleIsPossible8 = cellsObsctacles[8].position;
+        let obstacleIsPossible9 = cellsObsctacles[9].position;
+        let playerIsPossible = cellsPlayers;
+        
+        if (player1 - 10 == obstacleIsPossible0) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible0) {
+            console.log('pas possible joueur2');
+        } 
+        
+        if (player1 - 10 == obstacleIsPossible1) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible1) {
+            console.log('pas possible joueur2');
+        } 
+        
+        if (player1 - 10 == obstacleIsPossible2) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible2) {
+            console.log('pas possible joueur2');
+        } 
+        
+        if (player1 - 10 == obstacleIsPossible3) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible3) {
+            console.log('pas possible joueur2');
+        }
+        
+        if (player1 - 10 == obstacleIsPossible5) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible5) {
+            console.log('pas possible joueur2');
+        }
+        
+        if (player1 - 10 == obstacleIsPossible6) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible6) {
+            console.log('pas possible joueur2');
+        } 
+
+        if (player1 - 10 == obstacleIsPossible7) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible7) {
+            console.log('pas possible joueur2');
+        } 
+
+        if (player1 - 10 == obstacleIsPossible8) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible8) {
+            console.log('pas possible joueur2');
+        } 
+
+        if (player1 - 10 == obstacleIsPossible9) {
+            console.log('pas possible joueur1');
+        } else if (player2 - 10 == obstacleIsPossible9) {
+            console.log('pas possible joueur2');
+        } 
+
+
+        switch(index){
+            case 0:
+                player1 - 10 == cellsObsctacles[0].position;
+                console.log('pas bon');
+                player2 - 10 == cellsObsctacles[0].position;
+                console.log('pas bon');
+            break;
+            case 1:
+                player1 - 10 == cellsObsctacles[1].position;
+                console.log('pas bon');
+                player2 - 10 == cellsObsctacles[1].position;
+                console.log('pas bon');
+            break;
+            case 2:
+                player1 - 10 == cellsObsctacles[2].position;
+                console.log('pas bon');
+                player2 - 10 == cellsObsctacles[2].position;
+                console.log('pas bon');
+            break;
+            case 3:
+                player1 - 10 == cellsObsctacles[3].position;
+                console.log('pas bon');
+                player2 - 10 == cellsObsctacles[3].position;
+                console.log('pas bon');
+            break;
+            case 4:
+                player1 - 10 == cellsObsctacles[4].position;
+                console.log('pas bon');
+                player2 - 10 == cellsObsctacles[4].position;
+                console.log('pas bon');
+            break;
+            case 5:
+                player1 - 10 == cellsObsctacles[5].position;
+                console.log('pas bon');
+                player2 - 10 == cellsObsctacles[5].position;
+                console.log('pas bon');
+            break;
+            default:
+                console.log("RAS");
+        }
+
+                    switch(moves) {
+                case player1 - 1 == indexObstacle:
+                    console.log('pas bon');
+                break;
+                case player1 - 2 == indexObstacle:
+                    console.log('pas bon');
+                break;
+                case player1 - 3 == indexObstacle:
+                    console.log('pas bon');     
+                break;        
+                case player1 + 1 == indexObstacle:
+                    console.log('pas bon');
+                break;
+                case player1 + 2 == indexObstacle:
+                    console.log('pas bon');  
+                break;   
+                case player1 + 3 == indexObstacle:
+                    console.log('pas bon');      
+                break;   
+                case player1 - 10 == indexObstacle:
+                    console.log('pas bon');
+                break;
+                case player1 - 20 == indexObstacle:
+                    console.log('pas bon');
+                break;
+                case player1 - 30 == indexObstacle:
+                    console.log('pas bon');
+                break;
+                default:
+                    console.log('OK');
+            }

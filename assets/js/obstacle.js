@@ -3,3 +3,4 @@ class Obstacle {
         this.position = position;
     }
 }
+

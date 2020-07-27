@@ -64,3 +64,9 @@ html, body {
     position: relative;
 
 }
+
+.moveIsPossible {
+
+    background-color: royalblue;
+
+}

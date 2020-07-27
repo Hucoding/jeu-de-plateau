@@ -9,4 +9,5 @@ $(document).ready(function() {
     gameBoard.generateWeapons();
     gameBoard.addPlayers();
     //gameBoard.cellIsFree();
+    gameBoard.moveIsPossible();
 });     

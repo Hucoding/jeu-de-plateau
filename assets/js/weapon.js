@@ -1,7 +1,7 @@
 class Weapon {
-    constructor(position, id){
+    constructor(i, position, id){
         this.position = position;
-        this.id = id;
+        this.id = i;
         switch(this.id) {
             case 0:
                 this.damage = 5;
@@ -10,29 +10,21 @@ class Weapon {
             break;
             case 1:
                 this.damage = 10;
-                this.name = "Lazer gun";
+                this.name = "Lazer";
                 //this.skin = skin;
             break;
             case 2:
                 this.damage = 15;
-                this.name = "Maxi gun";
+                this.name = "Maxi";
                 //this.skin = skin;
             break;
             case 3:
                 this.damage = 20;
-                this.name = "Mega gun";
+                this.name = "Mega";
                 //this.skin = skin;
             break;
 
         }
     }
-    /*
-    skinForTheWeapon(element, random) {
-        if(cellsWeapons.indexOf(Weapon)) {
-            let imageUrl = "assets/imgs/weapons/"+ random +".png";
-            this.skin = imageUrl;
-            element.css("background-image", "url(" + this.skin + ")");
-        } 
-    }*/
 
 }
