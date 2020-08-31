@@ -21,6 +21,8 @@ let numberOfPlayers = 2;
 //vie du joueur
 let maxLife = 100;
 
+let numberMove = 3;
+
 //Nom du skin utilisé par le joueur
 let playerSkin = "alien-fork";
 
@@ -35,5 +37,4 @@ let cellsIndex = [];
 let cellsWeapons = [];
 let cellsObsctacles = [];
 let cellsPlayers = [];
-
 

@@ -339,3 +339,315 @@ skinForTheWeapon(element, random) {
                 default:
                     console.log('OK');
             }
+
+    moveIsPossible() {
+        let player1 = cellsPlayers[0].position;
+        let player2 = cellsPlayers[1].position;
+
+        //détection des obstacles à proximité des joueurs
+        for(let i = 0; i < numberOfObstacles; i++) {
+
+            //let classObstacle = document.getElementsByClassName("obstacle");
+            let indexObstacle = cellsObsctacles[i].position;
+            let playerPosition;
+
+            if (player1 - 1 != indexObstacle) {
+                console.log('OK');
+                let playerPosition = player1 - 1;
+                console.log('position -1:', playerPosition);
+                $("td#"+ player1).addClass("moveIsPossible");
+                $("td#"+playerPosition).addClass("moveIsPossible");
+
+            } else {
+                
+                if (player1 - 1 == indexObstacle){ 
+                    console.log('pas bon');
+                    playerPosition = player1 - 1;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 - 2 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 - 2;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 - 3 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 - 3;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 + 1 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 + 1;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 + 2 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 + 2;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 + 3 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 + 3;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if(player1 - 10 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 - 10;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 - 20 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 - 20;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 - 30 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 - 30;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 + 10 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 + 10;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 + 20 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 + 20;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } else if (player1 + 30 == indexObstacle) {
+                    console.log('pas bon');
+                    playerPosition = player1 + 30;
+                    $("td#"+playerPosition).removeClass("moveIsPossible");
+                } 
+            }
+
+
+            if (player2 - 1 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 - 2 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 - 3 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 + 1 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 + 2 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 + 3 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 - 10 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 - 20 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 - 30 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 + 10 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 + 20 == indexObstacle) {
+                console.log('pas bon');
+            } else if (player2 + 30 == indexObstacle) {
+                console.log('pas bon');
+            } 
+
+            //return indexObstacle;
+            console.log('Obstacle :', indexObstacle);
+            //console.log(cellsIndex);
+            
+            
+        }
+        
+        
+
+        //let obstacleIsPossible0 = cellsObsctacles[0].position;
+    
+        //for(let i = 0; i < numberOfObstacles; i++) {
+            /*
+            if(player1 - 10 == obstacle) {
+                console.log('pas bon');
+            } else if (player1 + 10 == obstacle) {
+                console.log('pas bon');
+            } */
+
+            
+             
+            /*
+            if (player2 - 10 == obstacle) {
+                console.log('pas bon');
+            } else if (player2 + 10 == obstacle) {
+                console.log('pas bon');
+            } */
+            
+    /*
+    
+    lorsque tu génères les positions de tes joueurs, juste après tu vérifies que le joueur 2 n'est pas sur le même x ou y que le joueur 1. Si c'est le cas tu contines à générer la position du joueur 2 (boucle while) jusqu'à ce que la condition soit vérifiée. Exemple :
+    while (cellPlayer0.dataset.x === cellPlayer1.dataset.x || cellPlayer0.dataset.y === cellPlayer1.dataset.y) {
+    cellPlayer1 = this.getRandomCell();
+    }
+        
+    */
+    
+        
+         
+    }
+
+    //player1
+/* for(let i=0 ; i <= player1; i++) {
+    console.log("i =", i);
+    if(player1 % 2 == 0) {
+        console.log("Player 1:", "Nombre pair");
+    } else {
+        console.log("Player 1:", "Nombre impair");
+    }
+}
+*/
+
+//player2
+/*
+if(player2 % 2 == 0) {
+    console.log("Player 2:", "Nombre pair");
+} else {
+    console.log("Player 2:", "Nombre impair");
+}
+
+if(player2 % -2 == 0) {
+    console.log("Player 2:", "Nombre pair");
+} else {
+    console.log("Player 2:", "Nombre impair");
+}
+*/
+
+// note avant les vacances :
+/*
+
+- Exemple vérifier si la cellule 73 + 1 est disponible ?
+
+- Le modulo vas etre utilisé pour la fonction de vérification 
+    -> le modulo est absolument à voir 
+    -> division pair ou impair => qui donne +1 ou -1
+
+- Ajouter des paramètres de factorisation (pas de code non dynamique)
+
+- varification de gauche à droite et de haut en bas
+
+- Si on est sur la ligne courante :
+    -> y'a t'il des armes ?
+    -> y'a t'il des obstacles ?
+
+- Ne pas vérifier + 100 cellules 
+
+- si joueurs cote à cote = bon = alors combat
+- si joueurs sur arme = bon  = alors remplacment de l'arme actuelle
+- si obstcales = pas bon = on arrête 
+
+*/
+
+
+        return;
+
+        //Déplacements vers la droite
+        for (let i = 1; i <= numberMove; i++) {
+
+            let line = positionPlayer1 % this.columns;
+            let map_limit = (line + i) <= this.columns - 1;
+
+            if(this.cellIsMovable(positionPlayer1 + i) && map_limit){
+                let resultMove = positionPlayer1 + i;
+                console.log("result déplacement droite joueur 1:", resultMove);
+                $("td#"+resultMove).addClass("moveIsPossible");
+            } else {
+                break;
+            }
+
+        }
+
+        //Déplacements vers la gauche 
+        for (let i = 1; i <= numberMove; i++) {
+
+            let line = positionPlayer1 % this.columns;
+
+            if((positionPlayer1 - i) != opponentPlayer && this.obstacles.indexOf(positionPlayer1 - i) == -1 && (line - i) >= 0){
+                let resultMove = positionPlayer1 - i;
+                console.log("result déplacement gauche joueur 1:", resultMove);
+                $("td#"+resultMove).addClass("moveIsPossible");
+            } else {
+                break;
+            }
+
+        }
+
+        //Déplacements vers le bas 
+        for (let i = this.columns; i <= 3 * this.columns; i += this.columns) {
+
+            if((positionPlayer1 + i) != opponentPlayer && this.obstacles.indexOf(positionPlayer1 + i) == -1 && (positionPlayer1 + i) <= this.numberOfCell){
+                let resultMove = positionPlayer1 + i;
+                console.log("result déplacement gauche joueur 1:", resultMove);
+                $("td#"+resultMove).addClass("moveIsPossible");
+            } else {
+                break;
+            }
+
+        }
+
+        //déplacements vers le haut
+        for(let i = this.columns; i <= 3 * this.columns; i += this.columns) {   
+
+            if ((positionPlayer1 - i) != opponentPlayer && this.obstacles.indexOf(positionPlayer1 - i) == -1 && (positionPlayer1 - i) >= 0) {
+                let resultMove = positionPlayer1 - i;
+                console.log("result déplacement gauche joueur 1:", resultMove);
+                $("td#"+resultMove).addClass("moveIsPossible");
+            } else {
+                break;
+            }
+
+        }
+
+        //------------------------------------//
+        //------------------------------------//
+
+        //Mouvements Joueur 2
+        console.log("-------------------------");
+        //Déplacements vers la droite
+        for (let i = 1; i <= 3; i++) {
+
+            let line = positionPlayer2 % this.columns;
+
+            if((positionPlayer2 + i) != opponentPlayer && this.obstacles.indexOf(positionPlayer2 + i) == -1 && (line + i) <= this.columns - 1){
+                let resultMove = positionPlayer2 + i;
+                console.log("result déplacement droite joueur 2:", resultMove);
+                $("td#"+resultMove).addClass("moveIsPossible");
+            } else {
+                break;
+            }
+
+        }
+
+        //Déplacements vers la gauche 
+        for (let i = 1; i <= 3; i++) {
+
+            let line = positionPlayer2 % this.columns;
+
+            if((positionPlayer2 - i) != opponentPlayer && this.obstacles.indexOf(positionPlayer2 - i) == -1 && (line - i) >= 0){
+                let resultMove = positionPlayer2 - i;
+                console.log("result déplacement gauche joueur 2:", resultMove);
+                $("td#"+resultMove).addClass("moveIsPossible");
+            } else {
+                break;
+            }
+
+        }
+
+        //Déplacements vers le bas 
+        for (let i = this.columns; i <= 3 * this.columns; i += this.columns) {
+
+            if((positionPlayer2 + i) != opponentPlayer && this.obstacles.indexOf(positionPlayer2 + i) == -1 && (positionPlayer2 + i) <= this.numberOfCell){
+                let resultMove = positionPlayer2 + i;
+                console.log("result déplacement gauche joueur 2:", resultMove);
+                $("td#"+resultMove).addClass("moveIsPossible");
+            } else {
+                break;
+            }
+
+        }
+
+        //déplacements vers le haut
+        for(let i = this.columns; i <= 3 * this.columns; i += this.columns) {   
+
+            if ((positionPlayer2 - i) != opponentPlayer && this.obstacles.indexOf(positionPlayer2 - i) == -1 && (positionPlayer2 - i) >= 0) {
+                let resultMove = positionPlayer2 - i;
+                console.log("result déplacement gauche joueur 2:", resultMove);
+                $("td#"+resultMove).addClass("moveIsPossible");
+            } else {
+                break;
+            }
+
+        }
+        

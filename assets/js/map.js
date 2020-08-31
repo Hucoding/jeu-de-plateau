@@ -117,10 +117,6 @@ class Gameboard {
 
     cellIsFree(index) {
 
-        console.log(this.weapons);
-        console.log(this.obstacles);
-        console.log(this.players);
-
         let isfree = true;
 
         isfree = this.obstacles.filter(ob => ob.position === index).length > 0 ? false : isfree;
@@ -133,144 +129,112 @@ class Gameboard {
 
     }   
 
-    moveIsPossible() {
-        let player1 = cellsPlayers[0].position;
-        let player2 = cellsPlayers[1].position;
+    //cellIsMovable est une fonction qui permet de déterminer si les positions entre le joueur et les obstacles
+    cellIsMovable(index) {
 
-        //détection des obstacles à proximité des joueurs
-        for(let i = 0; i < numberOfObstacles; i++) {
+        let isMovable = true;
 
-            //let classObstacle = document.getElementsByClassName("obstacle");
-            let indexObstacle = cellsObsctacles[i].position;
-            let playerPosition;
+        isMovable = this.obstacles.filter(ob => ob.position === index).length > 0 ? false : isMovable;
 
-            if (player1 - 1 != indexObstacle) {
-                console.log('OK');
-                let playerPosition = player1 - 1;
-                console.log('position -1:', playerPosition);
-                $("td#"+ player1).addClass("moveIsPossible");
-                $("td#"+playerPosition).addClass("moveIsPossible");
+        isMovable = this.players.filter(pl => pl.position === index).length > 0 ? false : isMovable;
 
+        return isMovable;
+
+
+    }
+
+    moveInDirection(playerPosition, step, colorStep) {
+
+        // Itération -10 à -30
+        // i = -10         
+        // i = -20
+        // i = -30     // stop
+
+        // i est égale à une step qui est en réalité une case du tableau
+        let i = step;
+        let endTest;
+
+        if(step < 0){
+            endTest = i >= (step * numberMove);
+        } else {
+            endTest = i <= (step * numberMove);
+        }
+
+        while (endTest) {
+            
+            let line = playerPosition % this.columns;
+            let map_limit;
+
+            if(step == 1) {
+                map_limit = (line + i) < this.columns;
+            } else if(step == -1) {
+                map_limit = (line + i) > -1;
             } else {
-                
-                if (player1 - 1 == indexObstacle){ 
-                    console.log('pas bon');
-                    playerPosition = player1 - 1;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 - 2 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 - 2;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 - 3 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 - 3;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 + 1 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 + 1;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 + 2 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 + 2;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 + 3 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 + 3;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if(player1 - 10 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 - 10;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 - 20 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 - 20;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 - 30 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 - 30;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 + 10 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 + 10;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 + 20 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 + 20;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } else if (player1 + 30 == indexObstacle) {
-                    console.log('pas bon');
-                    playerPosition = player1 + 30;
-                    $("td#"+playerPosition).removeClass("moveIsPossible");
-                } 
+                map_limit = true;
             }
 
+            if(this.cellIsMovable(playerPosition + i) && map_limit){
+                let resultMove = playerPosition + i;
 
-            if (player2 - 1 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 - 2 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 - 3 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 + 1 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 + 2 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 + 3 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 - 10 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 - 20 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 - 30 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 + 10 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 + 20 == indexObstacle) {
-                console.log('pas bon');
-            } else if (player2 + 30 == indexObstacle) {
-                console.log('pas bon');
-            } 
+                //Cette condition permet de mettre en couleur une case commune de déplacements que peuvent avoir les joueurs
+                if(colorStep == "moveIsPossiblePlayer2" && $("td#"+resultMove).hasClass("moveIsPossiblePlayer1")) {
+                    $("td#"+resultMove).removeClass("moveIsPossiblePlayer1");
+                    $("td#"+resultMove).addClass("moveIsPossibleBothPlayer");
+                } else {
+                    $("td#"+resultMove).addClass(colorStep);
+                }
 
-            //return indexObstacle;
-            console.log('Obstacle :', indexObstacle);
-            //console.log(cellsIndex);
-            
-            
+            } else {
+                break;
+            }
+
+            i = i + step;
+
+            if(step < 0){
+                endTest = i >= (step * numberMove);
+            } else {
+                endTest = i <= (step * numberMove);
+            }
+
         }
-        
-        
 
-        //let obstacleIsPossible0 = cellsObsctacles[0].position;
-    
-        //for(let i = 0; i < numberOfObstacles; i++) {
-            /*
-            if(player1 - 10 == obstacle) {
-                console.log('pas bon');
-            } else if (player1 + 10 == obstacle) {
-                console.log('pas bon');
-            } */
-
-            
-             
-            /*
-            if (player2 - 10 == obstacle) {
-                console.log('pas bon');
-            } else if (player2 + 10 == obstacle) {
-                console.log('pas bon');
-            } */
-            
-    
-        
-         
     }
 
-    /*
+    //Si les déplacements sont autorisés et si je clique sur une case dispo est de couleur 
+    // Remove le skin du player et ajoute le skin dans la case cliquer
+    //si cette case contient une arme prends l'arme et dépose celle qui est déjà rattachée au joueurs
+    //Attention le joueur ne peut pas disposer de 2 armes à la fois 
+
+
+    moveIsPossible() {        
+        // vérification à droite à gauche, au-dessus et en-dessous de l'index du joueur 
+        // division pair ou impair  +1 ou -1
+        // vérification si obstcales ou pas 
     
-    lorsque tu génères les positions de tes joueurs, juste après tu vérifies que le joueur 2 n'est pas sur le même x ou y que le joueur 1. Si c'est le cas tu contines à générer la position du joueur 2 (boucle while) jusqu'à ce que la condition soit vérifiée. Exemple :
-    while (cellPlayer0.dataset.x === cellPlayer1.dataset.x || cellPlayer0.dataset.y === cellPlayer1.dataset.y) {
-    cellPlayer1 = this.getRandomCell();
+        let positionPlayer1 = cellsPlayers[0].position;
+        let positionPlayer2 = cellsPlayers[1].position;
+
+        let opponentPlayer = this.players[this.id == 0 ? 1 : 0].position;
+        console.log("opponentPlayer :", opponentPlayer);
+
+
+        //Mouvements Joueur 1
+        //définition des paramètres pour le joueur 1
+        this.moveInDirection(positionPlayer1, 1, "moveIsPossiblePlayer1"); //mouvements à droite
+        this.moveInDirection(positionPlayer1, this.columns, "moveIsPossiblePlayer1"); //mouvement en bas
+        this.moveInDirection(positionPlayer1, -1, "moveIsPossiblePlayer1"); //mouvements à gauche
+        this.moveInDirection(positionPlayer1, this.columns * -1, "moveIsPossiblePlayer1"); //mouvements en haut
+
+        //Mouvements Joueur 2
+        //définition des paramètres pour le joueur 2
+        this.moveInDirection(positionPlayer2, 1, "moveIsPossiblePlayer2"); //mouvements à droite
+        this.moveInDirection(positionPlayer2, this.columns, "moveIsPossiblePlayer2"); //mouvements en bas
+        this.moveInDirection(positionPlayer2, -1, "moveIsPossiblePlayer2"); //mouvements à gauche
+        this.moveInDirection(positionPlayer2, this.columns * -1, "moveIsPossiblePlayer2"); //mouvements en haut
+
+
     }
-        
-    */
- 
+
 } 
+
+

@@ -8,6 +8,7 @@ $(document).ready(function() {
     gameBoard.generateObstacles();
     gameBoard.generateWeapons();
     gameBoard.addPlayers();
+    //gameBoard.checkOddOrEvenNumber();
     //gameBoard.cellIsFree();
     gameBoard.moveIsPossible();
 });     
