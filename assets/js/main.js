@@ -11,4 +11,5 @@ $(document).ready(function() {
     //gameBoard.checkOddOrEvenNumber();
     //gameBoard.cellIsFree();
     gameBoard.moveIsPossible();
+    gameBoard.enterThePlayerName();
 });     

@@ -1,24 +1,169 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Dhurjati&display=swap');
+
 
 html, body {
 
     background-image: url(../imgs/background.svg);
     background-size: cover;
-    height: 100%;
-    
+    width: 100%;
 }
 
-.gameBoard {
+body {
+    margin: 0 !important;
+}
 
+.gameContainer {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+}
+
+/*
+.gameContainer {
+
+    text-align: center;
+    width: 992px;
+    height: 630px;
+    margin: auto;
+}*/
+
+.gameBoard {
     border: 10px solid #BF7930;
     border-spacing: 0;
     border-collapse: collapse;
     background-color: #BF7930;
-    margin: 0 auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+
+}
+
+.titleGame {
+    color: #fff;
+    width: 100%;
+    letter-spacing: 2px;
+    text-align: center;
+    font-size: 25px;
+    font-family: 'Bangers', cursive;
+}
+
+.rulesBar {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #00E53D;
+    font-family: 'Dhurjati', sans-serif;
+}
+
+.rules {
+    background: black;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.startGamePile,
+.startGameFace {
+
+    background: black;
+    border-radius: 3px;
+    border: 1px solid #00E53D;
+    color: #00E53D;
+    font-family: 'Dhurjati', sans-serif;
+
+}
+
+.playerName1,
+.playerName2 {
+
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 3px;
+    font-size: 30px;
+}
+
+.playerImg1 {
+
+    border-radius: 50%;
+    border: 2px solid #9B59B6;
+    background: royalblue;
+    padding: 10px;
+    margin-bottom: 20px;
+
+}
+
+.playerImg2 {
+
+    border-radius: 50%;
+    border: 2px solid #9B59B6;
+    background: #ff3333;
+    padding: 10px;
+    margin-bottom: 20px;
+
+}
+
+.createNameContainer {
+
+    border-top: 5px solid #9B59B6;
+    padding: 20px;
+
+}
+
+.createName1,
+.createName2 {
+
+    border-radius: 3px;
+    border: 1px solid gray;
+    padding: 5px; 
+
+}
+
+.createName1::placeholder,
+.createName2::placeholder { 
+
+    font-family: 'Arial', Helvetica, sans-serif !important;
+
+}
+
+.buttonCreateName {
+
+    background: royalblue;
+    color: #fff;
+    border: 1px solid royalblue;
+    border-radius: 3px;
+    padding: 5px;
+
+}
+
+.gameBoardContainer {
+
+    display: inline-block;
+
+}
+
+.playerPanelLeft {
+
+    background: #2a0080;
+    height: 610px;
+    width: 300px;
+    border: 5px solid ;
+    border-radius: 3px; 
+    border: 5px solid #9B59B6;
+    margin-left: 10%;
+    margin-top: 15px;
+    float: left;
+
+}
+
+.playerPanelRight {
+
+    background: #2a0080;
+    height: 610px;
+    width: 300px;
+    border-radius: 3px;
+    border: 5px solid #9B59B6;
+    margin-right: 10%;
+    margin-top: 15px;
+    float: right;
 
 }
 
@@ -97,5 +242,25 @@ html, body {
 
     background-color: #b300b3;
     /* animation: blinkingBackground 3s infinite; */
+
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1608px) {
+
+
+    html, body {
+
+        background-size: auto;
+        width: 100%;
+        background-repeat: no-repeat;
+
+    }
+
+    .playerPanelLeft,
+    .playerPanelRight {
+        margin-right: 0px;
+        margin-left: 0px;
+        width: 175px;
+    }
 
 }

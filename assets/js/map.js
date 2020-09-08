@@ -143,6 +143,8 @@ class Gameboard {
 
     }
 
+
+    //moveInDirection est une fonction qui vas nous permettre de pourvoir indiquer ou est ce que notre joueur peut se déplacer sur le plateau de jeu
     moveInDirection(playerPosition, step, colorStep) {
 
         // Itération -10 à -30
@@ -151,89 +153,203 @@ class Gameboard {
         // i = -30     // stop
 
         // i est égale à une step qui est en réalité une case du tableau
-        let i = step;
-        let endTest;
+        //countStep est égale à une itération d'une step
+        let countStep = step;
 
+        //cette variable permet de tester/vérifier les cases sur lesquelles le joueur peut se déplacer 
+        let moveInStepIsPossible;
+
+        // Premier test
         if(step < 0){
-            endTest = i >= (step * numberMove);
+            moveInStepIsPossible = countStep >= (step * numberMove);
         } else {
-            endTest = i <= (step * numberMove);
+            moveInStepIsPossible = countStep <= (step * numberMove);
         }
 
-        while (endTest) {
-            
-            let line = playerPosition % this.columns;
-            let map_limit;
+        // step = 10
+        // ité  endTest = countStep <= (step * numberMove);
+        // 1      true  = 10        <= (10   * 3) 
+        // 2      true  = 20        <= (10   * 3)
+        // 3      true  = 30        <= (10   * 3)
+        // 4      false = 40        <= (10   * 3) => arrêt boucle
 
+        // tant que les mouvements sont possibles
+        while (moveInStepIsPossible) {
+            
+            let gameBoardLine = playerPosition % this.columns;
+            let mapLimitation;
+
+            // Vérification des limites de la map à droite et à gauche du joueur
             if(step == 1) {
-                map_limit = (line + i) < this.columns;
+                mapLimitation = (gameBoardLine + countStep) < this.columns;
             } else if(step == -1) {
-                map_limit = (line + i) > -1;
+                mapLimitation = (gameBoardLine + countStep) > -1;
             } else {
-                map_limit = true;
+                mapLimitation = true;
             }
 
-            if(this.cellIsMovable(playerPosition + i) && map_limit){
-                let resultMove = playerPosition + i;
-
-                //Cette condition permet de mettre en couleur une case commune de déplacements que peuvent avoir les joueurs
-                if(colorStep == "moveIsPossiblePlayer2" && $("td#"+resultMove).hasClass("moveIsPossiblePlayer1")) {
-                    $("td#"+resultMove).removeClass("moveIsPossiblePlayer1");
-                    $("td#"+resultMove).addClass("moveIsPossibleBothPlayer");
-                } else {
-                    $("td#"+resultMove).addClass(colorStep);
-                }
-
+            //Ajout de couleur dans les steps ou le joueur peut se déplacer
+            if(this.cellIsMovable(playerPosition + countStep) && mapLimitation){
+                let resultMove = playerPosition + countStep;
+                $("td#"+resultMove).addClass(colorStep);
             } else {
                 break;
             }
 
-            i = i + step;
+            //incrémentation du compteur de cases ou le player peut bouger
+            countStep = countStep + step;
 
+            // Dernier test dans la boucle
             if(step < 0){
-                endTest = i >= (step * numberMove);
+                moveInStepIsPossible = countStep >= (step * numberMove);
             } else {
-                endTest = i <= (step * numberMove);
+                moveInStepIsPossible = countStep <= (step * numberMove);
             }
 
         }
 
     }
+
+
 
     //Si les déplacements sont autorisés et si je clique sur une case dispo est de couleur 
     // Remove le skin du player et ajoute le skin dans la case cliquer
     //si cette case contient une arme prends l'arme et dépose celle qui est déjà rattachée au joueurs
     //Attention le joueur ne peut pas disposer de 2 armes à la fois 
 
-
     moveIsPossible() {        
         // vérification à droite à gauche, au-dessus et en-dessous de l'index du joueur 
         // division pair ou impair  +1 ou -1
         // vérification si obstcales ou pas 
     
-        let positionPlayer1 = cellsPlayers[0].position;
-        let positionPlayer2 = cellsPlayers[1].position;
+        //let positionPlayer1 = cellsPlayers[0].position;
+        //let positionPlayer2 = cellsPlayers[1].position;
 
-        let opponentPlayer = this.players[this.id == 0 ? 1 : 0].position;
-        console.log("opponentPlayer :", opponentPlayer);
+        //let opponentPlayer = this.players[this.id == 0 ? 1 : 0].position;
+        //console.log("opponentPlayer :", opponentPlayer);
 
+        //console.log("Joueur 1", positionPlayer1);
+        //console.log("Joueur 2:", positionPlayer2);
 
+ 
         //Mouvements Joueur 1
         //définition des paramètres pour le joueur 1
-        this.moveInDirection(positionPlayer1, 1, "moveIsPossiblePlayer1"); //mouvements à droite
-        this.moveInDirection(positionPlayer1, this.columns, "moveIsPossiblePlayer1"); //mouvement en bas
-        this.moveInDirection(positionPlayer1, -1, "moveIsPossiblePlayer1"); //mouvements à gauche
-        this.moveInDirection(positionPlayer1, this.columns * -1, "moveIsPossiblePlayer1"); //mouvements en haut
+        //this.moveInDirection(positionPlayer1, 1, "moveIsPossiblePlayer1"); //mouvements à droite
+        //this.moveInDirection(positionPlayer1, this.columns, "moveIsPossiblePlayer1"); //mouvement en bas
+        //this.moveInDirection(positionPlayer1, -1, "moveIsPossiblePlayer1"); //mouvements à gauche
+        //this.moveInDirection(positionPlayer1, this.columns * -1, "moveIsPossiblePlayer1"); //mouvements en haut
+
 
         //Mouvements Joueur 2
         //définition des paramètres pour le joueur 2
-        this.moveInDirection(positionPlayer2, 1, "moveIsPossiblePlayer2"); //mouvements à droite
-        this.moveInDirection(positionPlayer2, this.columns, "moveIsPossiblePlayer2"); //mouvements en bas
-        this.moveInDirection(positionPlayer2, -1, "moveIsPossiblePlayer2"); //mouvements à gauche
-        this.moveInDirection(positionPlayer2, this.columns * -1, "moveIsPossiblePlayer2"); //mouvements en haut
+        //this.moveInDirection(positionPlayer2, 1, "moveIsPossiblePlayer2"); //mouvements à droite
+        //this.moveInDirection(positionPlayer2, this.columns, "moveIsPossiblePlayer2"); //mouvements en bas
+        //this.moveInDirection(positionPlayer2, -1, "moveIsPossiblePlayer2"); //mouvements à gauche
+        //this.moveInDirection(positionPlayer2, this.columns * -1, "moveIsPossiblePlayer2"); //mouvements en haut
+
+        let cellPositionPlayer;
+        let playerPosition = cellsPlayers[cellPositionPlayer].position;
+
+        let tablePositionPlayer = []; 
+        let tableDirection = [1, this.columns, -1, this.columns * -1];
+
+        console.log("tablePositionPlayer", tablePositionPlayer);
+        console.log("tableDirection", tableDirection);
+        console.log("cellPlayers", cellsPlayers);
+
+        for (let cellPositionPlayer = 0; cellPositionPlayer < playerPosition; cellPositionPlayer++) {
+            tablePositionPlayer = playerPosition;
+        }
+
+        console.log(tablePositionPlayer);
+
+        let currentPlayer = 1;
+
+        for(let i = 0; i < tablePositionPlayer; i++) {
+
+            for(let i = 0; i < tableDirection; i++) {
+
+                this.moveInDirection(playerPosition, tableDirection, "moveIsPossible" + currentPlayer);
+
+            }
+
+            currentPlayer + 1;
+
+        }
+
+
+        // V2
+
+
+        // Déclaration pos tab joueur
+
+        // array('baba', 'artoul');
+        // 1ere itération player = baba
+        // 2eme itération player = artoul
+
+        
+        //foreach(cellsPlayers as player) {
+        //    taPosPlayer[] = player.position;
+        //}
+        // Fin déclaration tab player
+
+        // Début de définition des position possible
+
+        // Boucle player
+
+        //foreach(tabPosPlay as posPlayer) {
+
+           // foreach(tabDirection as direc) {
+
+            //    this.moveInDirection(posPlayer, direc, "moveIsPossiblePlayer"+ currentPlayer); //mouvements en haut
+
+            //}
+
+            //currentPlayer + 1;
+
+        //}
 
 
     }
+
+    
+    enterThePlayerName() {
+
+        $('#buttonCreateName1').on("click", function () {
+            if ($('#createName1').val().length === 0) { // Si le joueur 1 n'a pas rentrer son pseudo
+                $('#createName1').css('border', '1px solid red');
+                $('#playerName1').text('Entrez votre nom !').css({  //on affiche un message d'erreur
+                    'color': 'red',
+                    'font-weight': 'bold'
+                });
+            } else {
+                $('#playerName1').replaceWith("<h3 class='playerName1' id='playerName1'>" + $('#createName1').val() + "</h3>"); // Remplace player 1 par le nom du joueur
+                $('#createNameContainer1').fadeOut("3000"); // on efface les inputs
+                $('#createName1').val(''); // ici on remets l'input à zéro
+                //Afficher player ici
+            }
+        });
+
+        $('#buttonCreateName2').on("click", function () {
+            if (($('#createName2').val().length === 0) || ($('#playerName1').text() === $('#createName2').val())) { // Si le joueur 2 n'a pas rentrer son pseudo ou si c'est le meme que le joueur 1
+                $('#createName2').css('border', '1px solid red');
+                $('#playerName2').text('Entrez votre nom !').css({ // on affiche un message d'erreur 
+                    'color': 'red',
+                    'font-weight': 'bold'
+                });
+            } else {
+                $('#playerName2').replaceWith("<h3 class='playerName2' id='playerName2'>" + $('#createName2').val() + "</h3>");
+                $('#createNameContainer2').fadeOut("3000");
+                $('#createName2').val('');
+
+                // Système de pile ou face pour déterminer quel joueur commence
+                // le joueur qui perd est grisé et l'autre peut commencer à jouer
+                //$('#rules').html('Qui commence ? <button class="startGamePile" id="startGamePile">Pile</button> ou <button class="startGameFace" id="startGameFace">Face</button>');
+            }
+        });
+    }
+    
+
 
 } 
 

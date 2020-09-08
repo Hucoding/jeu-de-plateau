@@ -651,3 +651,61 @@ if(player2 % -2 == 0) {
 
         }
         
+
+
+        /* if(this.cellIsMovable(playerPosition + i) && map_limit){
+                let resultMove = playerPosition + i;
+
+                //Cette condition permet de mettre en couleur une case commune de déplacements que peuvent avoir les joueurs
+                if(colorStep == "moveIsPossiblePlayer2" && $("td#"+resultMove).hasClass("moveIsPossiblePlayer1")) {
+                    $("td#"+resultMove).removeClass("moveIsPossiblePlayer1");
+                    $("td#"+resultMove).addClass("moveIsPossibleBothPlayer");
+                } else {
+                    $("td#"+resultMove).addClass(colorStep);
+                }
+
+            } else {
+                break;
+            }
+        */
+
+// RÃ©cupÃ¨re le nom des joueurs dans les input, teste si le champ est bien rempli et affiche les players
+$(function () {
+    $('#buttonname1').on("click", function () {
+        if ($('#name1').val().length === 0) { // Si le joueur 1 n'a pas entrÃ© son pseudo
+            $('#name1').css('border', '1px solid red');
+            $('#pname1').text('Entrez votre nom !').css({
+                'color': 'red',
+                'font-weight': 'bold'
+            });
+        } else {
+            $('#title-player1').replaceWith("<span id='title-player1'>" + $('#name1').val() + "</span>"); // Remplace player 1 par le nom du joueur
+            $('#divname-player1').fadeOut("3000"); // Efface les input
+            $('#name1').val(''); // Remets l'input Ã  "zÃ©ro"
+            map.placePlayer1();
+        }
+    });
+    $('#buttonname2').on("click", function () {
+        if (($('#name2').val().length === 0) || ($('#title-player1').text() === $('#name2').val())) { // Si le joueur 2 n'a pas entrÃ© son pseudo ou si c'est le mÃªme que le joueur 1
+            $('#name2').css('border', '1px solid red');
+            $('#pname2').text('Entrez votre nom !').css({
+                'color': 'red',
+                'font-weight': 'bold'
+            });
+        } else {
+            $('#title-player2').replaceWith("<span id='title-player2'>" + $('#name2').val() + "</span>");
+            $('#divname-player2').fadeOut("3000");
+            $('#name2').val('');
+            map.placePlayer2();
+            $('#instructions').html('Qui commence ? <button class="pf" id="pile">Pile</button> ou <button class="pf" id="face">Face</button>');
+        }
+    });
+    $('#instructions').on("click", ".pf", function () {
+        var pouf = $(this).attr('id'); // RÃ©cupÃ¨re le texte du bouton cliquÃ© : soit pile soit face
+        map.quiCommence(pouf); // pouf : pour Pile OU Face 
+        $('#instructions').fadeOut('2000'); // Efface les instructions en 2 secondes
+        $('#instructions').text(''); // Supprime le code html
+        $('#instructions').fadeIn('2000'); // Supprime le display: none
+        $('#instructions').html('Utilisez les flÃ¨ches du clavier pour dÃ©placer les players</br><u>3 dÃ©placements possibles</u>');
+    });    
+});
