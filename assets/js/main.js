@@ -1,5 +1,5 @@
 //objects
-const gameBoard = new Gameboard(10, 10);
+const gameBoard = new Gameboard(10, 10, "gameBoard");
 const weapons = new Weapon();
 const players = new Player();
 
@@ -8,8 +8,6 @@ $(document).ready(function() {
     gameBoard.generateObstacles();
     gameBoard.generateWeapons();
     gameBoard.addPlayers();
-    //gameBoard.checkOddOrEvenNumber();
-    //gameBoard.cellIsFree();
-    gameBoard.moveIsPossible();
+    //gameBoard.moveIsPossible();
     gameBoard.enterThePlayerName();
 });     

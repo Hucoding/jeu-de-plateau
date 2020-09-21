@@ -2,12 +2,8 @@
 let columnGameBoard = 10;
 let rowGameBoard =  10;
 
-//Nombre de cellules
-//let numberOfCell = 0;
-
-//Dimension des cases du plateau
-//let cellWidth = 60;
-//let cellHeight = 60;
+//index initial du premier joueur
+let indexCurrentPlayer = 0;
 
 //Nombre d'obstacles
 let numberOfObstacles = 10;
@@ -32,7 +28,6 @@ function randomNumberWeapon() {
     return Math.floor(Math.random() * Math.floor(numberOfWeapons));
 }
 
-let indexRows = [];
 let cellsIndex = [];
 let cellsWeapons = [];
 let cellsObsctacles = [];

@@ -1,16 +1,18 @@
 class Gameboard {
-    constructor(rows, columns) {
+    constructor(rows, columns, idHtmlTable) {
         this.rows = rows;
         this.columns = columns;
+        this.idHtmlTable = idHtmlTable;
         this.numberOfCell = 0;
         this.obstacles = cellsObsctacles;
         this.weapons = cellsWeapons;
         this.players = cellsPlayers;
+        this.indexCurrentPlayer = indexCurrentPlayer;
     }
 
     createTheGameBoard() {
 
-        let gameboard = document.getElementById("gameBoard");
+        let gameboard = document.getElementById(this.idHtmlTable);
 
         for (let i = 0; i < this.rows; i++) {
             let tr = document.createElement("tr");
@@ -26,19 +28,23 @@ class Gameboard {
                 cellsIndex.push(this.numberOfCell-1);
             }
         }  
+
+        console.log("cellsIndex:", cellsIndex);
     }
     
     generateObstacles() {
 
-        let maxIndex = rowGameBoard * columnGameBoard - 1;
+        //nombre maximum de cellules
+        let maxCells = rowGameBoard * columnGameBoard - 1;
 
         let obstacleIndex = -1;
 
         for(let i = 0; i < numberOfObstacles; i++) {            
 
             do {
-
-                obstacleIndex = Math.round(Math.random() * maxIndex);
+                //nombre aléatoire * nombre maximum de cellules
+                obstacleIndex = Math.round(Math.random() * maxCells);
+                console.log("obstacleIndex :", obstacleIndex);
 
             } while(!this.cellIsFree(obstacleIndex));
 
@@ -47,11 +53,13 @@ class Gameboard {
             this.obstacles.push(obstacle);
         }
 
+        console.log("obstacles :", this.obstacles);
+
     } 
     
     generateWeapons() {
 
-        let maxIndex = rowGameBoard * columnGameBoard - 1;
+        let maxCells = rowGameBoard * columnGameBoard - 1;
 
         let weaponIndex = -1;
 
@@ -59,7 +67,7 @@ class Gameboard {
             
             do {
 
-                weaponIndex = Math.round(Math.random() * maxIndex);
+                weaponIndex = Math.round(Math.random() * maxCells);
 
             } while(!this.cellIsFree(weaponIndex));
             
@@ -79,7 +87,7 @@ class Gameboard {
 
     addPlayers() {
 
-        let maxIndex = rowGameBoard * columnGameBoard - 1;
+        let maxCells = rowGameBoard * columnGameBoard - 1;
 
         let playerIndex = -1;
 
@@ -87,7 +95,7 @@ class Gameboard {
 
             do { 
 
-                playerIndex = Math.round(Math.random() * maxIndex);
+                playerIndex = Math.round(Math.random() * maxCells);
 
             } while(!this.cellIsFree(playerIndex));
 
@@ -115,6 +123,7 @@ class Gameboard {
         }
     }
 
+    //le paramètre index : 
     cellIsFree(index) {
 
         let isfree = true;
@@ -145,7 +154,7 @@ class Gameboard {
 
 
     //moveInDirection est une fonction qui vas nous permettre de pourvoir indiquer ou est ce que notre joueur peut se déplacer sur le plateau de jeu
-    moveInDirection(playerPosition, step, colorStep) {
+    moveInDirection(playerPosition, step) {
 
         // Itération -10 à -30
         // i = -10         
@@ -167,7 +176,7 @@ class Gameboard {
         }
 
         // step = 10
-        // ité  endTest = countStep <= (step * numberMove);
+        // ité  moveInStepIsPossible = countStep <= (step * numberMove);
         // 1      true  = 10        <= (10   * 3) 
         // 2      true  = 20        <= (10   * 3)
         // 3      true  = 30        <= (10   * 3)
@@ -247,33 +256,42 @@ class Gameboard {
         //this.moveInDirection(positionPlayer2, -1, "moveIsPossiblePlayer2"); //mouvements à gauche
         //this.moveInDirection(positionPlayer2, this.columns * -1, "moveIsPossiblePlayer2"); //mouvements en haut
 
-        let cellPositionPlayer;
-        let playerPosition = cellsPlayers[cellPositionPlayer].position;
+        //fonction nextplayer => qui doit calculer et renvoyer le nouvel index du current player
+        // map.js => gameboard.js
+        //tout revoir de A à Z faire une petite doc pour bien comprendre comment fonctionne le code depuis le début
+        
+        //récupération de l'index actuel du joueur 
+        let currentPlayer = cellsPlayers[indexCurrentPlayer];
 
+        console.log("current player:", currentPlayer.position);
+
+        //tableau des positions des joueurs 
         let tablePositionPlayer = []; 
+
+        //tableau regroupant les différentes directions possibles des joueurs
         let tableDirection = [1, this.columns, -1, this.columns * -1];
 
-        console.log("tablePositionPlayer", tablePositionPlayer);
-        console.log("tableDirection", tableDirection);
-        console.log("cellPlayers", cellsPlayers);
+        //console.log("tablePositionPlayer", tablePositionPlayer);
+        //console.log("tableDirection", tableDirection);
+        //console.log("cellPlayers", cellsPlayers);
 
-        for (let cellPositionPlayer = 0; cellPositionPlayer < playerPosition; cellPositionPlayer++) {
+        for (cellPositionPlayer = 0; cellPositionPlayer < playerPosition; cellPositionPlayer++) {
             tablePositionPlayer = playerPosition;
         }
 
         console.log(tablePositionPlayer);
 
-        let currentPlayer = 1;
+        //let currentPlayer = 1;
 
         for(let i = 0; i < tablePositionPlayer; i++) {
 
             for(let i = 0; i < tableDirection; i++) {
 
-                this.moveInDirection(playerPosition, tableDirection, "moveIsPossible" + currentPlayer);
+                this.moveInDirection(playerPosition, tableDirection, "moveIsPossible" /*+ currentPlayer*/);
 
             }
 
-            currentPlayer + 1;
+           // currentPlayer + 1;
 
         }
 
@@ -349,7 +367,6 @@ class Gameboard {
         });
     }
     
-
 
 } 
 
