@@ -8,6 +8,6 @@ $(document).ready(function() {
     gameBoard.generateObstacles();
     gameBoard.generateWeapons();
     gameBoard.addPlayers();
-    //gameBoard.moveIsPossible();
-    gameBoard.enterThePlayerName();
+    gameBoard.createPlayerNameForm();
+    gameBoard.updateThePlayerName();
 });     

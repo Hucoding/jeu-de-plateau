@@ -1,0 +1,35 @@
+
+        //let html = "";
+        //html += "<h3 class=playerName" + playerId + " id=playerName" + playerId + ">" + playerName + "</h3>";
+
+                //$(html).appendTo('.playerPanelLeft');
+
+
+
+<!--<div class="playerPanelLeft" id="playerNameLeft"></div>-->
+
+player 1
+<h3 class="playerName1" id="playerName1">Joueur 1</h3>    
+<img class="playerImg1" src="./assets/imgs/players/alien.png" alt="personnage joueur 1" title="joueur_1">
+
+<div class="createNameContainer" id="createNameContainer1">
+    <input type="text" class="createName1" id="createName1" name="createName1" placeholder="Créer un pseudo ..." required/>
+    <button class="buttonCreateName" id="buttonCreateName1">OK</button>
+</div>
+
+
+player 2
+<h3 class="playerName2" id="playerName2">Joueur 2</h3>
+<img class="playerImg2" src="./assets/imgs/players/alien.png" alt="personnage joueur 2" title="joueur_2" >
+
+<div class="createNameContainer" id="createNameContainer2">
+    <input type="text" class="createName2" id="createName2" name="createName2" placeholder="Créer un pseudo ..." required/>
+    <button class="buttonCreateName" id="buttonCreateName2">OK</button>
+</div>
+
+
+
+                // Système de pile ou face pour déterminer quel joueur commence
+                // le joueur qui perd est grisé et l'autre peut commencer à jouer
+                //$('#rules').html('Qui commence ? <button class="startGamePile" id="startGamePile">Pile</button> ou <button class="startGameFace" id="startGameFace">Face</button>');
+            

@@ -1,7 +1,3 @@
-//Nombre de colonnes et de lignes
-let columnGameBoard = 10;
-let rowGameBoard =  10;
-
 //index initial du premier joueur
 let indexCurrentPlayer = 0;
 
@@ -22,8 +18,9 @@ let numberMove = 3;
 //Nom du skin utilisé par le joueur
 let playerSkin = "alien-fork";
 
-let numberOfGameBox = rowGameBoard * columnGameBoard;
-
+//Couleur de fond des joueurs
+let playerBackgroundColor = ["royalblue", "#ff3333"]; //blue , red
+ 
 function randomNumberWeapon() {
     return Math.floor(Math.random() * Math.floor(numberOfWeapons));
 }

@@ -35,7 +35,7 @@ class Gameboard {
     generateObstacles() {
 
         //nombre maximum de cellules
-        let maxCells = rowGameBoard * columnGameBoard - 1;
+        let maxCells = this.rows * this.columns - 1;
 
         let obstacleIndex = -1;
 
@@ -59,7 +59,7 @@ class Gameboard {
     
     generateWeapons() {
 
-        let maxCells = rowGameBoard * columnGameBoard - 1;
+        let maxCells = this.rows * this.columns - 1;
 
         let weaponIndex = -1;
 
@@ -87,7 +87,7 @@ class Gameboard {
 
     addPlayers() {
 
-        let maxCells = rowGameBoard * columnGameBoard - 1;
+        let maxCells = this.rows * this.columns - 1;
 
         let playerIndex = -1;
 
@@ -100,8 +100,16 @@ class Gameboard {
             } while(!this.cellIsFree(playerIndex));
 
             let firstWeapon = "Fork";
+            let playerId = i+1;
+            let playerName = "Joueur" + "_" + `${playerId}`;
             let weapon = new Weapon(this.weapons.length + 1, playerIndex, firstWeapon);
-            let player = new Player(i, playerIndex, weapon.id);
+            let player = new Player(playerId, playerName, playerIndex, weapon.id);
+
+            console.log("player_id:", playerId);
+            console.log("player:", player);
+
+            this.createPlayerNameForm(player, playerId, playerName);
+            this.updateThePlayerName(player, playerId, playerName);
 
             this.players.push(player);
             this.weapons.push(weapon);
@@ -121,6 +129,101 @@ class Gameboard {
             imgPlayer.appendTo("td#"+playerIndex, 0);
 
         }
+    }
+
+    //Cette fonction permet la création du formulaire d'entrée du nom du joueur de façon dynamique, on passe en paramètre l'id du joueur ainsi que son Nom par défaut
+    createPlayerNameForm(player, playerId, playerName) {
+
+        let playerNameClassId = "playerName" + playerId;
+
+        /* Création du form pour le joueur */
+        let containerLeftOrRight = $("<div></div>");
+        containerLeftOrRight.attr("class", "playerPanel"+playerId);
+        containerLeftOrRight.attr("id", "playerName"+playerId);
+
+        containerLeftOrRight.appendTo('.gameContainer');
+
+        /* Affichage du nom du joueur dans le form */
+        let playerContainerStats = $("<h3></h3>");
+        playerContainerStats.attr("class", playerNameClassId);
+        playerContainerStats.attr("id", playerNameClassId);
+
+        playerContainerStats.appendTo(containerLeftOrRight);
+
+        /* création de l'image du joueur dans le form */
+        let imgPlayerInContainerStats = $("<img />");
+        let imgPlayerUrlInContainerStats = "./assets/imgs/players/alien.png";
+        imgPlayerInContainerStats.attr("class", "playerImg" + playerId);
+        imgPlayerInContainerStats.attr("src", imgPlayerUrlInContainerStats);
+        imgPlayerInContainerStats.attr("alt", "personnage " + playerName);
+
+        playerContainerStats.append(playerName);
+        imgPlayerInContainerStats.appendTo(containerLeftOrRight);
+
+        /* création de la div qui contient l'input ou le joueur peut changer son pseudo */
+        let createNameContainer = $("<div></div>");
+        createNameContainer.attr("class", "createNameContainer");
+        createNameContainer.attr("id", "createNameContainer" + playerId);
+
+        /* ajout de l'input dans la div */
+        let inputChangePseudo = $("<input />");
+        inputChangePseudo.attr("type", "text");
+        inputChangePseudo.attr("class", "createName" + playerId);
+        inputChangePseudo.attr("id", "createName" + playerId);
+        inputChangePseudo.attr("name", "createName" + playerId);
+        inputChangePseudo.attr("placeholder", "Créer votre pseudo...");
+
+        /* ajout du bouton de validation du formulaire */
+        let buttonValidateChange = $("<button></button>");
+        buttonValidateChange.attr("class", "buttonCreateName");
+        buttonValidateChange.attr("id", "buttonCreateName" + playerId);
+        buttonValidateChange.append("OK");
+
+        createNameContainer.appendTo(containerLeftOrRight);
+        inputChangePseudo.appendTo(createNameContainer);
+        buttonValidateChange.appendTo(createNameContainer);
+
+        /* si un player et undefined on ne créer pas de nouveau form joueur */
+        if(player === undefined) {
+            containerLeftOrRight.remove();
+        }
+
+    }
+
+    // Création d'une fonction de mise a jour des informations du joueur et du formulaire
+    updateThePlayerName(player, playerId, playerName) {
+
+        $('#buttonCreateName' + playerId).on("click", function () {
+            if ($('#createName'+ playerId).val().length === 0) { // Si le joueur 1 n'a pas rentrer son pseudo
+                $('#createName'+ playerId).css('border', '1px solid red');
+                $('#playerName'+ playerId).text('Entrez votre nom !').css({  //on affiche un message d'erreur
+                    'color': 'red',
+                    'font-weight': 'bold'
+                });
+            } else {
+
+                let playerClassAndIdName = 'playerName'+ playerId;
+                let newPlayerName = $('#createName'+ playerId).val();
+                
+                $('.playerName'+ playerId).replaceWith("<h3 class=" + playerClassAndIdName + " id=" + playerClassAndIdName + ">" + newPlayerName + "</h3>"); // Remplace player 1 par le nom du joueur
+
+                //Mise à jour du nom du joueur dans l'objet
+                playerName = newPlayerName;
+                player.name = playerName;
+                
+                $('#createNameContainer'+ playerId).fadeOut("3000"); // on efface les inputs
+
+                $('#createName'+ playerId).val(''); // ici on remets l'input à zéro
+                //Afficher player ici
+
+                let playerIndexPosition = player.position;
+
+                $('td#' + playerIndexPosition + '.cell').css("background", playerBackgroundColor[playerId-1]);
+
+            }
+
+        });
+
     }
 
     //le paramètre index : 
@@ -330,43 +433,6 @@ class Gameboard {
 
     }
 
-    
-    enterThePlayerName() {
-
-        $('#buttonCreateName1').on("click", function () {
-            if ($('#createName1').val().length === 0) { // Si le joueur 1 n'a pas rentrer son pseudo
-                $('#createName1').css('border', '1px solid red');
-                $('#playerName1').text('Entrez votre nom !').css({  //on affiche un message d'erreur
-                    'color': 'red',
-                    'font-weight': 'bold'
-                });
-            } else {
-                $('#playerName1').replaceWith("<h3 class='playerName1' id='playerName1'>" + $('#createName1').val() + "</h3>"); // Remplace player 1 par le nom du joueur
-                $('#createNameContainer1').fadeOut("3000"); // on efface les inputs
-                $('#createName1').val(''); // ici on remets l'input à zéro
-                //Afficher player ici
-            }
-        });
-
-        $('#buttonCreateName2').on("click", function () {
-            if (($('#createName2').val().length === 0) || ($('#playerName1').text() === $('#createName2').val())) { // Si le joueur 2 n'a pas rentrer son pseudo ou si c'est le meme que le joueur 1
-                $('#createName2').css('border', '1px solid red');
-                $('#playerName2').text('Entrez votre nom !').css({ // on affiche un message d'erreur 
-                    'color': 'red',
-                    'font-weight': 'bold'
-                });
-            } else {
-                $('#playerName2').replaceWith("<h3 class='playerName2' id='playerName2'>" + $('#createName2').val() + "</h3>");
-                $('#createNameContainer2').fadeOut("3000");
-                $('#createName2').val('');
-
-                // Système de pile ou face pour déterminer quel joueur commence
-                // le joueur qui perd est grisé et l'autre peut commencer à jouer
-                //$('#rules').html('Qui commence ? <button class="startGamePile" id="startGamePile">Pile</button> ou <button class="startGameFace" id="startGameFace">Face</button>');
-            }
-        });
-    }
-    
 
 } 
 

@@ -140,7 +140,7 @@ body {
 
 }
 
-.playerPanelLeft {
+.playerPanel1 {
 
     background: #2a0080;
     height: 610px;
@@ -154,7 +154,7 @@ body {
 
 }
 
-.playerPanelRight {
+.playerPanel2 {
 
     background: #2a0080;
     height: 610px;
@@ -256,8 +256,8 @@ body {
 
     }
 
-    .playerPanelLeft,
-    .playerPanelRight {
+    .playerPanel1,
+    .playerPanel2 {
         margin-right: 0px;
         margin-left: 0px;
         width: 175px;
