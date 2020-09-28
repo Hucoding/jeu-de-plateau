@@ -190,7 +190,7 @@ class Gameboard {
 
     }
 
-    // Création d'une fonction de mise a jour des informations du joueur et du formulaire
+    // Création d'une fonction de mise a jour du nom du joueur et du formulaire
     updateThePlayerName(player, playerId, playerName) {
 
         $('#buttonCreateName' + playerId).on("click", function () {
@@ -211,7 +211,7 @@ class Gameboard {
                 playerName = newPlayerName;
                 player.name = playerName;
                 
-                $('#createNameContainer'+ playerId).fadeOut("3000"); // on efface les inputs
+                $('#createNameContainer'+ playerId).fadeOut("3000"); 
 
                 $('#createName'+ playerId).val(''); // ici on remets l'input à zéro
                 //Afficher player ici
