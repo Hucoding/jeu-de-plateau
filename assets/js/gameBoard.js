@@ -1,5 +1,5 @@
 class Gameboard {
-    constructor(rows, columns, idHtmlTable) {
+    constructor(rows, columns, idHtmlTable, indexCurrentPlayer) {
         this.rows = rows;
         this.columns = columns;
         this.idHtmlTable = idHtmlTable;
@@ -8,6 +8,8 @@ class Gameboard {
         this.weapons = cellsWeapons;
         this.players = cellsPlayers;
         this.indexCurrentPlayer = indexCurrentPlayer;
+        console.log("index current value in gameBoard Controller:", this.indexCurrentPlayer);
+
     }
 
     createTheGameBoard() {
@@ -29,7 +31,7 @@ class Gameboard {
             }
         }  
 
-        console.log("cellsIndex:", cellsIndex);
+        //console.log("cellsIndex:", cellsIndex);
     }
     
     generateObstacles() {
@@ -44,16 +46,23 @@ class Gameboard {
             do {
                 //nombre aléatoire * nombre maximum de cellules
                 obstacleIndex = Math.round(Math.random() * maxCells);
-                console.log("obstacleIndex :", obstacleIndex);
+                //console.log("obstacleIndex :", obstacleIndex);
 
             } while(!this.cellIsFree(obstacleIndex));
 
-            $("td#"+obstacleIndex).addClass("obstacle");
+            $("td#"+obstacleIndex)
+                .addClass("obstacle")
+                .click( (e) => {
+                    console.log("event:", e.target);
+                    //console.log($(this).attr('id'));
+                });
+
             let obstacle = new Obstacle(obstacleIndex);
+
+            //this.update(obstacle);
+
             this.obstacles.push(obstacle);
         }
-
-        console.log("obstacles :", this.obstacles);
 
     } 
     
@@ -73,8 +82,9 @@ class Gameboard {
             
             let randomWeapon = randomNumberWeapon();
             let weapon = new Weapon(i, weaponIndex, randomWeapon);
+
             this.weapons.push(weapon);
-            console.log('arme: ', weapon);
+            //console.log('arme: ', weapon);
 
             let imgWeapon = $("<img />");
             let imgWeaponUrl = `assets/imgs/weapons/${weapon.name}.png`;
@@ -102,14 +112,19 @@ class Gameboard {
             let firstWeapon = "Fork";
             let playerId = i+1;
             let playerName = "Joueur" + "_" + `${playerId}`;
-            let weapon = new Weapon(this.weapons.length + 1, playerIndex, firstWeapon);
-            let player = new Player(playerId, playerName, playerIndex, weapon.id);
-
-            console.log("player_id:", playerId);
-            console.log("player:", player);
+            let weaponId = this.weapons.length + 1;
+            let weapon = new Weapon(weaponId, playerIndex, firstWeapon);
+            let playerWeaponId = weapon.id;
+            let player = new Player(playerId, playerName, playerIndex, playerWeaponId);
 
             this.createPlayerNameForm(player, playerId, playerName);
-            this.updateThePlayerName(player, playerId, playerName);
+            this.updateWeapons(weaponId, playerWeaponId);
+            this.update(player, playerId, playerName, playerIndex, playerWeaponId);
+
+            //let tablePlayers = this.players;
+
+            indexCurrentPlayer = playerId;
+            this.nextPlayer(indexCurrentPlayer);
 
             this.players.push(player);
             this.weapons.push(weapon);
@@ -190,9 +205,23 @@ class Gameboard {
 
     }
 
-    // Création d'une fonction de mise a jour du nom du joueur et du formulaire
-    updateThePlayerName(player, playerId, playerName) {
+    updateWeapons(weaponId, playerWeaponId) {
 
+        if (weaponId != playerWeaponId) {
+            toastr["error"]("l id de l arme ramassé doit etre égale à l id de l arme que possède le joueur", "error");
+        } else if (typeof weaponId != "number" && typeof playerWeaponId != "number") {
+            toastr["error"]("il y'a un problème l'id est une string !", "error");
+        } else {
+            toastr["success"]("aucun problème", "success");
+        }
+
+
+    }
+
+    // Création d'une fonction de mise a jour du nom du joueur et du formulaire
+    update(player, playerId, playerName, playerIndex) {
+
+        //ce premier bloc de code à pour but de mettre à jour et remplacer le nom du joueur par défaut lorsque l'utilisateur rentre un nom personnalisé pour le joueur
         $('#buttonCreateName' + playerId).on("click", function () {
             if ($('#createName'+ playerId).val().length === 0) { // Si le joueur 1 n'a pas rentrer son pseudo
                 $('#createName'+ playerId).css('border', '1px solid red');
@@ -206,7 +235,7 @@ class Gameboard {
                 let newPlayerName = $('#createName'+ playerId).val();
                 
                 $('.playerName'+ playerId).replaceWith("<h3 class=" + playerClassAndIdName + " id=" + playerClassAndIdName + ">" + newPlayerName + "</h3>"); // Remplace player 1 par le nom du joueur
-
+                
                 //Mise à jour du nom du joueur dans l'objet
                 playerName = newPlayerName;
                 player.name = playerName;
@@ -216,9 +245,7 @@ class Gameboard {
                 $('#createName'+ playerId).val(''); // ici on remets l'input à zéro
                 //Afficher player ici
 
-                let playerIndexPosition = player.position;
-
-                $('td#' + playerIndexPosition + '.cell').css("background", playerBackgroundColor[playerId-1]);
+                $('td#' + playerIndex + '.cell').css("background", playerBackgroundColor[playerId-1]);
 
             }
 
@@ -256,8 +283,112 @@ class Gameboard {
     }
 
 
+    findMyCurrentPlayer(index, tablePlayers) {
+
+        //console.log("tablePlayers", tablePlayers);
+        //console.log("index", index);
+    
+        return tablePlayers[index];
+          
+    }
+
+    nextPlayer(indexCurrentPlayer) {
+
+        let newIndex = indexCurrentPlayer + 1;
+        //console.log("nouvel index", newIndex);
+        //console.log("taille tableau", this.players.length);
+
+        if(newIndex < this.players.length) {
+            newIndex = newIndex;
+            console.log("index plus petit que la taille du tableau");
+        } else {
+            console.log("index plus grand que la taille du tableau");
+            newIndex = 0;
+        }
+
+        return newIndex;  
+    }
+
+    testInit() {
+
+        this.createTheGameBoard();
+        this.generateObstacles();
+        this.generateWeapons();
+        this.addPlayers();
+        this.createPlayerNameForm();
+        this.update();
+        this.moveIsPossible();
+        this.moveInDirection();
+
+        //this.updateWeapons();
+
+        /*let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player initial:", getCurrentIndexPlayer);
+        this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+
+        //this.indexCurrentPlayer = this.indexCurrentPlayer + 1; //passage au joueur suivant
+        console.log("modifications index:", this.indexCurrentPlayer);
+        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player après changement:", getCurrentIndexPlayer);
+
+    
+        this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player après changement:", getCurrentIndexPlayer);*/
+    }
+
+    moveIsPossible() { 
+                
+        //récupération de l'index actuel du joueur 
+        let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);  
+        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+
+        console.log("player initial:", getCurrentIndexPlayer);
+
+        //tableau regroupant les différentes directions possibles des joueurs
+        let tableDirection = [1, this.columns, -1, this.columns * -1];
+
+        //tableau des positions des joueurs 
+        //let tablePositionPlayer = [];
+
+        /*for (let cellPositionPlayer = 0; cellPositionPlayer < getCurrentIndexPlayer; cellPositionPlayer++) {
+            tablePositionPlayer = getCurrentIndexPlayer;
+        }*/
+       
+        for(let i = 0; i < getCurrentIndexPlayer.id; i++) {
+
+            console.log(' in get current Index player loop');
+
+            for(let i = 0; i < tableDirection.length; i++) {
+
+                console.log('in tabledirection loop');
+
+                let classStep = "moveIsPossible"+ getCurrentIndexPlayer.id;
+
+                this.moveInDirection(getCurrentIndexPlayer.position, tableDirection, classStep);
+
+                console.log('table direction player', tableDirection);
+                console.log('index player', getCurrentIndexPlayer.position);
+
+                console.log(classStep);
+
+            } 
+
+            this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+            console.log("modifications index:", this.indexCurrentPlayer);
+
+            getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+            console.log("player après changement:", getCurrentIndexPlayer);
+
+        }
+
+
+
+    } 
+
+
     //moveInDirection est une fonction qui vas nous permettre de pourvoir indiquer ou est ce que notre joueur peut se déplacer sur le plateau de jeu
-    moveInDirection(playerPosition, step) {
+    moveInDirection(playerIndex, step, colorStep) {
 
         // Itération -10 à -30
         // i = -10         
@@ -280,15 +411,19 @@ class Gameboard {
 
         // step = 10
         // ité  moveInStepIsPossible = countStep <= (step * numberMove);
-        // 1      true  = 10        <= (10   * 3) 
-        // 2      true  = 20        <= (10   * 3)
-        // 3      true  = 30        <= (10   * 3)
-        // 4      false = 40        <= (10   * 3) => arrêt boucle
+        // 1      true  = 10        <= (10   * 3) 
+        // 2      true  = 20        <= (10   * 3)
+        // 3      true  = 30        <= (10   * 3)
+        // 4      false = 40        <= (10   * 3) => arrêt boucle
 
         // tant que les mouvements sont possibles
+        // Si moveInStepIsPossible est false ne rentre pas da
+        console.log('moveInStepIsPossible', moveInStepIsPossible);
+
         while (moveInStepIsPossible) {
             
-            let gameBoardLine = playerPosition % this.columns;
+            let gameBoardLine = playerIndex % this.columns;
+            console.log('gameboard_line :', gameBoardLine);
             let mapLimitation;
 
             // Vérification des limites de la map à droite et à gauche du joueur
@@ -301,8 +436,11 @@ class Gameboard {
             }
 
             //Ajout de couleur dans les steps ou le joueur peut se déplacer
-            if(this.cellIsMovable(playerPosition + countStep) && mapLimitation){
-                let resultMove = playerPosition + countStep;
+            if(this.cellIsMovable(playerIndex + countStep) && mapLimitation){
+                console.log('count_step', countStep);
+                let resultMove = playerIndex + countStep;
+                console.log('result_move', resultMove);
+                console.log('player_Id', playerIndex);
                 $("td#"+resultMove).addClass(colorStep);
             } else {
                 break;
@@ -321,118 +459,7 @@ class Gameboard {
         }
 
     }
-
-
-
-    //Si les déplacements sont autorisés et si je clique sur une case dispo est de couleur 
-    // Remove le skin du player et ajoute le skin dans la case cliquer
-    //si cette case contient une arme prends l'arme et dépose celle qui est déjà rattachée au joueurs
-    //Attention le joueur ne peut pas disposer de 2 armes à la fois 
-
-    moveIsPossible() {        
-        // vérification à droite à gauche, au-dessus et en-dessous de l'index du joueur 
-        // division pair ou impair  +1 ou -1
-        // vérification si obstcales ou pas 
-    
-        //let positionPlayer1 = cellsPlayers[0].position;
-        //let positionPlayer2 = cellsPlayers[1].position;
-
-        //let opponentPlayer = this.players[this.id == 0 ? 1 : 0].position;
-        //console.log("opponentPlayer :", opponentPlayer);
-
-        //console.log("Joueur 1", positionPlayer1);
-        //console.log("Joueur 2:", positionPlayer2);
-
- 
-        //Mouvements Joueur 1
-        //définition des paramètres pour le joueur 1
-        //this.moveInDirection(positionPlayer1, 1, "moveIsPossiblePlayer1"); //mouvements à droite
-        //this.moveInDirection(positionPlayer1, this.columns, "moveIsPossiblePlayer1"); //mouvement en bas
-        //this.moveInDirection(positionPlayer1, -1, "moveIsPossiblePlayer1"); //mouvements à gauche
-        //this.moveInDirection(positionPlayer1, this.columns * -1, "moveIsPossiblePlayer1"); //mouvements en haut
-
-
-        //Mouvements Joueur 2
-        //définition des paramètres pour le joueur 2
-        //this.moveInDirection(positionPlayer2, 1, "moveIsPossiblePlayer2"); //mouvements à droite
-        //this.moveInDirection(positionPlayer2, this.columns, "moveIsPossiblePlayer2"); //mouvements en bas
-        //this.moveInDirection(positionPlayer2, -1, "moveIsPossiblePlayer2"); //mouvements à gauche
-        //this.moveInDirection(positionPlayer2, this.columns * -1, "moveIsPossiblePlayer2"); //mouvements en haut
-
-        //fonction nextplayer => qui doit calculer et renvoyer le nouvel index du current player
-        // map.js => gameboard.js
-        //tout revoir de A à Z faire une petite doc pour bien comprendre comment fonctionne le code depuis le début
-        
-        //récupération de l'index actuel du joueur 
-        let currentPlayer = cellsPlayers[indexCurrentPlayer];
-
-        console.log("current player:", currentPlayer.position);
-
-        //tableau des positions des joueurs 
-        let tablePositionPlayer = []; 
-
-        //tableau regroupant les différentes directions possibles des joueurs
-        let tableDirection = [1, this.columns, -1, this.columns * -1];
-
-        //console.log("tablePositionPlayer", tablePositionPlayer);
-        //console.log("tableDirection", tableDirection);
-        //console.log("cellPlayers", cellsPlayers);
-
-        for (cellPositionPlayer = 0; cellPositionPlayer < playerPosition; cellPositionPlayer++) {
-            tablePositionPlayer = playerPosition;
-        }
-
-        console.log(tablePositionPlayer);
-
-        //let currentPlayer = 1;
-
-        for(let i = 0; i < tablePositionPlayer; i++) {
-
-            for(let i = 0; i < tableDirection; i++) {
-
-                this.moveInDirection(playerPosition, tableDirection, "moveIsPossible" /*+ currentPlayer*/);
-
-            }
-
-           // currentPlayer + 1;
-
-        }
-
-
-        // V2
-
-
-        // Déclaration pos tab joueur
-
-        // array('baba', 'artoul');
-        // 1ere itération player = baba
-        // 2eme itération player = artoul
-
-        
-        //foreach(cellsPlayers as player) {
-        //    taPosPlayer[] = player.position;
-        //}
-        // Fin déclaration tab player
-
-        // Début de définition des position possible
-
-        // Boucle player
-
-        //foreach(tabPosPlay as posPlayer) {
-
-           // foreach(tabDirection as direc) {
-
-            //    this.moveInDirection(posPlayer, direc, "moveIsPossiblePlayer"+ currentPlayer); //mouvements en haut
-
-            //}
-
-            //currentPlayer + 1;
-
-        //}
-
-
-    }
-
+     
 
 } 
 

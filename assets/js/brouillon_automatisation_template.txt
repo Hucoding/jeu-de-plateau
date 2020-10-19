@@ -29,7 +29,385 @@ player 2
 
 
 
-                // Système de pile ou face pour déterminer quel joueur commence
-                // le joueur qui perd est grisé et l'autre peut commencer à jouer
-                //$('#rules').html('Qui commence ? <button class="startGamePile" id="startGamePile">Pile</button> ou <button class="startGameFace" id="startGameFace">Face</button>');
+    // Système de pile ou face pour déterminer quel joueur commence
+    // le joueur qui perd est grisé et l'autre peut commencer à jouer
+    //$('#rules').html('Qui commence ? <button class="startGamePile" id="startGamePile">Pile</button> ou <button class="startGameFace" id="startGameFace">Face</button>');
+
+
+/*********************************** MOVE IN DIRECTION ***************************************/
+
+
+
+        //let indexCurrentPlayer = playerId;
+        //console.log('index_current_player', indexCurrentPlayer);
+
+        // vérification à droite à gauche, au-dessus et en-dessous de l'index du joueur 
+        // division pair ou impair  +1 ou -1
+        // vérification si obstcales ou pas 
+    
+        //let positionPlayer1 = cellsPlayers[0].position;
+        //let positionPlayer2 = cellsPlayers[1].position;
+
+        //let opponentPlayer = this.players[this.id == 0 ? 1 : 0].position;
+        //console.log("opponentPlayer :", opponentPlayer);
+
+        //console.log("Joueur 1", positionPlayer1);
+        //console.log("Joueur 2:", positionPlayer2);
+
+ 
+        //Mouvements Joueur 1
+        //définition des paramètres pour le joueur 1
+        //this.moveInDirection(positionPlayer1, 1, "moveIsPossiblePlayer1"); //mouvements à droite
+        //this.moveInDirection(positionPlayer1, this.columns, "moveIsPossiblePlayer1"); //mouvement en bas
+        //this.moveInDirection(positionPlayer1, -1, "moveIsPossiblePlayer1"); //mouvements à gauche
+        //this.moveInDirection(positionPlayer1, this.columns * -1, "moveIsPossiblePlayer1"); //mouvements en haut
+
+
+        //Mouvements Joueur 2
+        //définition des paramètres pour le joueur 2
+        //this.moveInDirection(positionPlayer2, 1, "moveIsPossiblePlayer2"); //mouvements à droite
+        //this.moveInDirection(positionPlayer2, this.columns, "moveIsPossiblePlayer2"); //mouvements en bas
+        //this.moveInDirection(positionPlayer2, -1, "moveIsPossiblePlayer2"); //mouvements à gauche
+        //this.moveInDirection(positionPlayer2, this.columns * -1, "moveIsPossiblePlayer2"); //mouvements en haut
+
+        //fonction nextplayer => qui doit calculer et renvoyer le nouvel index du current player
+        // map.js => gameboard.js
+        //tout revoir de A à Z faire une petite doc pour bien comprendre comment fonctionne le code depuis le début
+        
+
+
+        //console.log("tablePositionPlayer", tablePositionPlayer);
+        //console.log("tableDirection", tableDirection);
+        //console.log("cellPlayers", cellsPlayers);
+
+
+        //let currentPlayer = 1;
+
+        //for(let i = 0; i < tablePositionPlayer; i++) {
+
+         //   for(let i = 0; i < tableDirection; i++) {
+
+           //     this.moveInDirection(playerPosition, tableDirection, "moveIsPossible" /*+ currentPlayer*/);
+
+          //  }
+
+           // currentPlayer + 1;
+
+       // }
+
+
+        // V2
+
+
+        // Déclaration pos tab joueur
+
+        // array('baba', 'artoul');
+        // 1ere itération player = baba
+        // 2eme itération player = artoul
+
+        
+        //foreach(cellsPlayers as player) {
+        //    taPosPlayer[] = player.position;
+        //}
+        // Fin déclaration tab player
+
+        // Début de définition des position possible
+
+        // Boucle player
+
+        //foreach(tabPosPlay as posPlayer) {
+
+           // foreach(tabDirection as direc) {
+
+            //    this.moveInDirection(posPlayer, direc, "moveIsPossiblePlayer"+ currentPlayer); //mouvements en haut
+
+            //}
+
+            //currentPlayer + 1;
+
+        //}
+
+
+
+
+
+
+
+
+
+
+
+    //moveInDirection est une fonction qui vas nous permettre de pourvoir indiquer ou est ce que notre joueur peut se déplacer sur le plateau de jeu
+    moveInDirection(playerPosition, step) {
+
+        // Itération -10 à -30
+        // i = -10         
+        // i = -20
+        // i = -30     // stop
+
+        // i est égale à une step qui est en réalité une case du tableau
+        //countStep est égale à une itération d'une step
+        let countStep = step;
+
+        //cette variable permet de tester/vérifier les cases sur lesquelles le joueur peut se déplacer 
+        let moveInStepIsPossible;
+
+        // Premier test
+        if(step < 0){
+            moveInStepIsPossible = countStep >= (step * numberMove);
+        } else {
+            moveInStepIsPossible = countStep <= (step * numberMove);
+        }
+
+        // step = 10
+        // ité  moveInStepIsPossible = countStep <= (step * numberMove);
+        // 1      true  = 10        <= (10   * 3) 
+        // 2      true  = 20        <= (10   * 3)
+        // 3      true  = 30        <= (10   * 3)
+        // 4      false = 40        <= (10   * 3) => arrêt boucle
+
+        // tant que les mouvements sont possibles
+        while (moveInStepIsPossible) {
             
+            let gameBoardLine = playerPosition % this.columns;
+            let mapLimitation;
+
+            // Vérification des limites de la map à droite et à gauche du joueur
+            if(step == 1) {
+                mapLimitation = (gameBoardLine + countStep) < this.columns;
+            } else if(step == -1) {
+                mapLimitation = (gameBoardLine + countStep) > -1;
+            } else {
+                mapLimitation = true;
+            }
+
+            //Ajout de couleur dans les steps ou le joueur peut se déplacer
+            if(this.cellIsMovable(playerPosition + countStep) && mapLimitation){
+                let resultMove = playerPosition + countStep;
+                $("td#"+resultMove).addClass(colorStep);
+            } else {
+                break;
+            }
+
+            //incrémentation du compteur de cases ou le player peut bouger
+            countStep = countStep + step;
+
+            // Dernier test dans la boucle
+            if(step < 0){
+                moveInStepIsPossible = countStep >= (step * numberMove);
+            } else {
+                moveInStepIsPossible = countStep <= (step * numberMove);
+            }
+
+        }
+
+    }
+
+
+
+    //Si les déplacements sont autorisés et si je clique sur une case dispo est de couleur 
+    // Remove le skin du player et ajoute le skin dans la case cliquer
+    //si cette case contient une arme prends l'arme et dépose celle qui est déjà rattachée au joueurs
+    //Attention le joueur ne peut pas disposer de 2 armes à la fois 
+
+    moveIsPossible() {        
+        // vérification à droite à gauche, au-dessus et en-dessous de l'index du joueur 
+        // division pair ou impair  +1 ou -1
+        // vérification si obstcales ou pas 
+    
+        //let positionPlayer1 = cellsPlayers[0].position;
+        //let positionPlayer2 = cellsPlayers[1].position;
+
+        //let opponentPlayer = this.players[this.id == 0 ? 1 : 0].position;
+        //console.log("opponentPlayer :", opponentPlayer);
+
+        //console.log("Joueur 1", positionPlayer1);
+        //console.log("Joueur 2:", positionPlayer2);
+
+ 
+        //Mouvements Joueur 1
+        //définition des paramètres pour le joueur 1
+        //this.moveInDirection(positionPlayer1, 1, "moveIsPossiblePlayer1"); //mouvements à droite
+        //this.moveInDirection(positionPlayer1, this.columns, "moveIsPossiblePlayer1"); //mouvement en bas
+        //this.moveInDirection(positionPlayer1, -1, "moveIsPossiblePlayer1"); //mouvements à gauche
+        //this.moveInDirection(positionPlayer1, this.columns * -1, "moveIsPossiblePlayer1"); //mouvements en haut
+
+
+        //Mouvements Joueur 2
+        //définition des paramètres pour le joueur 2
+        //this.moveInDirection(positionPlayer2, 1, "moveIsPossiblePlayer2"); //mouvements à droite
+        //this.moveInDirection(positionPlayer2, this.columns, "moveIsPossiblePlayer2"); //mouvements en bas
+        //this.moveInDirection(positionPlayer2, -1, "moveIsPossiblePlayer2"); //mouvements à gauche
+        //this.moveInDirection(positionPlayer2, this.columns * -1, "moveIsPossiblePlayer2"); //mouvements en haut
+
+        //fonction nextplayer => qui doit calculer et renvoyer le nouvel index du current player
+        // map.js => gameboard.js
+        //tout revoir de A à Z faire une petite doc pour bien comprendre comment fonctionne le code depuis le début
+        
+        //récupération de l'index actuel du joueur 
+        let currentPlayer = cellsPlayers[indexCurrentPlayer];
+
+        console.log("current player:", currentPlayer.position);
+
+        //tableau des positions des joueurs 
+        let tablePositionPlayer = []; 
+
+        //tableau regroupant les différentes directions possibles des joueurs
+        let tableDirection = [1, this.columns, -1, this.columns * -1];
+
+        //console.log("tablePositionPlayer", tablePositionPlayer);
+        //console.log("tableDirection", tableDirection);
+        //console.log("cellPlayers", cellsPlayers);
+
+        for (cellPositionPlayer = 0; cellPositionPlayer < playerPosition; cellPositionPlayer++) {
+            tablePositionPlayer = playerPosition;
+        }
+
+        console.log(tablePositionPlayer);
+
+        //let currentPlayer = 1;
+
+        for(let i = 0; i < tablePositionPlayer; i++) {
+
+            for(let i = 0; i < tableDirection; i++) {
+
+                this.moveInDirection(playerPosition, tableDirection, "moveIsPossible" /*+ currentPlayer*/);
+
+            }
+
+           // currentPlayer + 1;
+
+        }
+
+
+        // V2
+
+
+        // Déclaration pos tab joueur
+
+        // array('baba', 'artoul');
+        // 1ere itération player = baba
+        // 2eme itération player = artoul
+
+        
+        //foreach(cellsPlayers as player) {
+        //    taPosPlayer[] = player.position;
+        //}
+        // Fin déclaration tab player
+
+        // Début de définition des position possible
+
+        // Boucle player
+
+        //foreach(tabPosPlay as posPlayer) {
+
+           // foreach(tabDirection as direc) {
+
+            //    this.moveInDirection(posPlayer, direc, "moveIsPossiblePlayer"+ currentPlayer); //mouvements en haut
+
+            //}
+
+            //currentPlayer + 1;
+
+        //}
+
+
+    }
+
+
+
+
+
+//recherche du joueur actuel
+// reste à le décortiquer pour le comprendre avant intégration
+
+let players = [{
+
+  name: "alien",
+  life: 100,
+  position: 1
+
+},
+{
+	    
+  name: "astronaut",
+  life: 100,
+  position: 2
+		
+}]; 
+
+let indexCurrentPlayer = 1;
+
+function findMyCurrentPlayer(index, players) {
+	    
+  let playerIndex = index - 1;
+  let currentPlayer = players[playerIndex];
+  
+  return currentPlayer;
+    
+}
+
+
+function nextPlayer(indexCurrentPlayer, players) {
+
+	let newIndex = indexCurrentPlayer + 1;
+  
+    if(indexCurrentPlayer < players.length) {
+        newIndex = newIndex;
+    } else {
+            newIndex = 0;
+    }
+
+    /*if(playerId < cellsPlayers.length) {
+        newIndex = newIndex;
+    } else {
+        newIndex = 0;
+    }*/
+  
+ 	return newIndex;  
+
+}
+
+indexCurrentPlayer = nextPlayer(indexCurrentPlayer, players);
+
+let findMyCurrentPly = findMyCurrentPlayer(indexCurrentPlayer, players);
+
+console.log("index_actuel_du_joueur:", indexCurrentPlayer);
+console.log("joueur_actuel:", findMyCurrentPly);
+
+
+
+
+    // args : playerIndex, playerId        
+    //let playerPosition = playerIndex;
+    //console.log('player_position', playerPosition);
+
+    //Si les déplacements sont autorisés et si je clique sur une case dispo est de couleur 
+    //Remove le skin du player et ajoute le skin dans la case cliquer
+    //si cette case contient une arme prends l'arme et dépose celle qui est déjà rattachée au joueurs
+    //Attention le joueur ne peut pas disposer de 2 armes à la fois 
+
+
+            //let currentPlayer = cellsPlayers[playerIndex];
+        //let tablePositionPlayer = []; 
+
+
+
+
+        let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player initial:", getCurrentIndexPlayer);
+        this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+
+        //this.indexCurrentPlayer = this.indexCurrentPlayer + 1; //passage au joueur suivant
+        console.log("modifications index:", this.indexCurrentPlayer);
+        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player après changement:", getCurrentIndexPlayer);
+
+        //
+        this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player après changement:", getCurrentIndexPlayer);
+        
+    /*for (let cellPositionPlayer = 0; cellPositionPlayer < playerIndex; cellPositionPlayer++) {
+            tablePositionPlayer = playerIndex;
+        }*/

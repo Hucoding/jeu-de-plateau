@@ -238,13 +238,6 @@ body {
     50% { color: rgba(191, 85, 236, 1); }    
 }
 
-.moveIsPossibleBothPlayer {
-
-    background-color: #b300b3;
-    /* animation: blinkingBackground 3s infinite; */
-
-}
-
 @media screen and (min-width: 1000px) and (max-width: 1608px) {
 
 
