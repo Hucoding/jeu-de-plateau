@@ -291,6 +291,15 @@ class Gameboard {
           
     }
 
+    findMyCurrentWeapon(index, tablePlayers) {
+
+        //console.log("tablePlayers", tablePlayers);
+        //console.log("index", index);
+    
+        return tablePlayers[index];
+          
+    }
+
     nextPlayer(indexCurrentPlayer) {
 
         let newIndex = indexCurrentPlayer + 1;
