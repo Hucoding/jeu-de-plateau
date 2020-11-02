@@ -132,6 +132,7 @@ player 2
 
 
 
+                //let classStep = "moveIsPossible"+ getCurrentIndexPlayer.id;
 
 
 
@@ -170,6 +171,8 @@ player 2
         while (moveInStepIsPossible) {
             
             let gameBoardLine = playerPosition % this.columns;
+
+            
             let mapLimitation;
 
             // Vérification des limites de la map à droite et à gauche du joueur
@@ -411,3 +414,181 @@ console.log("joueur_actuel:", findMyCurrentPly);
     /*for (let cellPositionPlayer = 0; cellPositionPlayer < playerIndex; cellPositionPlayer++) {
             tablePositionPlayer = playerIndex;
         }*/
+
+
+
+                //this.updateWeapons();
+
+        /*let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player initial:", getCurrentIndexPlayer);
+        this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+
+        //this.indexCurrentPlayer = this.indexCurrentPlayer + 1; //passage au joueur suivant
+        console.log("modifications index:", this.indexCurrentPlayer);
+        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player après changement:", getCurrentIndexPlayer);
+
+    
+        this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        console.log("player après changement:", getCurrentIndexPlayer);*/
+
+
+                // nombre max deplacements = 10 * numbermove => 10, 20, 30
+        // nombre max deplacements = -10 * numbermove => -10, -20, -30
+
+        //let gameBoardLine = playerIndex % this.rows;
+
+        //let topDir = this.rows * numberMove;
+        //console.log(topDir);
+
+        // let numberMoveIteration = this.rows * (i+1);
+        // console.log(numberMoveIteration); 
+
+
+        /*let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+console.log("player initial:", getCurrentIndexPlayer);
+this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+
+//this.indexCurrentPlayer = this.indexCurrentPlayer + 1; //passage au joueur suivant
+console.log("modifications index:", this.indexCurrentPlayer);
+getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+console.log("player après changement:", getCurrentIndexPlayer);
+
+
+this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+console.log("player après changement:", getCurrentIndexPlayer);*/
+
+            let gameBoardLine = playerIndex % this.columns;
+
+
+            let gameBoardLine = playerIndex % this.columns;
+
+            let limitMap;
+
+                if (step == numberMove) {
+                    limitMap = (playerIndex + step) < this.columns;
+                    console.log('calcul', playerIndex + step)
+                    console.log('first', limitMap);
+                } else if (step == -numberMove) {
+                    limitMap = (gameBoardLine + step) > -numberMove;
+                    console.log('second', limitMap);
+                } else {
+                    limitMap = true;
+                    console.log('last', limitMap);
+                }
+
+
+                                //console.log('table', topDirection[topStep]);
+
+                        let modulo = rightDirection[rightStep] % this.columns;
+                        let limit;
+                                if (modulo == 1) {
+                                    limit = (modulo + leftDirection[leftStep]) < this.columns;
+                                } else if (modulo == -1) {
+                                    limit = (modulo + leftDirection[leftStep]) > -1;
+                                } else {
+                                    limit = true;
+                                }
+
+                                                            if (modulo == 1) {
+                                limit = (modulo + rightDirection[rightStep]) < this.columns;
+                            } else if (modulo == -1) {
+                                limit = (modulo + rightDirection[rightStep]) > -1;
+                            } else {
+                                limit = true;
+                            }
+
+
+
+
+
+
+
+
+            
+     /*   
+            leftDirection = [currentPlayer.position-step];
+            topDirection = [currentPlayer.position - (this.rows * step)];
+            bottomDirection = [currentPlayer.position + (this.rows * step)];
+
+            for(let topStep = 0; topStep < topDirection.length; topStep++) {
+
+                if (topDirection[topStep] < 0){
+                    topDirection.splice(topStep);
+                } else { 
+                    if (this.cellIsMovable(topDirection[topStep])) {
+                        cellIsMovable.push(topDirection[topStep]);
+                        $("td#"+topDirection[topStep]).addClass("moveIsPossible");
+                    } 
+                }
+                
+                for(let bottomStep = 0; bottomStep < bottomDirection.length; bottomStep++) {
+                    
+                    if (bottomDirection[bottomStep] > gameBoard) {
+                        bottomDirection.splice(bottomStep);
+                    } else {
+                        if (this.cellIsMovable(bottomDirection[bottomStep])) {
+                            cellIsMovable.push(bottomDirection[bottomStep]);
+                            $("td#"+bottomDirection[bottomStep]).addClass("moveIsPossible");
+                        } 
+                    }
+
+                    for(let rightStep = 0; rightStep < rightDirection.length; rightStep++) {
+
+                        if (rightDirection[rightStep] < 0) {
+                            rightDirection.splice(rightStep);
+                        } else {
+
+                            if (this.cellIsMovable(rightDirection[rightStep])) {
+                                cellIsMovable.push(rightDirection[rightStep])
+                                $("td#"+rightDirection[rightStep]).addClass("moveIsPossible");
+                            }
+
+                        }
+
+                        for(let leftStep = 0; leftStep < leftDirection.length; leftStep++) {
+                            console.log('ksdhk');                            
+                            if (leftDirection[leftStep] < 0) {
+                                leftDirection.splice(leftStep);
+                            } else {
+
+                                if (this.rows * modulo != currentPlayer.position - modulo) {
+                                    break;
+                                } 
+
+                                if (!obstacle && this.cellIsMovable(leftDirection[leftStep])) {
+                                    cellIsMovable.push(leftDirection[leftStep]);
+                                    $("td#"+leftDirection[leftStep]).addClass("moveIsPossible");
+                                } 
+ 
+                            } 
+
+                        }
+
+                    }
+
+                }
+            }
+        
+        }
+
+
+        //console.log('table_right_dir: ', rightDirection);
+        //console.log('table_left_dir: ', leftDirection);
+
+        $('.moveIsPossible')
+        .click( (e) => {
+            console.log(e.target.id);
+        });
+        */
+
+        //ajout des cases de droites quand cela est possible
+
+            //rightDirection c'est la position actuel du joueur (currentPlayer.position), step c'est une case
+
+            // currentRow c'est le résultat de la position du joueur dans la row dans laquelle il se trouve 
+            // Number.parseInt => permet de supprimer la virgule
+
+                    // limitMap c'est le résultat de rightDirection diviser par 10 (this.rows)

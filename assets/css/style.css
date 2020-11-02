@@ -215,7 +215,7 @@ body {
     50% { background-color: rgb(119, 119, 243); }
 } 
 
-.moveIsPossiblePlayer1 {
+.moveIsPossible {
 
     background-color: royalblue;
     animation: blinkingBlueBackground 2s infinite; 

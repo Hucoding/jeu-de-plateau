@@ -1,5 +1,5 @@
 //index initial du premier joueur
-let indexCurrentPlayer = 0;
+let indexCurrentPlayer = 1;
 
 //Nombre d'obstacles
 let numberOfObstacles = 10;
@@ -13,7 +13,7 @@ let numberOfPlayers = 2;
 //vie du joueur
 let maxLife = 100;
 
-let numberMove = 3;
+let numberMove = 4;
 
 //Nom du skin utilisé par le joueur
 let playerSkin = "alien-fork";
@@ -24,6 +24,7 @@ let playerBackgroundColor = ["royalblue", "#ff3333"]; //blue , red
 function randomNumberWeapon() {
     return Math.floor(Math.random() * Math.floor(numberOfWeapons));
 }
+
 
 let cellsIndex = [];
 let cellsWeapons = [];

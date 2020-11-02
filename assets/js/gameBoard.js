@@ -28,10 +28,11 @@ class Gameboard {
                 tr.appendChild(td);
                 this.numberOfCell++;
                 cellsIndex.push(this.numberOfCell-1);
+
             }
+
         }  
 
-        //console.log("cellsIndex:", cellsIndex);
     }
     
     generateObstacles() {
@@ -121,10 +122,8 @@ class Gameboard {
             this.updateWeapons(weaponId, playerWeaponId);
             this.update(player, playerId, playerName, playerIndex, playerWeaponId);
 
-            //let tablePlayers = this.players;
-
-            indexCurrentPlayer = playerId;
-            this.nextPlayer(indexCurrentPlayer);
+            // When player move and step is in highlight
+            //this.miseEnSurbrillance(player, playerId, playerIndex);
 
             this.players.push(player);
             this.weapons.push(weapon);
@@ -309,6 +308,166 @@ class Gameboard {
         return newIndex;  
     }
 
+    moveIsPossible(player) { 
+                
+        //récupération de l'index actuel du joueur 
+        let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);  
+
+        //tableau regroupant les différentes directions possibles des joueurs
+        let tableDirection = [1, this.columns, -1, this.columns * -1];
+
+        for(let i = 0; i < getCurrentIndexPlayer; i++) {
+
+            for(let i = 0; i < tableDirection.length; i++) {
+
+                this.miseEnSurbrillance(player, playerId, playerIndex);
+
+                console.log(getCurrentIndexPlayer);
+
+                this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+                this.indexCurrentPlayer;
+
+            } 
+
+        }
+
+    } 
+
+    miseEnSurbrillance(currentPlayer) {
+
+        let cellIsMovable = [];
+
+        let rightDirection;
+        let leftDirection;
+        let topDirection;
+        let bottomDirection;
+
+        //ajout des cases de déplacement de droite quand cela est possible
+        for( let step = 1; step < numberMove; step++) {
+
+            rightDirection = currentPlayer.position + step;
+
+            let currentRow = Number.parseInt(currentPlayer.position / this.rows);
+            let limitMap = Number.parseInt(rightDirection / this.rows);
+
+            if (currentRow != limitMap) {
+                break;
+            } else {
+
+                if (this.cellIsMovable(rightDirection)) {
+                    cellIsMovable.push(rightDirection)
+                    $("td#"+rightDirection).addClass("moveIsPossible");
+                } else {
+                    break;
+                }
+
+            }
+
+        }
+        
+        //ajout des cases de déplacement de gauche quand cela est possible
+        for( let step = 1; step < numberMove; step++) {
+
+            leftDirection  = currentPlayer.position - step;
+            
+            let currentRow = Number.parseInt(currentPlayer.position / this.rows);
+            let limitMap = Number.parseInt(leftDirection / this.rows);
+
+            if (currentRow != limitMap) {
+                break;
+            } else {
+
+                if (this.cellIsMovable(leftDirection)) {
+                    cellIsMovable.push(leftDirection)
+                    $("td#"+leftDirection).addClass("moveIsPossible");
+                } else {
+                    break;
+                }
+
+            }     
+
+        }
+
+        //ajout des cases de déplacement du haut quand cela est possible
+        for( let step = 1; step < numberMove; step++) {
+
+            topDirection  = currentPlayer.position - (this.columns * step);
+
+            let limitMap = Number.parseInt(topDirection / this.rows);
+
+            if (limitMap < 0) {
+                break;
+            } else {
+
+                if (this.cellIsMovable(topDirection)) {
+                    cellIsMovable.push(topDirection)
+                    $("td#"+topDirection).addClass("moveIsPossible");
+                } else {
+                    break;
+                }
+
+            }
+
+        }
+
+        //ajout des cases de déplacement du bas quand cela est possible
+        for( let step = 1; step < numberMove; step++) {
+
+            bottomDirection  = currentPlayer.position + (this.columns * step);
+
+            let limitMap = Number.parseInt(bottomDirection / this.rows);
+
+            if (limitMap >= this.rows) {
+                break;
+            } else {
+
+                if (this.cellIsMovable(bottomDirection)) {
+                    cellIsMovable.push(bottomDirection)
+                    $("td#"+bottomDirection).addClass("moveIsPossible");
+                } else {
+                    break;
+                }
+
+            }
+
+        }
+
+
+        $('.moveIsPossible')
+        .click( (e) => {
+
+            let targetStep = parseInt(e.target.id);
+            console.log('changement_de_case', targetStep);
+
+            $('td#'+currentPlayer.position+' img').remove();
+
+            //Mise à jour de la position du joueur 
+            currentPlayer.position = targetStep;
+            
+
+            let imgWeapon = $("<img />");
+            let imgWeaponUrl = `assets/imgs/weapons/fork.png`;
+
+            imgWeapon.attr("class", "weaponStartThePlayer");
+            imgWeapon.attr("src", imgWeaponUrl);    
+            imgWeapon.appendTo("td#"+currentPlayer.position, 0);     
+
+            let imgPlayer = $("<img />");
+            let imgPlayerUrl = "assets/imgs/players/alien.png";
+
+            imgPlayer.attr("class", "playerWithStartWeapon");
+            imgPlayer.attr("src", imgPlayerUrl);  
+            imgPlayer.appendTo("td#"+currentPlayer.position, 0);
+
+            console.log('nouvelle_position', currentPlayer.position);
+
+            console.log(currentPlayer);
+
+        });
+    
+    }
+
+
     testInit() {
 
         this.createTheGameBoard();
@@ -317,146 +476,10 @@ class Gameboard {
         this.addPlayers();
         this.createPlayerNameForm();
         this.update();
-        this.moveIsPossible();
-        this.moveInDirection();
-
-        //this.updateWeapons();
-
-        /*let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
-        console.log("player initial:", getCurrentIndexPlayer);
-        this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
-
-        //this.indexCurrentPlayer = this.indexCurrentPlayer + 1; //passage au joueur suivant
-        console.log("modifications index:", this.indexCurrentPlayer);
-        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
-        console.log("player après changement:", getCurrentIndexPlayer);
-
-    
-        this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
-        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
-        console.log("player après changement:", getCurrentIndexPlayer);*/
-    }
-
-    moveIsPossible() { 
-                
-        //récupération de l'index actuel du joueur 
-        let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);  
-        getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
-
-        console.log("player initial:", getCurrentIndexPlayer);
-
-        //tableau regroupant les différentes directions possibles des joueurs
-        let tableDirection = [1, this.columns, -1, this.columns * -1];
-
-        //tableau des positions des joueurs 
-        //let tablePositionPlayer = [];
-
-        /*for (let cellPositionPlayer = 0; cellPositionPlayer < getCurrentIndexPlayer; cellPositionPlayer++) {
-            tablePositionPlayer = getCurrentIndexPlayer;
-        }*/
-       
-        for(let i = 0; i < getCurrentIndexPlayer.id; i++) {
-
-            console.log(' in get current Index player loop');
-
-            for(let i = 0; i < tableDirection.length; i++) {
-
-                console.log('in tabledirection loop');
-
-                let classStep = "moveIsPossible"+ getCurrentIndexPlayer.id;
-
-                this.moveInDirection(getCurrentIndexPlayer.position, tableDirection, classStep);
-
-                console.log('table direction player', tableDirection);
-                console.log('index player', getCurrentIndexPlayer.position);
-
-                console.log(classStep);
-
-            } 
-
-            this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
-            console.log("modifications index:", this.indexCurrentPlayer);
-
-            getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
-            console.log("player après changement:", getCurrentIndexPlayer);
-
-        }
-
-
-
-    } 
-
-
-    //moveInDirection est une fonction qui vas nous permettre de pourvoir indiquer ou est ce que notre joueur peut se déplacer sur le plateau de jeu
-    moveInDirection(playerIndex, step, colorStep) {
-
-        // Itération -10 à -30
-        // i = -10         
-        // i = -20
-        // i = -30     // stop
-
-        // i est égale à une step qui est en réalité une case du tableau
-        //countStep est égale à une itération d'une step
-        let countStep = step;
-
-        //cette variable permet de tester/vérifier les cases sur lesquelles le joueur peut se déplacer 
-        let moveInStepIsPossible;
-
-        // Premier test
-        if(step < 0){
-            moveInStepIsPossible = countStep >= (step * numberMove);
-        } else {
-            moveInStepIsPossible = countStep <= (step * numberMove);
-        }
-
-        // step = 10
-        // ité  moveInStepIsPossible = countStep <= (step * numberMove);
-        // 1      true  = 10        <= (10   * 3) 
-        // 2      true  = 20        <= (10   * 3)
-        // 3      true  = 30        <= (10   * 3)
-        // 4      false = 40        <= (10   * 3) => arrêt boucle
-
-        // tant que les mouvements sont possibles
-        // Si moveInStepIsPossible est false ne rentre pas da
-        console.log('moveInStepIsPossible', moveInStepIsPossible);
-
-        while (moveInStepIsPossible) {
-            
-            let gameBoardLine = playerIndex % this.columns;
-            console.log('gameboard_line :', gameBoardLine);
-            let mapLimitation;
-
-            // Vérification des limites de la map à droite et à gauche du joueur
-            if(step == 1) {
-                mapLimitation = (gameBoardLine + countStep) < this.columns;
-            } else if(step == -1) {
-                mapLimitation = (gameBoardLine + countStep) > -1;
-            } else {
-                mapLimitation = true;
-            }
-
-            //Ajout de couleur dans les steps ou le joueur peut se déplacer
-            if(this.cellIsMovable(playerIndex + countStep) && mapLimitation){
-                console.log('count_step', countStep);
-                let resultMove = playerIndex + countStep;
-                console.log('result_move', resultMove);
-                console.log('player_Id', playerIndex);
-                $("td#"+resultMove).addClass(colorStep);
-            } else {
-                break;
-            }
-
-            //incrémentation du compteur de cases ou le player peut bouger
-            countStep = countStep + step;
-
-            // Dernier test dans la boucle
-            if(step < 0){
-                moveInStepIsPossible = countStep >= (step * numberMove);
-            } else {
-                moveInStepIsPossible = countStep <= (step * numberMove);
-            }
-
-        }
+        // this.moveIsPossible();
+        let currentPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
+        this.miseEnSurbrillance(currentPlayer);
+        console.log('current player', currentPlayer);
 
     }
      
