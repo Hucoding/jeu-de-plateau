@@ -20,15 +20,6 @@ body {
     margin: auto;
 }
 
-/*
-.gameContainer {
-
-    text-align: center;
-    width: 992px;
-    height: 630px;
-    margin: auto;
-}*/
-
 .gameBoard {
     border: 10px solid #BF7930;
     border-spacing: 0;
@@ -183,15 +174,113 @@ body {
 
 }
 
+.playerNameChanged1,
+.playerNameChanged2 {
+    color: white;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    margin: 20px;
+}
+
+.playerLifeInfo1,
+.playerLifeInfo2 {
+    color: white;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    margin: 20px;  
+}
+
+.playerWeaponInfo {
+    color: white;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    margin: 20px;  
+}
+
+.weaponInfoDamage {
+    color: white;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    margin: 20px;  
+}
+
+progress {
+    background-color: green;
+}
+
+/********
+* Weapons
+*********/
+
+.Fork {
+
+    background-image: url('../imgs/weapons/Fork.png');
+    background-color: rgb(153, 97, 38);
+    background-repeat: no-repeat;
+    background-position: center;   
+}
+
+.Lazer {
+
+    background-image: url('../imgs/weapons/Lazer.png');
+    background-color: rgb(153, 97, 38);
+    background-repeat: no-repeat;
+    background-position: center;    
+
+}
+
+.Maxi {
+
+    background-image: url('../imgs/weapons/Maxi.png');
+    background-color: rgb(153, 97, 38);
+    background-repeat: no-repeat;
+    background-position: center;    
+
+}
+
+.Mega {
+
+    background-image: url('../imgs/weapons/Mega.png');
+    background-color: rgb(153, 97, 38);
+    background-repeat: no-repeat;
+    background-position: center;    
+
+}
+
+.playWithFork {
+    background-image: url('../imgs/weapons/Fork.png');
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 25px top;
+}
+
+.playWithLazer {
+    background-image: url('../imgs/weapons/Lazer.png');
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 25px top;
+}
+
+.playWithMaxi {
+    background-image: url('../imgs/weapons/Maxi.png');
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 25px top;
+}
+
+.playWithMega {
+    background-image: url('../imgs/weapons/Mega.png');
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 25px top;
+}
+
+
 .obstacle {
 
     background-image: url(../imgs/obstacle.svg);
     background-repeat: no-repeat;
     
-}
-
-.weaponRandom {
-    padding: 10px;
 }
 
 .weaponStartThePlayer {
@@ -215,7 +304,7 @@ body {
     50% { background-color: rgb(119, 119, 243); }
 } 
 
-.moveIsPossible {
+.moveIsPossible1 {
 
     background-color: royalblue;
     animation: blinkingBlueBackground 2s infinite; 
@@ -226,7 +315,7 @@ body {
     50% { color: rgb(243, 158, 158); }
 }
 
-.moveIsPossiblePlayer2 {
+.moveIsPossible2 {
 
     background-color: #ff3333;
     animation: blinkingRedBackground 2s infinite;

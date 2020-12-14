@@ -1,5 +1,5 @@
 //index initial du premier joueur
-let indexCurrentPlayer = 1;
+let indexCurrentPlayer = 0;
 
 //Nombre d'obstacles
 let numberOfObstacles = 10;
@@ -25,9 +25,13 @@ function randomNumberWeapon() {
     return Math.floor(Math.random() * Math.floor(numberOfWeapons));
 }
 
-
 let cellsIndex = [];
 let cellsWeapons = [];
 let cellsObsctacles = [];
 let cellsPlayers = [];
 
+let target;
+
+let tourOfPlayer = 0;
+
+let defaultIdWeapon = 5;

@@ -592,3 +592,322 @@ console.log("player après changement:", getCurrentIndexPlayer);*/
             // Number.parseInt => permet de supprimer la virgule
 
                     // limitMap c'est le résultat de rightDirection diviser par 10 (this.rows)
+
+
+
+
+
+
+            /*let imgWeapon = $("<img />");
+            let imgWeaponUrl = `assets/imgs/weapons/fork.png`;
+
+            imgWeapon.attr("class", "weaponStartThePlayer");
+            imgWeapon.attr("src", imgWeaponUrl);    
+            imgWeapon.appendTo("td#"+currentPlayer.position, 0);*/     
+
+            let imgPlayer = $("<img />");
+            let imgPlayerUrl = "assets/imgs/players/alien.png";
+
+            imgPlayer.attr("class", "playerWithStartWeapon");
+            imgPlayer.attr("src", imgPlayerUrl);  
+            imgPlayer.appendTo("td#"+currentPlayer.position, 0);
+
+            console.log('nouvelle_position', currentPlayer.position);
+
+            console.log(currentPlayer);
+
+
+
+
+
+            let previousStep;
+
+            for(let step = 1; step < numberMove; step++) {
+
+                //haut
+                if (targetStep === currentPlayer.position - (this.columns * step)) {
+                    previousStep = targetStep + this.columns;
+                    for(previousStep; previousStep < targetStep; previousStep++) {
+                        console.log(previousStep);
+                    }
+                    
+                //bas
+                } else if (targetStep === currentPlayer.position + (this.columns * step)) {
+
+                //gauche
+                } else if (targetStep === currentPlayer.position - step) {
+
+                //droite
+                } else if (targetStep === currentPlayer.position + step) {
+
+                }
+            }
+
+            //$('td#'+currentPlayer.position+' img').remove();
+
+            //Mise à jour de la position du joueur 
+            //currentPlayer.position = targetStep;
+
+            /*
+            previousStep = targetStep + this.columns;
+            if (previousStep > targetStep && topCellIsMovable.indexOf(previousStep)) {
+                console.log(previousStep);
+            }
+            */
+
+            /*else if (target === currentPlayer.position + (this.columns * numberMove)) {
+                console.log('bas');
+            //déplacement vers la gauche
+            } else if (target === currentPlayer.position - numberMove) {
+                console.log('gauche');
+            //déplacement vers la droite
+            } else if (target === currentPlayer.position + numberMove) {
+                console.log('droite');
+            }*/
+
+
+            //$('td#'+currentPlayer.position+' img').remove();
+
+            //Mise à jour de la position du joueur 
+            //currentPlayer.position = targetStep;
+
+
+
+                let newPlayerPosition = currentPlayer.position + this.incrementationDeplacementJoueur(currentPlayer);
+
+                currentPlayer.position = newPlayerPosition;
+                newPlayerPosition = currentPlayer.position;
+
+
+                                   if(newPlayerPos === target) {
+                        currentPlayer.position = newPlayerPos;
+                        console.log('target égale a newPlayerPos', target,' = ',newPlayerPos);
+                        console.log('Nouvelle position du joueur', currentPlayer.position);
+                    } 
+
+
+                       /*if(target === newPlayerPos) {
+                    
+                    currentPlayer.position = newPlayerPos;
+                    newPlayerPos = currentPlayer.position;
+
+                    console.log('target égale a newPlayerPos', target,' = ', newPlayerPos);
+                } else {
+                    break;
+                }*/
+
+
+
+                           // } 
+
+            /*for(target = 0; target < currentPlayer.position; target++) {
+                currentPlayer.position = currentPlayer.position + this.incrementationDeplacementJoueur(currentPlayer);
+                console.log('new player position:', currentPlayer.position);
+            }*/
+
+            //console.log('changement_de_case', target);
+
+            //console.log('incrementation', this.incrementationDeplacementJoueur(currentPlayer)); 
+
+
+           // if (target < currentPlayer.position || target > currentPlayer.position) {
+
+            //console.log('pas dincrementation:', this.incrementationDeplacementJoueur(currentPlayer));
+
+
+               /* currentPlayer.position = newPlayerPos;
+                newPlayerPos = currentPlayer.position; */
+
+
+
+/*.weapon {
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    background-repeat: no-repeat;
+}*/
+
+/*
+.gameContainer {
+
+    text-align: center;
+    width: 992px;
+    height: 630px;
+    margin: auto;
+}*/
+
+            
+//let imgWeapon = $("<span />");
+//let imgWeaponUrl = `assets/imgs/weapons/${weapon.name}.png`;
+//imgWeapon.attr("class", `${weapon.name}`);
+//imgWeapon.attr("src", imgWeaponUrl);    
+//imgWeapon.attr("alt", `${weapon.name}`);
+//imgWeapon.appendTo("td#"+weaponIndex, randomWeapon); 
+
+/*let spanWeapon = $("<div></div>");
+let spanWeaponUrl = `assets/imgs/weapons/${weapon.name}.png`;
+spanWeapon.attr("class", "weapon");  
+$("div.weapon").css("background-image", `url(${spanWeaponUrl})`); 
+spanWeapon.appendTo("td#"+weaponIndex, randomWeapon); */ 
+
+
+            console.log('index_current_player', this.indexCurrentPlayer);
+            if (currentPlayer.position === target) {
+
+                let nextPlayerId =  this.nextPlayer(this.indexCurrentPlayer);
+
+               console.log('next_player', nextPlayerId);
+               console.log('new_current_player', currentPlayer);
+        
+            }  
+
+                                if(cellsWeapons[currentPlayer.position]) {
+                        cellsWeapons.id = currentPlayer.idWeapon;
+                        console.log('newWeapon', currentPlayer.idWeapon);
+                    }
+
+
+                                        if($("td#"+cellsWeapons[currentPlayer.position])) {
+                        console.log(cellsWeapons[]);
+                    }
+
+
+                                    //console.log('weapon :', weapon.name);
+                //console.log('weapon.id :', weapon.id);
+                //console.log('currentPlayer.idWeapon :', currentPlayer.idWeapon);
+                                //console.log('new_weapon', currentPlayer.idWeapon);
+
+
+                   /* let imgWeapon = $("<img />");
+                    let imgWeaponUrl = `assets/imgs/weapons/${firstWeapon}.png`;
+        
+                    imgWeapon.attr("class", "weaponStartThePlayer");
+                    imgWeapon.attr("src", imgWeaponUrl);    
+                    imgWeapon.appendTo("td#"+currentPlayer.position, 0); */
+
+
+
+
+    moveIsPossible(player) { 
+                
+        //récupération de l'index actuel du joueur 
+        let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);  
+
+        //tableau regroupant les différentes directions possibles des joueurs
+        let tableDirection = [1, this.columns, -1, this.columns * -1];
+
+        for(let i = 0; i < getCurrentIndexPlayer; i++) {
+
+            for(let i = 0; i < tableDirection.length; i++) {
+
+                this.miseEnSurbrillance(player, playerId, playerIndex);
+
+                console.log(getCurrentIndexPlayer);
+
+                //this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
+                this.indexCurrentPlayer;
+
+            } 
+
+        }
+
+    } 
+
+
+                    //$("td#"+ currentPlayer.position).removeClass(weapon.name);
+                //$("td#" + currentPlayer.position + " > img.weaponStartThePlayer" ).remove();
+
+
+            //let topCellIsMovable = [];
+        //let bottomCellIsMovable = [];
+        //let rightCellIsMovable = [];
+        //let leftCellIsMovable = [];
+
+        tableauObjet, attributObjet, idObjet 
+
+
+        //let newIndex = indexCurrentPlayer + 1;
+        /*
+        console.log("nouvel index", newIndex);
+        console.log("taille tableau", this.players.length);
+
+       if(newIndex < this.players.length) {
+            newIndex = newIndex;
+            console.log("index plus petit que la taille du tableau");
+        } else {
+            console.log("index plus grand que la taille du tableau");
+            newIndex = 0;
+        }
+
+        return newIndex;  
+        */
+
+        /*
+        var result = "";
+
+        for (var i in tableObject) {
+          if (tableObject.hasOwnProperty(i)) {
+              result += attrObject + "." + i + " = " + idObject + " " + tableObject[i] + "\n
+          }
+        }
+
+        return result;
+*/
+
+            //let convert = Object.keys(the_element).map((key) => the_element[key]);
+
+        //console.log('TABLE OBJECT', tableObject);
+           // console.log(element);
+
+        /*
+        let theElement = {}; 
+
+        tableObject.forEach(element => {
+
+            if (typeof element[idFieldName] !== 'undefined') { // si le champs id est défini dans element
+                if (element[idFieldName] == idObject) {
+                    theElement = element;
+                }
+            } 
+
+            if ( typeof theElement === 'object') {
+                console.log('THE ELEMENT', Object.keys(theElement).length);
+                let size = Object.keys(theElement).length;
+                if (size > 0) {
+                    console.log('the element ', theElement);
+                    if (typeof theElement[attrObject] !== 'undefined') {
+                        console.log('retourne name object :', theElement[attrObject]);
+                    }
+                    return null;
+                }
+                return null;
+            }
+            return null; //si jamais il passe dans aucune condition
+            
+        });
+        */
+
+//        console.log('tableObject', tableObject);
+
+
+                    
+                   //*** start - position ***//
+                   /*
+                   let getCurrentPosition = this.getInfo(this.players, "position", currentPlayer.id);
+
+                   let positionWeapon = this.setInfo(this.weapons, "position", currentPlayer.idWeapon, getCurrentPosition);
+                   console.log('position_armes', positionWeapon);
+                   */
+                   //*** end - position ***//
+
+
+
+
+                    //récupération des informations concernant l'arme actuelle du joueur
+                    //let getInfoObject = this.getInfo(cellsPlayers, "idWeapon", currentPlayer.idWeapon);
+                    //let setInfo = this.setInfo(cellsPlayers, "idWeapon", currentPlayer.idWeapon, findWeapon);
+                    //console.log('getInfoObject', getInfoObject);
+                    //console.log('setInfo', setInfo);
+
+                    
+                    //console.log('updateWeapon', updateWeapon)

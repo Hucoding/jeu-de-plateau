@@ -709,3 +709,14 @@ $(function () {
         $('#instructions').html('Utilisez les flÃ¨ches du clavier pour dÃ©placer les players</br><u>3 dÃ©placements possibles</u>');
     });    
 });
+
+
+        console.log('arme avant récup', oldWeapon);
+
+                //console.log('current pos', currentPlayer.idWeapon);
+                //console.log('current name', weapon.name);
+
+              // $("td#"+currentPlayer.position).removeClass();
+              //  $("td#"+currentPlayer.position + " > img.playerWithStartWeapon").addClass("playWith" + currentWeapon);
+
+                            console.log('old zrme', oldWeapon);

@@ -1,7 +1,9 @@
 class Weapon {
-    constructor(i, position, id){
+    constructor(i, position, damage, name){
         this.position = position;
         this.id = i;
+        this.damage = damage;
+        this.name = name;
         switch(this.id) {
             case 0:
                 this.damage = 5;

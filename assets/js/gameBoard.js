@@ -8,7 +8,8 @@ class Gameboard {
         this.weapons = cellsWeapons;
         this.players = cellsPlayers;
         this.indexCurrentPlayer = indexCurrentPlayer;
-        console.log("index current value in gameBoard Controller:", this.indexCurrentPlayer);
+        this.globalMoves = [];
+        //console.log("index current value in gameBoard Controller:", this.indexCurrentPlayer);
 
     }
 
@@ -85,13 +86,9 @@ class Gameboard {
             let weapon = new Weapon(i, weaponIndex, randomWeapon);
 
             this.weapons.push(weapon);
-            //console.log('arme: ', weapon);
 
-            let imgWeapon = $("<img />");
-            let imgWeaponUrl = `assets/imgs/weapons/${weapon.name}.png`;
-            imgWeapon.attr("class", "weaponRandom");
-            imgWeapon.attr("src", imgWeaponUrl);    
-            imgWeapon.appendTo("td#"+weaponIndex, randomWeapon);            
+            $("td#"+weaponIndex).addClass(`${weapon.name}`);
+           
         }
 
     }    
@@ -111,29 +108,28 @@ class Gameboard {
             } while(!this.cellIsFree(playerIndex));
 
             let firstWeapon = "Fork";
+            let firstWeaponDamage = 5;
             let playerId = i+1;
             let playerName = "Joueur" + "_" + `${playerId}`;
-            let weaponId = this.weapons.length + 1;
-            let weapon = new Weapon(weaponId, playerIndex, firstWeapon);
+            let weaponId = this.weapons.length;
+            let weapon = new Weapon(weaponId, playerIndex, firstWeaponDamage, firstWeapon);
+            console.log(weapon);
             let playerWeaponId = weapon.id;
+
             let player = new Player(playerId, playerName, playerIndex, playerWeaponId);
 
             this.createPlayerNameForm(player, playerId, playerName);
-            this.updateWeapons(weaponId, playerWeaponId);
-            this.update(player, playerId, playerName, playerIndex, playerWeaponId);
-
-            // When player move and step is in highlight
-            //this.miseEnSurbrillance(player, playerId, playerIndex);
-
+            this.update(player, playerId, playerName);
+            
             this.players.push(player);
             this.weapons.push(weapon);
 
-            let imgWeapon = $("<img />");
+            /* let imgWeapon = $("<img />");
             let imgWeaponUrl = `assets/imgs/weapons/${firstWeapon}.png`;
 
             imgWeapon.attr("class", "weaponStartThePlayer");
             imgWeapon.attr("src", imgWeaponUrl);    
-            imgWeapon.appendTo("td#"+playerIndex, 0);     
+            imgWeapon.appendTo("td#"+playerIndex, 0);   */
 
             let imgPlayer = $("<img />");
             let imgPlayerUrl = "assets/imgs/players/alien.png";
@@ -142,6 +138,7 @@ class Gameboard {
             imgPlayer.attr("src", imgPlayerUrl);  
             imgPlayer.appendTo("td#"+playerIndex, 0);
 
+            $("td#" + playerIndex + " > img.playerWithStartWeapon").addClass("playWith"+firstWeapon);
         }
     }
 
@@ -187,6 +184,7 @@ class Gameboard {
         inputChangePseudo.attr("name", "createName" + playerId);
         inputChangePseudo.attr("placeholder", "Créer votre pseudo...");
 
+        
         /* ajout du bouton de validation du formulaire */
         let buttonValidateChange = $("<button></button>");
         buttonValidateChange.attr("class", "buttonCreateName");
@@ -204,24 +202,15 @@ class Gameboard {
 
     }
 
-    updateWeapons(weaponId, playerWeaponId) {
-
-        if (weaponId != playerWeaponId) {
-            toastr["error"]("l id de l arme ramassé doit etre égale à l id de l arme que possède le joueur", "error");
-        } else if (typeof weaponId != "number" && typeof playerWeaponId != "number") {
-            toastr["error"]("il y'a un problème l'id est une string !", "error");
-        } else {
-            toastr["success"]("aucun problème", "success");
-        }
-
-
-    }
-
     // Création d'une fonction de mise a jour du nom du joueur et du formulaire
-    update(player, playerId, playerName, playerIndex) {
+    update(player, playerId, playerName) {
 
         //ce premier bloc de code à pour but de mettre à jour et remplacer le nom du joueur par défaut lorsque l'utilisateur rentre un nom personnalisé pour le joueur
         $('#buttonCreateName' + playerId).on("click", function () {
+
+        //let getNewWeaponName = this.getInfo(this.weapons, "name", player.idWeapon);
+        //let setPlayerWeaponName = this.setInfo(this.weapons, "name", player.idWeapon, getNewWeaponName);
+
             if ($('#createName'+ playerId).val().length === 0) { // Si le joueur 1 n'a pas rentrer son pseudo
                 $('#createName'+ playerId).css('border', '1px solid red');
                 $('#playerName'+ playerId).text('Entrez votre nom !').css({  //on affiche un message d'erreur
@@ -234,17 +223,53 @@ class Gameboard {
                 let newPlayerName = $('#createName'+ playerId).val();
                 
                 $('.playerName'+ playerId).replaceWith("<h3 class=" + playerClassAndIdName + " id=" + playerClassAndIdName + ">" + newPlayerName + "</h3>"); // Remplace player 1 par le nom du joueur
-                
+
                 //Mise à jour du nom du joueur dans l'objet
                 playerName = newPlayerName;
                 player.name = playerName;
+
+                if(player.name === playerName) {
+
+                    let newPlayerNameContainer = $('<div></div>');
+                    newPlayerNameContainer.attr("class", "playerNameChanged"+player.id);
+                    newPlayerNameContainer.attr("id", "playerNameChanged"+player.id);
+                    newPlayerNameContainer.append("Pseudo : ", player.name);
+
+                    let infoLifePlayerContainer = $('<div></div>');
+                    infoLifePlayerContainer.attr("class", "playerLifeInfo"+player.id);
+                    infoLifePlayerContainer.attr("id", "playerLifeInfo"+player.id);
+                    infoLifePlayerContainer.append("Life : ", player.life);
+
+                    let infoWeaponPlayerContainer = $('<div></div>');
+                    infoWeaponPlayerContainer.attr("class", "playerWeaponInfo");
+                    infoWeaponPlayerContainer.attr("id", "playerWeaponInfo");
+                    //infoWeaponPlayerContainer.append("Weapon : ", setPlayerWeaponName);
+
+                    let infoWeaponDamageContainer = $('<div></div>');
+                    infoWeaponDamageContainer.attr("class", "weaponInfoDamage");
+                    infoWeaponDamageContainer.attr("id", "weaponInfoDamage");
+                    //infoWeaponDamageContainer.append("Damage : ", cellsWeapons[player.idWeapon]['damage']);
+
+                    //console.log('weapons', cellsWeapons);
+
+                    let lifeBarPlayer = $('<progress></progress>');
+                    lifeBarPlayer.attr('class', 'lifeBarPlayer'+player.id);
+                    lifeBarPlayer.attr('id', 'lifeBarPlayer'+player.id);
+                    lifeBarPlayer.attr('max', player.life);
+                    lifeBarPlayer.attr('value', player.life);
+                   
+                    newPlayerNameContainer.appendTo(".playerPanel"+player.id);
+                    infoLifePlayerContainer.appendTo(".playerPanel"+player.id);
+                    infoWeaponPlayerContainer.appendTo(".playerPanel"+player.id);
+                    infoWeaponDamageContainer.appendTo(".playerPanel"+player.id);
+                    lifeBarPlayer.appendTo(".playerPanel"+player.id);
+
+                }
                 
                 $('#createNameContainer'+ playerId).fadeOut("3000"); 
 
                 $('#createName'+ playerId).val(''); // ici on remets l'input à zéro
                 //Afficher player ici
-
-                $('td#' + playerIndex + '.cell').css("background", playerBackgroundColor[playerId-1]);
 
             }
 
@@ -278,23 +303,10 @@ class Gameboard {
 
         return isMovable;
 
-
     }
 
 
     findMyCurrentPlayer(index, tablePlayers) {
-
-        //console.log("tablePlayers", tablePlayers);
-        //console.log("index", index);
-    
-        return tablePlayers[index];
-          
-    }
-
-    findMyCurrentWeapon(index, tablePlayers) {
-
-        //console.log("tablePlayers", tablePlayers);
-        //console.log("index", index);
     
         return tablePlayers[index];
           
@@ -302,54 +314,28 @@ class Gameboard {
 
     nextPlayer(indexCurrentPlayer) {
 
-        let newIndex = indexCurrentPlayer + 1;
-        //console.log("nouvel index", newIndex);
-        //console.log("taille tableau", this.players.length);
-
-        if(newIndex < this.players.length) {
-            newIndex = newIndex;
-            console.log("index plus petit que la taille du tableau");
-        } else {
-            console.log("index plus grand que la taille du tableau");
-            newIndex = 0;
+        console.log('INDEX CURRENT PLAYER', indexCurrentPlayer);   //index current player correspond à l'id du joueur
+        let newIndex = 0;
+        let allPlayers = this.players;
+        let index = indexCurrentPlayer-1;
+        if(typeof allPlayers[index+1] !== 'undefined'){ //l'index n'existe pas
+            newIndex = index + 1;
         }
+        let newPlayer = allPlayers[newIndex];
+        console.log('NEW ID', newPlayer.id);
 
-        return newIndex;  
+        return newIndex;
+
     }
 
-    moveIsPossible(player) { 
-                
-        //récupération de l'index actuel du joueur 
-        let getCurrentIndexPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);  
-
-        //tableau regroupant les différentes directions possibles des joueurs
-        let tableDirection = [1, this.columns, -1, this.columns * -1];
-
-        for(let i = 0; i < getCurrentIndexPlayer; i++) {
-
-            for(let i = 0; i < tableDirection.length; i++) {
-
-                this.miseEnSurbrillance(player, playerId, playerIndex);
-
-                console.log(getCurrentIndexPlayer);
-
-                this.indexCurrentPlayer = this.nextPlayer(this.indexCurrentPlayer);
-                this.indexCurrentPlayer;
-
-            } 
-
-        }
-
-    } 
-
     miseEnSurbrillance(currentPlayer) {
-
-        let cellIsMovable = [];
 
         let rightDirection;
         let leftDirection;
         let topDirection;
         let bottomDirection;
+
+        console.log('name + pos', currentPlayer.name , currentPlayer.position);
 
         //ajout des cases de déplacement de droite quand cela est possible
         for( let step = 1; step < numberMove; step++) {
@@ -364,8 +350,8 @@ class Gameboard {
             } else {
 
                 if (this.cellIsMovable(rightDirection)) {
-                    cellIsMovable.push(rightDirection)
-                    $("td#"+rightDirection).addClass("moveIsPossible");
+                    this.globalMoves.push(rightDirection)
+                    $("td#"+rightDirection).addClass("moveIsPossible"+currentPlayer.id);
                 } else {
                     break;
                 }
@@ -387,8 +373,8 @@ class Gameboard {
             } else {
 
                 if (this.cellIsMovable(leftDirection)) {
-                    cellIsMovable.push(leftDirection)
-                    $("td#"+leftDirection).addClass("moveIsPossible");
+                    this.globalMoves.push(leftDirection)
+                    $("td#"+leftDirection).addClass("moveIsPossible"+currentPlayer.id);
                 } else {
                     break;
                 }
@@ -409,8 +395,8 @@ class Gameboard {
             } else {
 
                 if (this.cellIsMovable(topDirection)) {
-                    cellIsMovable.push(topDirection)
-                    $("td#"+topDirection).addClass("moveIsPossible");
+                    this.globalMoves.push(topDirection)
+                    $("td#"+topDirection).addClass("moveIsPossible"+currentPlayer.id);
                 } else {
                     break;
                 }
@@ -431,8 +417,8 @@ class Gameboard {
             } else {
 
                 if (this.cellIsMovable(bottomDirection)) {
-                    cellIsMovable.push(bottomDirection)
-                    $("td#"+bottomDirection).addClass("moveIsPossible");
+                    this.globalMoves.push(bottomDirection)
+                    $("td#"+bottomDirection).addClass("moveIsPossible"+currentPlayer.id);
                 } else {
                     break;
                 }
@@ -441,41 +427,250 @@ class Gameboard {
 
         }
 
-
-        $('.moveIsPossible')
+        $('.moveIsPossible'+currentPlayer.id)
         .click( (e) => {
 
-            let targetStep = parseInt(e.target.id);
-            console.log('changement_de_case', targetStep);
+           // let dropWeapon = false;
 
-            $('td#'+currentPlayer.position+' img').remove();
+            target = Number(e.target.id);            
 
-            //Mise à jour de la position du joueur 
-            currentPlayer.position = targetStep;
-            
+            //console.log('target', target);
 
-            let imgWeapon = $("<img />");
-            let imgWeaponUrl = `assets/imgs/weapons/fork.png`;
+            //console.log('old next player', this.indexCurrentPlayer);
 
-            imgWeapon.attr("class", "weaponStartThePlayer");
-            imgWeapon.attr("src", imgWeaponUrl);    
-            imgWeapon.appendTo("td#"+currentPlayer.position, 0);     
+            do {
 
-            let imgPlayer = $("<img />");
-            let imgPlayerUrl = "assets/imgs/players/alien.png";
+                $("td#"+ currentPlayer.position + " .playerWithStartWeapon").remove();
+                $("td#"+ currentPlayer.position + " .weaponStartThePlayer").remove();
 
-            imgPlayer.attr("class", "playerWithStartWeapon");
-            imgPlayer.attr("src", imgPlayerUrl);  
-            imgPlayer.appendTo("td#"+currentPlayer.position, 0);
+                currentPlayer.position = currentPlayer.position + this.incrementationDeplacementJoueur(currentPlayer, target);
 
-            console.log('nouvelle_position', currentPlayer.position);
+                //console.log(currentPlayer.position);
 
-            console.log(currentPlayer);
+                //déposé skin ancienne arme 
+                /* let currentWeaponPosition = this.getInfo(this.weapons, "position", currentPlayer.idWeapon);
+                if(currentWeaponPosition === currentPlayer.position) {
+                    console.log('ok');
+                    dropWeapon = true;
+                    if(dropWeapon === true){
+                        $("td#"+currentPlayer.position).addClass("playWith" + "Fork");
+                        console.log('arme à déposé', currentWeapon);
+                        console.log('dropWeapon', dropWeapon);
+                    }
+                } */
 
-        });
+                if(currentPlayer.position === target) {
+
+                    let currentWeapon = this.getInfo(this.weapons, "name", currentPlayer.idWeapon);
     
+                    let imgPlayer = $("<img />");
+                    let imgPlayerUrl = "assets/imgs/players/alien.png";
+        
+                    imgPlayer.attr("class", "playerWithStartWeapon");
+                    imgPlayer.attr("src", imgPlayerUrl);  
+                    imgPlayer.appendTo("td#"+currentPlayer.position, 0);  
+
+                    $("td#"+currentPlayer.position + "> img.playerWithStartWeapon").addClass("playWith" + currentWeapon);
+
+                    this.globalMoves.map((index) => {
+                      $('td#'+index).removeClass('moveIsPossible'+currentPlayer.id);
+                      $('td#'+index).unbind('click');
+                    });
+
+                    console.log('TABLEAU ARME', cellsWeapons);
+                    console.log('TABLEAU PLAYER', cellsPlayers);
+                    
+                }   
+
+
+            } while(currentPlayer.position != target); 
+
+
+            //Activation des cellules de déplacements pour le joueur adverse
+            //let tour =  this.toutATour(currentPlayer, target);
+
+            //methode filter pour get les armes
+            this.updateWeapon(this.weapons, currentPlayer);
+
+            //this.fight(currentPlayer, this.players);
+
+            this.miseEnSurbrillance(this.players[this.nextPlayer(currentPlayer.id)]);
+
+            //combat
+           this.fightAction(this.weapons, currentPlayer);
+
+            //console.log('tour a tour', tour);
+
+            //console.log('player position:', currentPlayer.position);
+            //console.log('table_weapons', cellsWeapons);
+            
+        });  
+
     }
 
+    getInfo(tableObject, attrObject, idObject) {
+
+        let theElement = tableObject.filter(ob => ob.id === idObject);
+
+        if(tableObject === 'undefined' || attrObject === 'undefined' || idObject === 'undefined') {
+            return null;
+        } else {
+            return theElement[0][attrObject];
+        }
+
+    }
+
+    
+    setInfo(tableObject, attrObject, idObject, newValue) {
+
+        let theElement = tableObject.filter(ob => ob.id === idObject);
+
+        if(tableObject === 'undefined' || attrObject === 'undefined' || idObject === 'undefined' || newValue === 'undefined') {
+            return null;
+        } else {
+            return theElement[0][attrObject] = newValue;
+        }
+
+    }
+    
+
+    toutATour(currentPlayer, target) {
+
+        if(currentPlayer.position === target) {
+
+            let nextPlayer = 0;
+
+           if(currentPlayer.id == 1) {
+                nextPlayer = 1;
+           } else {
+               nextPlayer = 0;
+           }
+
+            if(nextPlayer != currentPlayer.id) {
+                this.miseEnSurbrillance(this.players[nextPlayer]);
+            }
+
+        } 
+
+    }
+
+    incrementationDeplacementJoueur(currentPlayer, target) {
+
+        let incrementation = null;
+
+        if (target < currentPlayer.position) {
+
+            //Vers la gauche, ou le haut
+            if (target <= (currentPlayer.position - this.rows)) {
+
+                incrementation = -this.rows;
+
+                //console.log('haut');
+
+                
+            } else {
+
+                incrementation = -1;
+
+                //console.log('vers la gauche');
+
+            }
+
+        } else {
+
+            //Vers la droite, ou le bas 
+            if (target >= (currentPlayer.position + this.rows)) {
+
+                incrementation = +this.rows;
+
+                //console.log('bas');
+
+            } else {
+
+                incrementation = +1;
+
+                //console.log('vers la droite');
+            } 
+
+        } 
+
+        return incrementation;
+
+    }
+
+
+    updateWeapon(tableWeapons, currentPlayer){
+
+        let newPlayerWeaponId = 0;
+        let getNewWeaponName;
+        let setNewPlayerWeaponName;
+        let setNewPlayerWeaponPosition;
+
+        let oldWeaponName = this.getInfo(this.weapons, "name", currentPlayer.idWeapon);
+        let oldWeaponPosition = this.getInfo(this.weapons, "position", currentPlayer.idWeapon);
+
+        let setOldPlayerWeaponPosition = this.setInfo(this.weapons, "position", currentPlayer.idWeapon, oldWeaponPosition);
+
+        console.log('acienne pos', oldWeaponPosition);
+
+        //déposé l'ancienne arme, prendre la nouvelle arme et mettre à jour le skin de la nouvelle arme
+        tableWeapons.filter(function(weapon) {
+            if(weapon.position === currentPlayer.position) {
+
+              $("td#"+currentPlayer.position).addClass(oldWeaponName);
+              $("td#"+currentPlayer.position + " > img.playerWithStartWeapon").removeClass("playWith" + oldWeaponName);
+              
+              newPlayerWeaponId = weapon.id;
+              currentPlayer.idWeapon = newPlayerWeaponId;
+
+              oldWeaponPosition = setOldPlayerWeaponPosition;
+              setOldPlayerWeaponPosition = oldWeaponPosition;
+
+              console.log('position ancinne arme', oldWeaponPosition);
+
+            } else {
+                currentPlayer.idWeapon;
+            }
+
+        });
+
+        getNewWeaponName = this.getInfo(this.weapons, "name", currentPlayer.idWeapon);
+
+        //problème quand on reviens sur la case initial du joueur à régler
+        setNewPlayerWeaponName = this.setInfo(this.weapons, "name", currentPlayer.idWeapon, getNewWeaponName);
+        console.log("setNewPlayerWeaponName", setNewPlayerWeaponName);
+
+        //nouvelle position de l'arme
+        setNewPlayerWeaponPosition = this.setInfo(this.weapons, "position", currentPlayer.idWeapon, currentPlayer.position);
+        console.log('nouvelle position de l arme', setNewPlayerWeaponPosition);
+
+        if(setNewPlayerWeaponPosition === currentPlayer.position) {
+            $("td#"+currentPlayer.position).removeClass(setNewPlayerWeaponName);
+            $("td#"+currentPlayer.position + " > img.playerWithStartWeapon").toggleClass("playWith" + setNewPlayerWeaponName, true);
+        }
+
+        console.log('nouvelle arme ramassée', getNewWeaponName);
+        
+    }
+
+
+    fightAction(tableWeapons, currentPlayer) {
+
+        if (this.players[0]['position'] === this.players[1]['position']+1 || this.players[1]['position'] === this.players[0]['position']+1){
+            alert('combat');
+        } else if (this.players[0]['position'] === this.players[1]['position']-1 || this.players[1]['position'] === this.players[0]['position']-1){
+            alert('combat');
+        } else if (this.players[0]['position'] === this.players[1]['position']+10 || this.players[1]['position'] === this.players[0]['position']+10){
+            alert('combat');
+        } else if (this.players[0]['position'] === this.players[1]['position']-10 || this.players[1]['position'] === this.players[0]['position']-10){
+            alert('combat');
+        } else {
+           alert('next');
+        }
+        
+        //console.log('position joueur 1', getCurrentPlayerPosition-1);
+        //console.log('position joueur 2', getCurrentPlayerPosition);
+    }
 
     testInit() {
 
@@ -488,7 +683,8 @@ class Gameboard {
         // this.moveIsPossible();
         let currentPlayer = this.findMyCurrentPlayer(this.indexCurrentPlayer, this.players);
         this.miseEnSurbrillance(currentPlayer);
-        console.log('current player', currentPlayer);
+        this.incrementationDeplacementJoueur(currentPlayer, target);
+        //console.log('current player', currentPlayer);
 
     }
      
