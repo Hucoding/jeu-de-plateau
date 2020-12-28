@@ -1,4 +1,6 @@
-
+/*************
+* Google Fonts
+**************/
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Dhurjati&display=swap');
 
 
@@ -158,6 +160,62 @@ body {
 
 }
 
+.fightingMessage1,
+.fightingMessage2 {
+
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 25px;
+}
+
+.infoWeaponPlayer1,
+.infoWeaponPlayer2 {
+
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    margin: 20px;
+}
+
+.infoWeaponDamagePlayer1,
+.infoWeaponDamagePlayer2 {
+
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    margin: 20px;
+
+}
+
+.attackMessage1,
+.attackMessage2 {
+
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 15px;
+
+}
+
+.defendBtn1,
+.defendBtn2 {
+    background: royalblue;
+    color: #fff;
+    border: 1px solid royalblue;
+    padding: 10px;
+    border-radius: 3px;
+    margin: 5px;
+}
+
+.attackBtn1,
+.attackBtn2 {
+    background: #ff3333;
+    color: #fff;
+    border: 1px solid #ff3333;
+    padding: 10px;
+    border-radius: 3px;  
+    margin: 5px;
+}
+
 .cell {
 
     margin: 0;
@@ -176,36 +234,46 @@ body {
 
 .playerNameChanged1,
 .playerNameChanged2 {
+
     color: white;
     font-family: 'Bangers', cursive;
     font-size: 20px;
     margin: 20px;
+
 }
 
 .playerLifeInfo1,
 .playerLifeInfo2 {
+
     color: white;
     font-family: 'Bangers', cursive;
     font-size: 20px;
     margin: 20px;  
+
 }
 
 .playerWeaponInfo {
+
     color: white;
     font-family: 'Bangers', cursive;
     font-size: 20px;
     margin: 20px;  
+
 }
 
 .weaponInfoDamage {
+
     color: white;
     font-family: 'Bangers', cursive;
     font-size: 20px;
     margin: 20px;  
+
 }
 
 progress {
+
     background-color: green;
+
 }
 
 /********
@@ -248,31 +316,39 @@ progress {
 }
 
 .playWithFork {
+
     background-image: url('../imgs/weapons/Fork.png');
     background-repeat: no-repeat;
     background-size: 20px;
     background-position: 25px top;
+
 }
 
 .playWithLazer {
+
     background-image: url('../imgs/weapons/Lazer.png');
     background-repeat: no-repeat;
     background-size: 20px;
     background-position: 25px top;
+
 }
 
 .playWithMaxi {
+
     background-image: url('../imgs/weapons/Maxi.png');
     background-repeat: no-repeat;
     background-size: 20px;
     background-position: 25px top;
+
 }
 
 .playWithMega {
+
     background-image: url('../imgs/weapons/Mega.png');
     background-repeat: no-repeat;
     background-size: 20px;
     background-position: 25px top;
+
 }
 
 
@@ -284,6 +360,7 @@ progress {
 }
 
 .weaponStartThePlayer {
+
     z-index: 1;
     width: 20px;
     margin-left: 10px;
@@ -293,10 +370,21 @@ progress {
 }
 
 .playerWithStartWeapon {
+
     z-index: 1;
     background-repeat: no-repeat;
     position: relative;
 
+}
+
+.fight {
+    height: 400px;
+    width: 400px;
+    border-radius: 3px;
+    border: 5px solid #9B59B6;
+    margin:  30px;
+    padding: 20px;
+    background-color: #2a0080;
 }
 
 @keyframes blinkingBlueBackground {
@@ -321,6 +409,7 @@ progress {
     animation: blinkingRedBackground 2s infinite;
 
 }
+
 
 @keyframes blinkingPurpleBackground {
     0%  {}

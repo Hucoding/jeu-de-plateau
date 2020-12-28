@@ -911,3 +911,39 @@ spanWeapon.appendTo("td#"+weaponIndex, randomWeapon); */
 
                     
                     //console.log('updateWeapon', updateWeapon)
+
+
+
+
+        //let position = currentPlayer.position;
+
+       // console.log('position', position);
+
+
+
+                            /*
+        if (this.players[0]['position'] === this.players[1]['position']+1 || this.players[1]['position'] === this.players[0]['position']+1){
+            alert('combat');
+        } else if (this.players[0]['position'] === this.players[1]['position']-1 || this.players[1]['position'] === this.players[0]['position']-1){
+            alert('combat');
+        } else if (this.players[0]['position'] === this.players[1]['position']+10 || this.players[1]['position'] === this.players[0]['position']+10){
+            alert('combat');
+        } else if (this.players[0]['position'] === this.players[1]['position']-10 || this.players[1]['position'] === this.players[0]['position']-10){
+            alert('combat');
+        } else {
+           console.log('next');
+        }
+        */
+
+        //if(player.life <= 0) {
+        //    console.log('perdu');
+        //}
+
+
+                    /* let imgWeapon = $("<img />");
+            let imgWeaponUrl = `assets/imgs/weapons/${firstWeapon}.png`;
+
+            imgWeapon.attr("class", "weaponStartThePlayer");
+            imgWeapon.attr("src", imgWeaponUrl);    
+            imgWeapon.appendTo("td#"+playerIndex, 0);   */
+        

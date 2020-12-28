@@ -10,7 +10,7 @@ class Gameboard {
         this.indexCurrentPlayer = indexCurrentPlayer;
         this.globalMoves = [];
         //console.log("index current value in gameBoard Controller:", this.indexCurrentPlayer);
-
+        let self = this;
     }
 
     createTheGameBoard() {
@@ -111,7 +111,7 @@ class Gameboard {
             let firstWeaponDamage = 5;
             let playerId = i+1;
             let playerName = "Joueur" + "_" + `${playerId}`;
-            let weaponId = this.weapons.length;
+            let weaponId = this.weapons.length - 1;
             let weapon = new Weapon(weaponId, playerIndex, firstWeaponDamage, firstWeapon);
             console.log(weapon);
             let playerWeaponId = weapon.id;
@@ -119,17 +119,21 @@ class Gameboard {
             let player = new Player(playerId, playerName, playerIndex, playerWeaponId);
 
             this.createPlayerNameForm(player, playerId, playerName);
-            this.update(player, playerId, playerName);
             
             this.players.push(player);
             this.weapons.push(weapon);
 
-            /* let imgWeapon = $("<img />");
-            let imgWeaponUrl = `assets/imgs/weapons/${firstWeapon}.png`;
-
-            imgWeapon.attr("class", "weaponStartThePlayer");
-            imgWeapon.attr("src", imgWeaponUrl);    
-            imgWeapon.appendTo("td#"+playerIndex, 0);   */
+            this.players.map((el) => {
+                if (playerIndex === el.position+1) {
+                    location.reload();
+                } else if (playerIndex === el.position-1) {
+                    location.reload();
+                } else if (playerIndex === el.position+10) {
+                    location.reload();
+                } else if (playerIndex === el.position-10) {
+                    location.reload();
+                } 
+            });
 
             let imgPlayer = $("<img />");
             let imgPlayerUrl = "assets/imgs/players/alien.png";
@@ -139,6 +143,9 @@ class Gameboard {
             imgPlayer.appendTo("td#"+playerIndex, 0);
 
             $("td#" + playerIndex + " > img.playerWithStartWeapon").addClass("playWith"+firstWeapon);
+            console.log('player IN ADD PLAYER', player);
+            console.log('weapon id', weaponId);
+            this.update(player, playerId, playerName);
         }
     }
 
@@ -202,11 +209,16 @@ class Gameboard {
 
     }
 
+
     // Création d'une fonction de mise a jour du nom du joueur et du formulaire
     update(player, playerId, playerName) {
 
+       //let getInfoCurrentPlayerWeapon = this.getInfo(this.weapons, "name", player.idWeapon);
+
         //ce premier bloc de code à pour but de mettre à jour et remplacer le nom du joueur par défaut lorsque l'utilisateur rentre un nom personnalisé pour le joueur
-        $('#buttonCreateName' + playerId).on("click", function () {
+        $('#buttonCreateName' + playerId).on("click", function (getInfoCurrentPlayerWeapon) {
+
+        console.log('weapons IN FUNCTION', self.weapons);
 
         //let getNewWeaponName = this.getInfo(this.weapons, "name", player.idWeapon);
         //let setPlayerWeaponName = this.setInfo(this.weapons, "name", player.idWeapon, getNewWeaponName);
@@ -222,7 +234,7 @@ class Gameboard {
                 let playerClassAndIdName = 'playerName'+ playerId;
                 let newPlayerName = $('#createName'+ playerId).val();
                 
-                $('.playerName'+ playerId).replaceWith("<h3 class=" + playerClassAndIdName + " id=" + playerClassAndIdName + ">" + newPlayerName + "</h3>"); // Remplace player 1 par le nom du joueur
+                $('.playerName'+ playerId).replaceWith(`<h3 class="${playerClassAndIdName}" id="${playerClassAndIdName}">" ${newPlayerName} "</h3>`); // Remplace player 1 par le nom du joueur
 
                 //Mise à jour du nom du joueur dans l'objet
                 playerName = newPlayerName;
@@ -230,40 +242,19 @@ class Gameboard {
 
                 if(player.name === playerName) {
 
-                    let newPlayerNameContainer = $('<div></div>');
-                    newPlayerNameContainer.attr("class", "playerNameChanged"+player.id);
-                    newPlayerNameContainer.attr("id", "playerNameChanged"+player.id);
-                    newPlayerNameContainer.append("Pseudo : ", player.name);
-
-                    let infoLifePlayerContainer = $('<div></div>');
-                    infoLifePlayerContainer.attr("class", "playerLifeInfo"+player.id);
-                    infoLifePlayerContainer.attr("id", "playerLifeInfo"+player.id);
-                    infoLifePlayerContainer.append("Life : ", player.life);
-
-                    let infoWeaponPlayerContainer = $('<div></div>');
-                    infoWeaponPlayerContainer.attr("class", "playerWeaponInfo");
-                    infoWeaponPlayerContainer.attr("id", "playerWeaponInfo");
-                    //infoWeaponPlayerContainer.append("Weapon : ", setPlayerWeaponName);
-
-                    let infoWeaponDamageContainer = $('<div></div>');
-                    infoWeaponDamageContainer.attr("class", "weaponInfoDamage");
-                    infoWeaponDamageContainer.attr("id", "weaponInfoDamage");
-                    //infoWeaponDamageContainer.append("Damage : ", cellsWeapons[player.idWeapon]['damage']);
-
-                    //console.log('weapons', cellsWeapons);
-
-                    let lifeBarPlayer = $('<progress></progress>');
-                    lifeBarPlayer.attr('class', 'lifeBarPlayer'+player.id);
-                    lifeBarPlayer.attr('id', 'lifeBarPlayer'+player.id);
-                    lifeBarPlayer.attr('max', player.life);
-                    lifeBarPlayer.attr('value', player.life);
-                   
-                    newPlayerNameContainer.appendTo(".playerPanel"+player.id);
-                    infoLifePlayerContainer.appendTo(".playerPanel"+player.id);
-                    infoWeaponPlayerContainer.appendTo(".playerPanel"+player.id);
-                    infoWeaponDamageContainer.appendTo(".playerPanel"+player.id);
-                    lifeBarPlayer.appendTo(".playerPanel"+player.id);
-
+                    let mytemplate = `
+                        <div class="playerNameChanged${player.id}" id="playerNameChanged${player.id}">
+                            pseudo : ${player.name}
+                        </div>
+                        <div class="playerLifeInfo${player.id}" id="playerLifeInfo${player.id}">
+                            Life : ${player.life}
+                        </div>
+                        <div class="playerWeaponInfo" id="playerWeaponInfo${player.id}">
+                            Weapon : ${player.idWeapon}
+                        </div>`;
+                
+                    $(mytemplate).appendTo(".playerPanel"+player.id);
+                                
                 }
                 
                 $('#createNameContainer'+ playerId).fadeOut("3000"); 
@@ -314,7 +305,7 @@ class Gameboard {
 
     nextPlayer(indexCurrentPlayer) {
 
-        console.log('INDEX CURRENT PLAYER', indexCurrentPlayer);   //index current player correspond à l'id du joueur
+        //console.log('INDEX CURRENT PLAYER', indexCurrentPlayer);   //index current player correspond à l'id du joueur
         let newIndex = 0;
         let allPlayers = this.players;
         let index = indexCurrentPlayer-1;
@@ -322,7 +313,7 @@ class Gameboard {
             newIndex = index + 1;
         }
         let newPlayer = allPlayers[newIndex];
-        console.log('NEW ID', newPlayer.id);
+       // console.log('NEW ID', newPlayer.id);
 
         return newIndex;
 
@@ -335,7 +326,7 @@ class Gameboard {
         let topDirection;
         let bottomDirection;
 
-        console.log('name + pos', currentPlayer.name , currentPlayer.position);
+       // console.log('name + pos', currentPlayer.name , currentPlayer.position);
 
         //ajout des cases de déplacement de droite quand cela est possible
         for( let step = 1; step < numberMove; step++) {
@@ -434,9 +425,6 @@ class Gameboard {
 
             target = Number(e.target.id);            
 
-            //console.log('target', target);
-
-            //console.log('old next player', this.indexCurrentPlayer);
 
             do {
 
@@ -446,18 +434,6 @@ class Gameboard {
                 currentPlayer.position = currentPlayer.position + this.incrementationDeplacementJoueur(currentPlayer, target);
 
                 //console.log(currentPlayer.position);
-
-                //déposé skin ancienne arme 
-                /* let currentWeaponPosition = this.getInfo(this.weapons, "position", currentPlayer.idWeapon);
-                if(currentWeaponPosition === currentPlayer.position) {
-                    console.log('ok');
-                    dropWeapon = true;
-                    if(dropWeapon === true){
-                        $("td#"+currentPlayer.position).addClass("playWith" + "Fork");
-                        console.log('arme à déposé', currentWeapon);
-                        console.log('dropWeapon', dropWeapon);
-                    }
-                } */
 
                 if(currentPlayer.position === target) {
 
@@ -477,10 +453,20 @@ class Gameboard {
                       $('td#'+index).unbind('click');
                     });
 
-                    console.log('TABLEAU ARME', cellsWeapons);
-                    console.log('TABLEAU PLAYER', cellsPlayers);
+                    //combat
+                    this.fightAction(target, currentPlayer.position);
+
+                    //console.log('TABLEAU ARME', cellsWeapons);
+                    //console.log('TABLEAU PLAYER', cellsPlayers);
                     
                 }   
+
+                //methode filter pour get les armes
+                this.updateWeapon(this.weapons, currentPlayer);
+
+                console.log('current position', currentPlayer.position);
+                //console.log('target', target);
+
 
 
             } while(currentPlayer.position != target); 
@@ -489,15 +475,9 @@ class Gameboard {
             //Activation des cellules de déplacements pour le joueur adverse
             //let tour =  this.toutATour(currentPlayer, target);
 
-            //methode filter pour get les armes
-            this.updateWeapon(this.weapons, currentPlayer);
-
             //this.fight(currentPlayer, this.players);
 
             this.miseEnSurbrillance(this.players[this.nextPlayer(currentPlayer.id)]);
-
-            //combat
-           this.fightAction(this.weapons, currentPlayer);
 
             //console.log('tour a tour', tour);
 
@@ -600,21 +580,24 @@ class Gameboard {
 
 
     updateWeapon(tableWeapons, currentPlayer){
+       // console.log('passage update weapon');
 
-        let newPlayerWeaponId = 0;
+        let newPlayerWeaponId = -1;
         let getNewWeaponName;
         let setNewPlayerWeaponName;
         let setNewPlayerWeaponPosition;
 
         let oldWeaponName = this.getInfo(this.weapons, "name", currentPlayer.idWeapon);
+        console.log('oldWeaponName', oldWeaponName);
         let oldWeaponPosition = this.getInfo(this.weapons, "position", currentPlayer.idWeapon);
 
         let setOldPlayerWeaponPosition = this.setInfo(this.weapons, "position", currentPlayer.idWeapon, oldWeaponPosition);
 
-        console.log('acienne pos', oldWeaponPosition);
+        //console.log('acienne pos', oldWeaponPosition);
 
         //déposé l'ancienne arme, prendre la nouvelle arme et mettre à jour le skin de la nouvelle arme
         tableWeapons.filter(function(weapon) {
+
             if(weapon.position === currentPlayer.position) {
 
               $("td#"+currentPlayer.position).addClass(oldWeaponName);
@@ -626,7 +609,7 @@ class Gameboard {
               oldWeaponPosition = setOldPlayerWeaponPosition;
               setOldPlayerWeaponPosition = oldWeaponPosition;
 
-              console.log('position ancinne arme', oldWeaponPosition);
+              //console.log('position ancienne arme', oldWeaponPosition);
 
             } else {
                 currentPlayer.idWeapon;
@@ -634,42 +617,133 @@ class Gameboard {
 
         });
 
+        //nom de la nouvelle arme
         getNewWeaponName = this.getInfo(this.weapons, "name", currentPlayer.idWeapon);
 
-        //problème quand on reviens sur la case initial du joueur à régler
+        //set le nom de l'arme
         setNewPlayerWeaponName = this.setInfo(this.weapons, "name", currentPlayer.idWeapon, getNewWeaponName);
-        console.log("setNewPlayerWeaponName", setNewPlayerWeaponName);
+        //console.log("setNewPlayerWeaponName", setNewPlayerWeaponName);
 
         //nouvelle position de l'arme
         setNewPlayerWeaponPosition = this.setInfo(this.weapons, "position", currentPlayer.idWeapon, currentPlayer.position);
-        console.log('nouvelle position de l arme', setNewPlayerWeaponPosition);
+       // console.log('nouvelle position de l arme', setNewPlayerWeaponPosition);
 
+        //si la position de la nouvelle arme est égale avec la position du joueur 
         if(setNewPlayerWeaponPosition === currentPlayer.position) {
             $("td#"+currentPlayer.position).removeClass(setNewPlayerWeaponName);
-            $("td#"+currentPlayer.position + " > img.playerWithStartWeapon").toggleClass("playWith" + setNewPlayerWeaponName, true);
+            $("td#"+currentPlayer.position + " > img.playerWithStartWeapon").addClass("playWith" + setNewPlayerWeaponName, true);
         }
 
-        console.log('nouvelle arme ramassée', getNewWeaponName);
+       // console.log('nouvelle arme ramassée', getNewWeaponName);
+
+        //problème quand on reviens sur la case initial du joueur à régler
         
     }
 
+    fightDisplayEvent(currentPlayer) {
+        //ici créer template factorisable pour l'action de combat
+        //fonctionne dans les 2 cas si le joueur à créer ou non un nouveau pseudo
 
-    fightAction(tableWeapons, currentPlayer) {
+        let getInfoCurrentPlayerWeapon = this.getInfo(this.weapons, "name", currentPlayer.idWeapon);
+        let getInfoCurrentPlayerWeaponDamage = this.getInfo(this.weapons, "damage", currentPlayer.idWeapon);
 
-        if (this.players[0]['position'] === this.players[1]['position']+1 || this.players[1]['position'] === this.players[0]['position']+1){
-            alert('combat');
-        } else if (this.players[0]['position'] === this.players[1]['position']-1 || this.players[1]['position'] === this.players[0]['position']-1){
-            alert('combat');
-        } else if (this.players[0]['position'] === this.players[1]['position']+10 || this.players[1]['position'] === this.players[0]['position']+10){
-            alert('combat');
-        } else if (this.players[0]['position'] === this.players[1]['position']-10 || this.players[1]['position'] === this.players[0]['position']-10){
-            alert('combat');
-        } else {
-           alert('next');
-        }
+        $('#gameBoard').remove();
+
+        let fightTemplate = `
+            <div class="fight">
+
+                <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">FIGHT !</h3>
+                <div class="infoWeaponPlayer${currentPlayer.id}" id="infoWeaponPlayer${currentPlayer.id}">Weapon : ${getInfoCurrentPlayerWeapon}</div>
+                <div class="infoWeaponDamagePlayer${currentPlayer.id}" id="infoWeaponDamagePlayer${currentPlayer.id}">Damage : ${getInfoCurrentPlayerWeaponDamage}</div>
+                <div class="playerLifeInfo${currentPlayer.id}" id="playerLifeInfo${currentPlayer.id}">Life : ${currentPlayer.life}</div>
+                <div class="lifeBarPlayer${currentPlayer.id} ui-progressbar ui-corner-all ui-widget ui-widget-content" id="lifeBarPlayer${currentPlayer.id}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${currentPlayer.life}">
+                    <div class="ui-progressbar-value ui-corner-left ui-widget-header ui-progressbar-complete ui-corner-right" style="width: 100%;"></div>
+                </div>
+
+                <p class="attackMessage${currentPlayer.id}">${currentPlayer.name} attacks you what do you want to do?</p>
+                <button class="defendBtn${currentPlayer.id}" id="defendBtn${currentPlayer.id}"><i class="fas fa-shield-alt"></i> Defend</button>
+                <button class="attackBtn${currentPlayer.id}" id="attackBtn${currentPlayer.id}"><i class="fas fa-bomb"></i> Attack</button></div>
+
+            </div>
+        `;
+
+        $(fightTemplate).appendTo(".gameBoardContainer");
+
+        $( function() {
+            $('#lifeBarPlayer'+currentPlayer.id).progressbar({
+                value: currentPlayer.life
+            });
+        });
+
+        this.attackOrDefendAction(currentPlayer);
+    }
+
+
+    attackOrDefendAction(currentPlayer) {
+
+        //dernière étape :
+        // il faut faire le tour à tour pour que chaque joueur effectue une action de défense ou d'attaque
+        // voir du coté de next player
+
+        let weapon = this.getInfo(this.players, "idWeapon", currentPlayer.id);
+        console.log('weapon', weapon);
+        let getDamage = this.getInfo(this.weapons, "damage", weapon);
+        console.log('damage', getDamage);
+
+        //si le joueur attaque alors inflige les dégat selon l'arme qu'il possède,
+        $("#attackBtn"+currentPlayer.id)
+        .click( (e) => {
+
+            let newLife =  currentPlayer.life - getDamage;
+            currentPlayer.life = newLife;
+            newLife = currentPlayer.life;
+
+            if(currentPlayer.life <= 0) {
+                alert('perdu');
+            }
+
+            //return newLife;
+            console.log('life after damage', newLife);
+            console.log('tableau de joueur', this.players);
+        }); 
+
+        // si le joeuur se défend alors inflige 50% des dégats 
+        $("#defendBtn"+currentPlayer.id)
+        .click( (e) => {
+
+            let newLife = currentPlayer.life - getDamage/2;
+            currentPlayer.life = newLife;
+            newLife = currentPlayer.life;
+
+            if(currentPlayer.life <= 0) {
+                alert('perdu');
+            }
+
+            //return newLife;
+            console.log('life after damage', newLife);
+            console.log('tableau de joueur', this.players);
+
+        }); 
+
+
+    }
+
+
+    fightAction(target) {
         
-        //console.log('position joueur 1', getCurrentPlayerPosition-1);
-        //console.log('position joueur 2', getCurrentPlayerPosition);
+        //get position all player and make position condition
+        this.players.map((el) => {
+            if (target === el.position+1) {
+                this.fightDisplayEvent(el);
+            } else if (target === el.position-1) {
+                this.fightDisplayEvent(el);
+            } else if (target === el.position+10) {
+                this.fightDisplayEvent(el);
+            } else if (target === el.position-10) {
+                this.fightDisplayEvent(el);
+            } 
+        });
+
     }
 
     testInit() {

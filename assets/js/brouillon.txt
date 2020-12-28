@@ -720,3 +720,172 @@ $(function () {
               //  $("td#"+currentPlayer.position + " > img.playerWithStartWeapon").addClass("playWith" + currentWeapon);
 
                             console.log('old zrme', oldWeapon);
+
+
+                 /*   let newPlayerNameContainer = $('<div></div>');
+                    newPlayerNameContainer.attr("class", "playerNameChanged"+player.id);
+                    newPlayerNameContainer.attr("id", "playerNameChanged"+player.id);
+                    newPlayerNameContainer.append("Pseudo : ", player.name); */
+
+                    /*let infoLifePlayerContainer = $('<div></div>');
+                    infoLifePlayerContainer.attr("class", "playerLifeInfo"+player.id);
+                    infoLifePlayerContainer.attr("id", "playerLifeInfo"+player.id);
+                    infoLifePlayerContainer.append("Life : ", player.life);*/
+
+                    /*let infoWeaponPlayerContainer = $('<div></div>');
+                    infoWeaponPlayerContainer.attr("class", "playerWeaponInfo");
+                    infoWeaponPlayerContainer.attr("id", "playerWeaponInfo");*/
+                    //infoWeaponPlayerContainer.append("Weapon : ", setPlayerWeaponName);
+
+                    /*let infoWeaponDamageContainer = $('<div></div>');
+                    infoWeaponDamageContainer.attr("class", "weaponInfoDamage");
+                    infoWeaponDamageContainer.attr("id", "weaponInfoDamage");*/
+                    //infoWeaponDamageContainer.append("Damage : ", cellsWeapons[player.idWeapon]['damage']);
+
+                    //console.log('weapons', cellsWeapons);
+
+                    /*let lifeBarPlayer = $('<progress></progress>');
+                    lifeBarPlayer.attr('class', 'lifeBarPlayer'+player.id);
+                    lifeBarPlayer.attr('id', 'lifeBarPlayer'+player.id);
+                    lifeBarPlayer.attr('max', player.life);
+                    lifeBarPlayer.attr('value', player.life);
+                   
+                    newPlayerNameContainer.appendTo(".playerPanel"+player.id);
+                    infoLifePlayerContainer.appendTo(".playerPanel"+player.id);
+                    infoWeaponPlayerContainer.appendTo(".playerPanel"+player.id);
+                    infoWeaponDamageContainer.appendTo(".playerPanel"+player.id);
+                    lifeBarPlayer.appendTo(".playerPanel"+player.id); */
+
+
+            //console.log('target', target);
+
+            //console.log('old next player', this.indexCurrentPlayer);
+
+                //déposé skin ancienne arme 
+                /* let currentWeaponPosition = this.getInfo(this.weapons, "position", currentPlayer.idWeapon);
+                if(currentWeaponPosition === currentPlayer.position) {
+                    console.log('ok');
+                    dropWeapon = true;
+                    if(dropWeapon === true){
+                        $("td#"+currentPlayer.position).addClass("playWith" + "Fork");
+                        console.log('arme à déposé', currentWeapon);
+                        console.log('dropWeapon', dropWeapon);
+                    }
+                } */
+
+
+        // Fight event message
+        let fightingMessage = $('<h3></h3>');
+        fightingMessage.attr("class", "fightingMessage"+currentPlayer.id);
+        fightingMessage.attr("id", "fightingMessage"+currentPlayer.id);
+        fightingMessage.append("FIGHT !");
+
+        //attack message 
+        let attackMessage = $('<p></p>');
+        attackMessage.attr("class", "attackMessage"+currentPlayer.id);
+        attackMessage.append(this.players[nextPlayer]["name"] + " attacks you what do you want to do?");
+
+        //Life bar
+        let lifeBarPlayer = $('<div></div>');
+        lifeBarPlayer.attr('class', 'lifeBarPlayer'+currentPlayer.id);
+        lifeBarPlayer.attr('id', 'lifeBarPlayer'+currentPlayer.id);
+        //lifeBarPlayer.attr('max', currentPlayer.life);
+        //lifeBarPlayer.attr('value', currentPlayer.life);
+
+
+        //info life player
+        let infoLifePlayer = $('<div></div>');
+        infoLifePlayer.attr("class", "playerLifeInfo"+currentPlayer.id);
+        infoLifePlayer.attr("id", "playerLifeInfo"+currentPlayer.id);
+        infoLifePlayer.append("Life : ", currentPlayer.life);
+
+        //info weapon player
+        let infoWeaponPlayer = $('<div></div>');
+        infoWeaponPlayer.attr("class", "infoWeaponPlayer"+currentPlayer.id);
+        infoWeaponPlayer.attr("id", "infoWeaponPlayer"+currentPlayer.id);
+        infoWeaponPlayer.append("Weapon : ", getInfoCurrentPlayerWeapon);
+
+        //info damage weapon player
+        let infoWeaponDamagePlayer = $('<div></div>');
+        infoWeaponDamagePlayer.attr("class", "infoWeaponDamagePlayer"+currentPlayer.id);
+        infoWeaponDamagePlayer.attr("id", "infoWeaponDamagePlayer"+currentPlayer.id);
+        infoWeaponDamagePlayer.append("Damage : ", getInfoCurrentPlayerWeaponDamage);
+
+        let defendBtn = $('<button></button>');
+        defendBtn.attr("class", "defendBtn"+currentPlayer.id);
+        defendBtn.attr("id", "defendBtn"+currentPlayer.id);
+        defendBtn.append("<i class=\"fas fa-shield-alt\"></i> Defend");
+
+        let attackBtn = $('<button></button>');
+        attackBtn.attr("class", "attackBtn"+currentPlayer.id);
+        attackBtn.attr("id", "attackBtn"+currentPlayer.id);
+        attackBtn.append("<i class=\"fas fa-bomb\"></i> Attack"); 
+
+
+
+
+        // RECUPERER LA VIE DES JOUEURS EN TEMPS REEL !! voir avec GETINFO ET SETINFO !!!
+
+        //let getInfoCurrentPlayerLife = this.getInfo(this.players, "life", currentPlayer.id);
+        //let setInfoCurrentPlayerLife = this.setInfo(this.players, "life", currentPlayer.id, getInfoCurrentPlayerLife);
+
+
+        //let nextPlayer = this.nextPlayer(getIdNextplayer);
+        //let getIdNextPlayer = this.getInfo(this.players, "id", this.indexCurrentPlayer);
+        //let getNameNextPlayer = this.getInfo(this.players, "name", this.indexCurrentPlayer);
+
+
+
+    /*
+    fightDisplayEvent(currentPlayer) {
+        //ici créer template factorisable pour l'action de combat
+        //fonctionne dans les 2 cas si le joueur à créer ou non un nouveau pseudo
+
+        let getInfoCurrentPlayerWeapon = this.getInfo(this.weapons, "name", currentPlayer.idWeapon);
+        let getInfoCurrentPlayerWeaponDamage = this.getInfo(this.weapons, "damage", currentPlayer.idWeapon);
+
+        //get current player id et nextPlayer ensuite
+        let getIdNextplayer = this.getInfo(this.players, "id", currentPlayer.id);
+
+
+        let defaultPseudoFightTemplate = `
+            <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">FIGHT !</h3>
+            <div class="infoWeaponPlayer${currentPlayer.id}" id="infoWeaponPlayer${currentPlayer.id}">Weapon : ${getInfoCurrentPlayerWeapon}</div>
+            <div class="infoWeaponDamagePlayer${currentPlayer.id}" id="infoWeaponDamagePlayer${currentPlayer.id}">Damage : ${getInfoCurrentPlayerWeaponDamage}</div>
+            <div class="playerLifeInfo${currentPlayer.id}" id="playerLifeInfo${currentPlayer.id}">Life : ${currentPlayer.life}</div>
+            <div class="lifeBarPlayer${currentPlayer.id} ui-progressbar ui-corner-all ui-widget ui-widget-content" id="lifeBarPlayer${currentPlayer.id}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${currentPlayer.life}">
+                <div class="ui-progressbar-value ui-corner-left ui-widget-header ui-progressbar-complete ui-corner-right" style="width: 100%;"></div>
+            </div>
+            <p class="attackMessage${currentPlayer.id}">${currentPlayer.name} attacks you what do you want to do?</p>
+                <button class="defendBtn${currentPlayer.id}" id="defendBtn${currentPlayer.id}"><i class="fas fa-shield-alt"></i> Defend</button>
+                <button class="attackBtn${currentPlayer.id}" id="attackBtn${currentPlayer.id}"><i class="fas fa-bomb"></i> Attack</button></div>
+            </div>
+        `;
+
+        let pseudoIsDefinedtemplate = `
+            <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">FIGHT !</h3>
+            <div class="lifeBarPlayer${currentPlayer.id} ui-progressbar ui-corner-all ui-widget ui-widget-content" id="lifeBarPlayer${currentPlayer.id}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${currentPlayer.life}">
+                <div class="ui-progressbar-value ui-corner-left ui-widget-header ui-progressbar-complete ui-corner-right" style="width: 100%;"></div>
+            </div>
+            <p class="attackMessage${currentPlayer.id}">${currentPlayer.name} attacks you what do you want to do?</p>
+                <button class="defendBtn${currentPlayer.id}" id="defendBtn${currentPlayer.id}"><i class="fas fa-shield-alt"></i> Defend</button>
+                <button class="attackBtn${currentPlayer.id}" id="attackBtn${currentPlayer.id}"><i class="fas fa-bomb"></i> Attack</button></div>
+            </div>
+        `;
+        
+        if($('#createName'+ currentPlayer.id).val().length === 0) {
+            $(defaultPseudoFightTemplate).appendTo(".playerPanel"+currentPlayer.id);
+        } else {
+            $(pseudoIsDefinedtemplate).appendTo(".playerPanel"+currentPlayer.id);
+        }
+
+        $( function() {
+            $('#lifeBarPlayer'+currentPlayer.id).progressbar({
+                value: currentPlayer.life
+            });
+        });
+
+        this.attackOrDefendAction(currentPlayer);
+
+    }
+    */
