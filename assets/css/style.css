@@ -216,6 +216,26 @@ body {
     margin: 5px;
 }
 
+.replayGame1,
+.replayGame2 {
+    background: royalblue;
+    color: #fff;
+    border: 1px solid royalblue;
+    padding: 10px;
+    border-radius: 3px;  
+    margin: 5px;
+}
+
+.stopGame1,
+.stopGame2 {
+    background: #ff3333;
+    color: #fff;
+    border: 1px solid #ff3333;
+    padding: 10px;
+    border-radius: 3px;  
+    margin: 5px;
+}
+
 .cell {
 
     margin: 0;
@@ -274,6 +294,38 @@ progress {
 
     background-color: green;
 
+}
+
+progress.redMidLife{
+
+    background-color: red;
+    color: red;
+
+}
+
+progress.redMidLife::-webkit-progress-bar-value { 
+
+    background-color: red;
+
+}
+
+progress.redMidLife::-webkit-progress-value {
+
+    background-color: red;
+
+}
+
+.opacity1,
+.opacity2 {
+    opacity: 0.6;
+}
+
+.looseIcon {
+    color: red;
+}
+
+.winIcon {
+    color: #BF7930;
 }
 
 /********

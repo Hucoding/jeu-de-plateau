@@ -889,3 +889,171 @@ $(function () {
 
     }
     */
+
+
+
+
+
+
+            /* let notCurrentPlayerLife = this.getInfo(
+            this.players,
+            "life",
+            this.players[next]["id"]
+        ); */
+
+        /*if(currentPlayer.life > notCurrentPlayerLife ||currentPlayer.life < notCurrentPlayerLife ) {
+    
+        } */
+
+
+
+
+
+
+/*
+old 
+*/
+
+
+        /*let setNewPlayerWeaponPosition = this.setInfo(
+            this.weapons,
+            "position",
+            currentPlayer.idWeapon,
+        );*/
+        
+        /* let getNewWeaponName = this.getInfo(
+            this.weapons,
+            "name",
+            currentPlayer.idWeapon
+        ); */
+
+        
+        console.log('current pos', currentPlayer.position);
+
+        //console.log('Global moves', this.globalMoves);
+
+       // console.log('AVANT _______ TABLEAU ARME AVANT DEPOT', this.weapons);
+       // console.log('AVANT _______ TABLEAU JOUEUR AVANT DEPOT', this.players);
+        //déposé l'ancienne arme, prendre la nouvelle arme et mettre à jour le skin de la nouvelle arme
+        tableWeapons.filter(function (weapon) {
+
+            //let newPlayerWeaponId;
+            //let getNewWeaponName;
+    
+            //let oldWeaponPosition;
+            //let setOldPlayerWeaponPosition;
+            
+            //let setNewPlayerWeaponName;
+            //let setNewPlayerWeaponPosition;
+    //
+           // let oldWeaponName;
+    
+            //let playerid;
+    
+
+           // for(let i = 0; i < self.globalMoves.length; i++) {
+                //console.log('self.globalMoves', self.globalMoves);
+                //console.log('self.globalMoves.length', self.globalMoves.length);
+                //console.log('i', self.globalMoves[i]);
+                //console.log('target/numberMove', target);
+
+                //console.log('j', self.weapons[j].position);
+
+                if(weapon.position === currentPlayer.position) {
+                    console.log('weapon.position', weapon.position);
+
+                    let playerIdWeapon = self.getInfo(
+                        self.players,
+                        "idWeapon",
+                        currentPlayer.id
+                    );
+
+                    let oldWeaponName = self.getInfo(
+                        self.weapons,
+                        "name",
+                        playerIdWeapon
+                    );
+
+                    console.log('oldWeaponName', oldWeaponName);
+
+
+                    $("td#" + currentPlayer.position).addClass(oldWeaponName);       
+                    $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").removeClass("playWith" + oldWeaponName);
+
+
+                    let oldWeaponPosition = self.getInfo(
+                        self.weapons,
+                        "position",
+                        currentPlayer.idWeapon
+                    );
+            
+                    self.setInfo(
+                        self.weapons,
+                        "position",
+                        currentPlayer.idWeapon,
+                        oldWeaponPosition
+                    );
+            
+                    //oldWeaponPosition = setOldPlayerWeaponPosition;
+                    //setOldPlayerWeaponPosition = oldWeaponPosition;
+
+
+                   console.log('self weapons', self.weapons);
+
+                    //console.log('currentPlayer Position', currentPlayer.position);
+    
+                    
+                    currentPlayer.idWeapon = weapon.id;
+
+
+                    //nom de la nouvelle arme
+                    let getNewWeaponName = self.getInfo(
+                        self.weapons,
+                        "name",
+                        currentPlayer.idWeapon
+                    );
+                   // console.log('getNewWeaponName', getNewWeaponName);
+
+
+                    //set le nom de l'arme
+                    /*self.setInfo(
+                        self.weapons,
+                        "name",
+                        currentPlayer.idWeapon,
+                        getNewWeaponName
+                    ); */
+                    //console.log('setNewPlayerWeaponName', setNewPlayerWeaponName);
+
+
+                    //nouvelle position de l'arme
+                    self.setInfo(
+                        self.weapons,
+                        "position",
+                        currentPlayer.idWeapon,
+                        currentPlayer.position
+                    );
+                    //console.log('setNewPlayerWeaponPosition', setNewPlayerWeaponPosition);
+
+                    $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").addClass("playWith" + getNewWeaponName);
+
+
+                    //console.log('newPlayerWeaponId', newPlayerWeaponId);
+
+                    //console.log('this.players', self.weapons);
+    
+                } else {
+                   currentPlayer.idWeapon;
+                }
+            
+
+                //console.log('tableau armes', self.weapons);
+           // }
+
+           // if (weapon.position === currentPlayer.position) {
+
+        });
+       // console.log(' APRES ______ TABLEAU ARME APRES DEPOT', this.weapons);
+        //console.log(' APRES ______ TABLEAU DES JOUEUR', this.players)
+
+
+
