@@ -1057,3 +1057,205 @@ old
 
 
 
+
+        //si la position de la nouvelle arme est égale avec la position du joueur
+        /* if (setNewPlayerWeaponPosition === currentPlayer.position) {
+            $("td#" + currentPlayer.position).removeClass(
+                setNewPlayerWeaponName
+            );
+            console.log('setNewPlayerWeaponName', setNewPlayerWeaponName);
+            $(
+                "td#" + currentPlayer.position + " > img.playerWithStartWeapon"
+            ).addClass("playWith" + setNewPlayerWeaponName, true);
+
+            $('#playerWeaponInfo'+currentPlayer.id).html(
+                "Weapon : "+setNewPlayerWeaponName
+            );
+            $('#playerWeaponInfo'+currentPlayer.id).html(
+                "Weapon : "+setNewPlayerWeaponName
+            );
+        } */ 
+
+
+
+
+
+            let currentidweapon =  self.getInfo(
+                self.players,
+                "idWeapon",
+                currentPlayer.id
+            );
+
+            console.log('currentidweapon', currentidweapon);
+    
+            let playerpos = self.getInfo(
+                self.players,
+                "position",
+                currentPlayer.id,
+            );
+            console.log('position joueur', playerpos);
+
+            let testweapon = self.setInfo(
+                self.weapons,
+                "position",
+                currentidweapon,
+            );
+
+            console.log('testweapon', testweapon);
+
+
+
+                
+            if (playerpos === testweapon) {
+                
+                console.log('joueur arme actuel', currentPlayer.idWeapon);
+                console.log('nouvelle position de l arme', weapon.position);
+
+                //récupération du nom de l'arme par son idWeapon actuel
+                $("td#" + playerpos + " > img.playerWithStartWeapon").addClass("playWith" + self.weapons[currentPlayer.idWeapon]["name"]);
+            }
+
+
+                 /* console.log('position de l arme: ', weapon.position);
+                  
+                let oldIdWeapon = self.weapons[currentPlayer.idWeapon]["id"];
+                let oldWeaponPosition = self.weapons[oldIdWeapon]["position"];
+                
+                console.log('id de l arme trouvée: ', weapon.id);
+                console.log('nom de l arme trouvée: ', weapon.name);
+
+                console.log('nom de l arme a déposé au sol: ', self.weapons[currentPlayer.idWeapon]["name"]);
+                console.log('id de larme que je dépose au sol: ', self.weapons[currentPlayer.idWeapon]["id"]);
+
+                console.log(' id de lanciennne arme stockée dans la variable  = oldIdWeapon', oldIdWeapon);
+
+                console.log('position de l ancienne arme portée par le joueur: ', oldWeaponPosition);
+
+                //si on croise une arme sur le plateau
+                if (oldWeaponPosition != currentPlayer.position){
+                    //ancien nom de larme
+                    let oldName = self.weapons[currentPlayer.idWeapon]["name"];
+
+                    console.log('oldName', oldName);
+                    console.log('oldWeaponPosition', oldWeaponPosition);
+
+                    test = self.weapons[currentPlayer.idWeapon]["position"] = currentPlayer.position;
+                }     
+
+
+                console.log('maj data object arme', test);
+
+
+                //console.log('position actuelle :', currentPlayer.position);
+
+                //mise à jour des valeurs
+                //weapon.position = currentPlayer.position;
+                //currentPlayer.idWeapon = weapon.id;
+
+                
+                console.log('nouvelle arme assoiciée au joueur', self.weapons[currentPlayer.idWeapon]["name"]);
+
+                console.log('nouvel id de l arme au joueur: ', currentPlayer.idWeapon);
+
+            } else {
+                currentPlayer.idWeapon;
+            } 
+
+
+        /* TODO
+            - refaire l'action de combat 
+            - récupérer le joueur qui ne joue pas 
+        
+
+         let getInfoCurrentPlayerWeapon = this.getInfo(
+            this.weapons,
+            "name",
+            currentPlayer.idWeapon
+        ); 
+
+         let getInfoCurrentPlayerWeaponDamage = this.getInfo(
+            this.weapons,
+            "damage",
+            currentPlayer.idWeapon
+        ); 
+
+        // current player  = joueur qui est en train de jouer
+        // notCurrentPlayer = joueur en attente de pouvoir effectuer une action d'attaque ou de défense
+
+        let test = this.nextPlayer(currentPlayer.id);
+
+
+        let blabla = this.getInfo(
+            this.players,
+            "life",
+            this.players[test]["id"]
+        );
+        
+        console.log("blabla", blabla);
+
+       // let test = this.nextPlayer(currentPlayer.id);
+
+       // console.log("this.players[test]", this.players[test]['name']);
+
+        let notCurrentPlayerName;
+        let notCurrentPlayerLife;
+        let notCurrentPlayerWeapon;
+        let notCurrentPlayerWeaponDamage;
+
+
+        if(notCurrentPlayer === undefined){
+
+            let next = this.nextPlayer(currentPlayer.id);
+
+            //notCurrentPlayerName = this.players[next]['name'];
+
+            notCurrentPlayerName = this.getInfo(
+                this.players,
+                "name",
+                this.players[next]["id"]
+            );
+
+
+            notCurrentPlayerLife = this.players[next]["life"];
+
+             let next = this.nextPlayer(currentPlayer.id);
+
+            console.log('next player', next);
+
+            notCurrentPlayerName = this.players[next]['name'];
+
+            notCurrentPlayerLife = this.getInfo(
+                this.players,
+                "life",
+                this.players[next]["id"]
+            );
+
+            console.log("notCurrentPlayerLife", notCurrentPlayerLife);
+            
+            //notCurrentPlayerLife = this.players[next]['life'];
+
+            notCurrentPlayerWeapon = this.getInfo(
+                this.players,
+                "weaponOnHands",
+                this.players[next]["id"]
+            );
+
+            
+           
+            console.log('notCurrentPlayerWeapon', notCurrentPlayerWeapon);
+
+            notCurrentPlayerWeaponDamage = this.getInfo(
+                this.players,
+                "damage",
+                this.players[next]["id"]
+            );
+
+            //console.log('notCurrentPlayerWeaponDamage', notCurrentPlayerWeaponDamage);
+
+            
+
+
+        } else {
+
+            notCurrentPlayerName = notCurrentPlayer.name;
+        } */
