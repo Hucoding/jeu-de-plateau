@@ -47,12 +47,9 @@ class Gameboard {
                 .addClass("obstacle")
                 .click((e) => {
                     console.log("event:", e.target);
-                    //console.log($(this).attr('id'));
                 });
 
             let obstacle = new Obstacle(obstacleIndex);
-
-            //this.update(obstacle);
 
             this.obstacles.push(obstacle);
         }
@@ -90,12 +87,9 @@ class Gameboard {
 
             let firstWeapon = "Fork";
             let firstWeaponDamage = 5;
-            let playerId = i + 1;
+            let playerId = i+1;
             let playerName = "Joueur" + "_" + `${playerId}`;
             let weaponId = this.weapons.length;
-
-            //let playerWeaponOnHands;
-            //let playerWeaponId = 0;
 
             let player = new Player(
                 playerId,
@@ -113,7 +107,6 @@ class Gameboard {
             this.createPlayerNameForm(player, playerId, playerName);
 
             this.players.push(player);
-           // this.weapons.push(weapon);
 
             this.players.map((el) => {
                 if (playerIndex === el.position + 1) {
@@ -126,8 +119,6 @@ class Gameboard {
                     location.reload();
                 }
             });
-
-            console.log('players add', this.players);
 
             let imgPlayer = $("<img />");
             let imgPlayerUrl = "assets/imgs/players/alien.png";
@@ -143,16 +134,11 @@ class Gameboard {
             this.update(player, playerId, playerName);
         }
 
-        console.log('player object index', this.players);
-
-        // choper l'id du joueur de façon dynamique
         this.players[0]["weaponOnHands"].forEach(function(basicWeapon){ 
-            // delete basicWeapon.id; 
             delete basicWeapon.position; 
         });
 
         this.players[1]["weaponOnHands"].forEach(function(basicWeapon){ 
-           // delete basicWeapon.id; 
             delete basicWeapon.position; 
         }); 
 
@@ -246,7 +232,7 @@ class Gameboard {
                         player.name = playerName;
 
 
-                        let currentPlayerWeaponName = self.getInfo(self.weapons, "name", player.idWeapon);
+                       let currentPlayerWeaponName = self.getInfo(self.weapons, "name", player.idWeapon);
 
                     if (player.name === playerName) {
                         let mytemplate = `
@@ -321,11 +307,8 @@ class Gameboard {
         let allPlayers = this.players;
         let index = indexCurrentPlayer - 1;
         if (typeof allPlayers[index + 1] !== "undefined") {
-            //l'index n'existe pas
             newIndex = index + 1;
         }
-        //let newPlayer = allPlayers[newIndex];
-
         return newIndex;
     }
 
@@ -454,8 +437,6 @@ class Gameboard {
                     //combat
                     this.fightAction(target, currentPlayer.position);
 
-                    //console.log('moves', this.globalMoves);
-
                 }
 
                 //methode filter pour get les armes
@@ -550,10 +531,10 @@ class Gameboard {
 
                 //enregistrer la position actuelle du joueur, ajouter cette position à larme et pushé la propriété "position" à larme
                 currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["position"] = currentPlayer.position;
-                console.log('create properties', currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["position"]);
+                //console.log('create properties', currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["position"]);
                 
                 //larme à deposer par terre correspond à larme courante détenu par le joueur
-                console.log('arme a deposer par terre', currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]);
+                //console.log('arme a deposer par terre', currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]);
 
                 //on place temporairement lancienne arme dans le tableau des armes
                 self.weapons.push(currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]);
@@ -579,7 +560,7 @@ class Gameboard {
                 let newWeaponOnHands = weapon;
 
                 //mise à jour de l'id de l'arme qui est égale à idWeapon (idWeapon id de larme associé au joueur)
-                currentPlayer.idWeapon = weapon.id;
+                //currentPlayer.idWeapon = weapon.id;
 
                 currentPlayer.weaponOnHands.splice(currentPlayer.weaponOnHands.length-1);
 
@@ -587,15 +568,12 @@ class Gameboard {
 
                 //ICI ajouter le code du nouveau skin de larme associé au joueur
                 //Si idWeapon est similaire à lid de la nouvelle arme alors on affiche le skin de la nouvelle arme
-                if(currentPlayer.idWeapon == currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["id"]) {
-
+                //if(currentPlayer.idWeapon == currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["id"]) {
                     // ajout du skin de la nouvelle arme au joueur
                     $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").addClass(
                         "playWith" + currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]
                     );
-
-
-                }
+                //}
 
                 //ici on supprime la position de la nouvelle arme du joueur car nous en avons pas besoin nous avons la position du joueur (larme suis le joueur)
                 currentPlayer.weaponOnHands.forEach(function(newWeapon){ 
@@ -617,94 +595,52 @@ class Gameboard {
     }
 
     tourATourFight(currentPlayer, action) {
+
         if (action === true) {
             let nextPlayer;
             let setPlayerNoPlaying;
 
             if (currentPlayer.id == 1) {
                 nextPlayer = this.nextPlayer(currentPlayer.id);
-                console.log('nextPlayer', nextPlayer);
+
                 setPlayerNoPlaying = this.setInfo(
                     this.players,
                     "id",
                     currentPlayer.id,
                     nextPlayer = currentPlayer.id+1
                 );
-                console.log('setPlayerNoPlaying', setPlayerNoPlaying);
+
             } else {
                 nextPlayer = this.nextPlayer(currentPlayer.id);
-                console.log('nextPlayer', nextPlayer);
+
                 setPlayerNoPlaying = this.setInfo(
                     this.players,
                     "id",
                     currentPlayer.id,
                     nextPlayer = currentPlayer.id-1
                 );
-                console.log('setPlayerNoPlaying', setPlayerNoPlaying);
+
             } 
 
             if (nextPlayer != currentPlayer.id) {
-                this.fightDisplayEvent(currentPlayer,  this.players[setPlayerNoPlaying]);
+                this.fightDisplayEvent(currentPlayer,  Number(setPlayerNoPlaying));
             }
+
         }
+
     }
 
     fightDisplayEvent(currentPlayer, notCurrentPlayer) {
 
-        console.log("not current player FIGHT DISPLAY", notCurrentPlayer);
-
         // current player  = joueur qui est en train de jouer
         // notCurrentPlayer = joueur en attente de pouvoir effectuer une action d'attaque ou de défense 
 
-        let notCurrentPlayerName;
-        let notCurrentPlayerLife;
-        let notCurrentPlayerWeapon;
-        let notCurrentPlayerWeaponDamage;
-
         let next = this.nextPlayer(currentPlayer.id);
-
-        console.log('currentplayer id', currentPlayer.id);
-
-        console.log('next variable', next);
-        console.log('next id player', this.players[next]["id"]);
-        console.log('next name player', this.players[next]["name"]);
-
-        notCurrentPlayerName = this.getInfo(
-            this.players,
-            "name",
-            this.players[next]["id"]
-        );
-
-        console.log('notCurrentPlayerName', notCurrentPlayerName);
-
-        notCurrentPlayerLife = this.getInfo(
-            this.players,
-            "life",
-            this.players[next]["id"]
-        );
-
-        console.log('notCurrentPlayerLife', notCurrentPlayerLife);
-
-
-        notCurrentPlayerWeapon = this.getInfo(
-            this.weapons,
-            "name",
-            this.players[next]["idWeapon"]
-        );
-
-        console.log('notCurrentPlayerWeapon', notCurrentPlayerWeapon);
-
-
-        notCurrentPlayerWeaponDamage = this.getInfo(
-            this.weapons,
-            "damage",
-            this.players[next]["idWeapon"]
-        );
-
-        console.log('notCurrentPlayerWeaponDamage', notCurrentPlayerWeaponDamage);
-
+        let notCurrentPlayerName = this.players[Number(next)]["name"];
+        let notCurrentPlayerLife = this.players[Number(next)]["life"];
+        
+        // suppression plateau de jeu
         $("#gameBoard").remove();
-
 
         let fightTemplate = `
             <div class="fight" id="fightTemplate${currentPlayer.id}">
@@ -742,37 +678,29 @@ class Gameboard {
                 value: notCurrentPlayerLife,
             });
         });
+
+        if(typeof $('#fightTemplate'+notCurrentPlayer) != 'undefined') {
+            $('#fightTemplate'+notCurrentPlayer).remove();
+        }
         
         this.attackOrDefendAction(currentPlayer, notCurrentPlayerLife);
     }
 
     attackOrDefendAction(currentPlayer, notCurrentPlayerLife) {
-        //dernière étape :
-        // il faut faire le tour à tour pour que chaque joueur effectue une action de défense ou d'attaque
-        // voir du coté de next player
             
         let next = this.nextPlayer(currentPlayer.id);
-
-        let weapon = this.getInfo(
-            this.players, 
-            "weaponOnHands", 
-            this.players[next]["id"]
-        );
         
-        let getDamage = weapon[0]["damage"];
+        let getDamage = currentPlayer.weaponOnHands[0].damage;
 
-       // console.log('START FUNCTION notCurrentPlayerLife', notCurrentPlayerLife);
-
-        //let winner = this.printWinnerPlayer(currentPlayer, next, notCurrentPlayerLife); ${winner}
-       // console.log('winner ', winner);
+        let winner = this.printWinnerPlayer(currentPlayer, this.players[Number(next)].name, notCurrentPlayerLife);
 
         let FinishGameTemplate = `
-        <div class="fight">
+        <div class="fight" id="fightTemplate${currentPlayer.id}">
             <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">
                 ${currentPlayer.name} lose the game !  <i class="fas fa-times-circle looseIcon"></i>
             </h3>
             <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">
-                 win the game !   <i class="fas fa-trophy winIcon"></i>
+                ${winner} win the game ! <i class="fas fa-trophy winIcon"></i>
             </h3>
             <button class="replayGame${currentPlayer.id}" onclick="location.reload()"; id="replayGame${currentPlayer.id}">
                 <i class="fas fa-redo"></i> Replay the game
@@ -782,29 +710,20 @@ class Gameboard {
             </button>
         </div>
         `;
-        
+
         //si le joueur attaque alors inflige les dégat selon l'arme qu'il possède,
         $("#attackBtn" + currentPlayer.id).click((e) => {
             let actionAttack = true;
             
-            // console.log('not current player life', notCurrentPlayerLife);
-
              let newLife = this.setInfo(
                 this.players,
                 "life",
-                this.players[next]["id"],
+                this.players[Number(next)]["id"],
                 notCurrentPlayerLife - getDamage
             );
 
-            console.log('newlife ' +  newlife);
-
             notCurrentPlayerLife = newLife;
             newLife = notCurrentPlayerLife;
-            
-           // console.log('tableau joueur', this.players);
-            
-            //console.log('not_current_player_life', notCurrentPlayerLife);
-            //console.log('new_life', newLife);
 
             $('#playerLifeInfo'+currentPlayer.id).html(
                 "Life : "+ newLife
@@ -824,11 +743,15 @@ class Gameboard {
             }
 
             if(notCurrentPlayerLife <= 0) {
-                $(`#fightTemplate${currentPlayer.id}`).remove();
+                if(typeof $(`#fightTemplate${currentPlayer.id}`) != 'undefined' || 
+                   typeof $(`#fightTemplate${this.players[Number(next)].id}`) != 'undefined') {
+                    $('.fight').remove();
+                }
                 $(FinishGameTemplate).appendTo(".gameBoardContainer");
             }
-
+            
             this.tourATourFight(currentPlayer, actionAttack);
+
         });
 
         // si le joueur se défend alors inflige 50% des dégats
@@ -863,34 +786,34 @@ class Gameboard {
             }
 
             if(notCurrentPlayerLife <= 0) {
-                $(`#fightTemplate${currentPlayer.id}`).remove();
+                if(typeof $(`#fightTemplate${currentPlayer.id}`) != 'undefined' || 
+                   typeof $(`#fightTemplate${this.players[Number(next)].id}`) != 'undefined') {
+                    $('.fight').remove();
+                }
                 $(FinishGameTemplate).appendTo(".gameBoardContainer");
             }
 
             this.tourATourFight(currentPlayer, actionDefend);
-        });
 
+        });
     }
 
-    /* printWinnerPlayer(currentPlayer, notCurrentPlayer, notCurrentPlayerLife) {
+    printWinnerPlayer(currentPlayer, notCurrentPlayer, notCurrentPlayerLife) {
 
-        console.log('currentPlayer', currentPlayer);
-        console.log('notCurrentPlayer', notCurrentPlayer);
-        //console.log('notCurrentPlayerLife', notCurrentPlayerLife);
-
-        if(notCurrentPlayerLife > currentPlayer.life) {
-            console.log('notCurrentPlayer', notCurrentPlayer);
+        //on affiche le nom du gagnant en fonction des points de vie des joueur
+        if(currentPlayer.life < notCurrentPlayerLife ) {
             return notCurrentPlayer;
         } else if (notCurrentPlayerLife < currentPlayer.life) {
-            console.log('currentPlayer.name', currentPlayer.name);
             return currentPlayer.name;
         }
-    } */
+
+    } 
 
     fightAction(target, notCurrentPlayer) {
-        //get position all player and make position condition
+
         this.players.map((el) => {
             if (target === el.position+1) {
+
                 for( let step = 1; step < 2; step++) {
                     let rightDirection;
 
@@ -907,7 +830,9 @@ class Gameboard {
                 }
 
             } else if (target === el.position-1) {
+
                 for( let step = 1; step < 2; step++) {
+
                     let leftDirection;
 
                     leftDirection  = el.position - step;
@@ -923,13 +848,15 @@ class Gameboard {
                 } 
 
             } else if (target === el.position+10) {
+
                 this.fightDisplayEvent(el, notCurrentPlayer);
+
             } else if (target === el.position-10) {
+
                 this.fightDisplayEvent(el, notCurrentPlayer);
+
             } 
         });
-
-        console.log(' END table players', this.players);
     }
 
     testInit() {
@@ -944,9 +871,6 @@ class Gameboard {
             this.indexCurrentPlayer,
             this.players
         );
-
-        console.log('table players', this.players);
-        console.log('table weapons', this.weapons);
 
         this.miseEnSurbrillance(currentPlayer);
         this.incrementationDeplacementJoueur(currentPlayer, target);

@@ -13,8 +13,7 @@ let numberOfPlayers = 2;
 //vie du joueur
 let maxLife = 100;
 
-//let numberMove = 4;
-let numberMove = 10;
+let numberMove = 4;
 
 //Nom du skin utilisé par le joueur
 let playerSkin = "alien-fork";
