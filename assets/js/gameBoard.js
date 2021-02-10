@@ -232,7 +232,8 @@ class Gameboard {
                         player.name = playerName;
 
 
-                       let currentPlayerWeaponName = self.getInfo(self.weapons, "name", player.idWeapon);
+                       let currentPlayerWeaponName = player.weaponOnHands[0].name;
+
 
                     if (player.name === playerName) {
                         let mytemplate = `
@@ -451,20 +452,6 @@ class Gameboard {
         });
     }
 
-    getInfo(tableObject, attrObject, idObject) {
-        let theElement = tableObject.filter((ob) => ob.id === idObject);
-
-        if (
-            tableObject === "undefined" ||
-            attrObject === "undefined" ||
-            idObject === "undefined"
-        ) {
-            return null;
-        } else {
-            return theElement[0][attrObject];
-        }
-    }
-
     setInfo(tableObject, attrObject, idObject, newValue) {
         let theElement = tableObject.filter((ob) => ob.id === idObject);
 
@@ -494,7 +481,6 @@ class Gameboard {
                 this.miseEnSurbrillance(this.players[nextPlayer]); 
             }
         }
-
     }
 
     incrementationDeplacementJoueur(currentPlayer, target) {
@@ -596,6 +582,8 @@ class Gameboard {
 
     tourATourFight(currentPlayer, action) {
 
+        console.log('entrée tour a tour current player ' + currentPlayer);
+
         if (action === true) {
             let nextPlayer;
             let setPlayerNoPlaying;
@@ -610,6 +598,8 @@ class Gameboard {
                     nextPlayer = currentPlayer.id+1
                 );
 
+                console.log('currentPlayer.id+1', currentPlayer.id+1);
+
             } else {
                 nextPlayer = this.nextPlayer(currentPlayer.id);
 
@@ -619,6 +609,8 @@ class Gameboard {
                     currentPlayer.id,
                     nextPlayer = currentPlayer.id-1
                 );
+                
+                console.log('currentPlayer.id-1' + currentPlayer.id-1);
 
             } 
 
@@ -750,6 +742,7 @@ class Gameboard {
                 $(FinishGameTemplate).appendTo(".gameBoardContainer");
             }
             
+            console.log('AVANT tour a tour current player ' + currentPlayer);
             this.tourATourFight(currentPlayer, actionAttack);
 
         });
@@ -871,6 +864,8 @@ class Gameboard {
             this.indexCurrentPlayer,
             this.players
         );
+
+        console.log('players ', this.players);
 
         this.miseEnSurbrillance(currentPlayer);
         this.incrementationDeplacementJoueur(currentPlayer, target);
