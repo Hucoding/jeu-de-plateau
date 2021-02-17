@@ -234,7 +234,6 @@ class Gameboard {
 
                        let currentPlayerWeaponName = player.weaponOnHands[0].name;
 
-
                     if (player.name === playerName) {
                         let mytemplate = `
                         <div class="playerNameChanged${player.id}" id="playerNameChanged${player.id}">
@@ -436,7 +435,7 @@ class Gameboard {
                     });
 
                     //combat
-                    this.fightAction(target, currentPlayer.position);
+                    this.fightAction(target, currentPlayer.position, currentPlayer);
 
                 }
 
@@ -580,65 +579,44 @@ class Gameboard {
 
     }
 
-    tourATourFight(currentPlayer, action) {
+    tourATourFight(currentPlayer, action, notCurrentPlayer) {
 
-        console.log('entrée tour a tour current player ' + currentPlayer);
+        if(action === true) {
+            let temp = currentPlayer;
+            currentPlayer = notCurrentPlayer;
+            notCurrentPlayer = temp;
+        } 
 
-        if (action === true) {
-            let nextPlayer;
-            let setPlayerNoPlaying;
-
-            if (currentPlayer.id == 1) {
-                nextPlayer = this.nextPlayer(currentPlayer.id);
-
-                setPlayerNoPlaying = this.setInfo(
-                    this.players,
-                    "id",
-                    currentPlayer.id,
-                    nextPlayer = currentPlayer.id+1
-                );
-
-                console.log('currentPlayer.id+1', currentPlayer.id+1);
-
-            } else {
-                nextPlayer = this.nextPlayer(currentPlayer.id);
-
-                setPlayerNoPlaying = this.setInfo(
-                    this.players,
-                    "id",
-                    currentPlayer.id,
-                    nextPlayer = currentPlayer.id-1
-                );
-                
-                console.log('currentPlayer.id-1' + currentPlayer.id-1);
-
-            } 
-
-            if (nextPlayer != currentPlayer.id) {
-                this.fightDisplayEvent(currentPlayer,  Number(setPlayerNoPlaying));
-            }
-
-        }
-
+        this.fightDisplayEvent(currentPlayer, notCurrentPlayer);
+    
     }
 
     fightDisplayEvent(currentPlayer, notCurrentPlayer) {
 
+        //confusion avec notCurrentPlayer faire un clean propre 
+        // des fonction fightDisplayEvent / fightAction / $(.moveIsPossible) => this.fightAction
+
         // current player  = joueur qui est en train de jouer
         // notCurrentPlayer = joueur en attente de pouvoir effectuer une action d'attaque ou de défense 
 
-        let next = this.nextPlayer(currentPlayer.id);
-        let notCurrentPlayerName = this.players[Number(next)]["name"];
-        let notCurrentPlayerLife = this.players[Number(next)]["life"];
+        //let next = this.nextPlayer(currentPlayer.id);
+
+        let notCurrentPlayerName = notCurrentPlayer.name;
+
+        let notCurrentPlayerLife = notCurrentPlayer.life;
         
         // suppression plateau de jeu
         $("#gameBoard").remove();
+        $("#createNameContainer" + currentPlayer.id).remove();
+        $("#createNameContainer" + notCurrentPlayer.id).remove();
+
 
         let fightTemplate = `
             <div class="fight" id="fightTemplate${currentPlayer.id}">
                 <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">
                     FIGHT !
                 </h3>
+                <h4 class="infoCurrentPlayerName${currentPlayer.id}">à votre tour : ${currentPlayer.name}</h4>
                 <div class="infoWeaponPlayer${currentPlayer.id}" id="infoWeaponPlayer${currentPlayer.id}">
                     Weapon : ${currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]}
                 </div>
@@ -646,13 +624,13 @@ class Gameboard {
                     Damage : ${currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["damage"]}
                 </div>
                 <div class="playerLifeInfo${currentPlayer.id}" id="playerLifeInfo${currentPlayer.id}">
-                    Life : ${notCurrentPlayerLife}
+                    Life of player ${notCurrentPlayer.name} : ${notCurrentPlayer.life}
                 </div>
-                <progress class="lifeBarPlayer${currentPlayer.id}" id="lifeBarPlayer${currentPlayer.id}" value="${notCurrentPlayerLife}" max="100">
-                    ${notCurrentPlayerLife} %
+                <progress class="lifeBarPlayer${currentPlayer.id}" id="lifeBarPlayer${currentPlayer.id}" value="${notCurrentPlayer.life}" max="100">
+                    ${notCurrentPlayer.life} %
                 </progress>
                 <p class="attackMessage${currentPlayer.id}">
-                   Le joueur ${notCurrentPlayerName} attaque le joueur ${currentPlayer.name} que voulez vous faire ?
+                    ${notCurrentPlayerName} attaque que voulez vous faire ?
                 </p>
                 <button class="defendBtn${currentPlayer.id}" id="defendBtn${currentPlayer.id}">
                     <i class="fas fa-shield-alt"></i> Defend
@@ -662,7 +640,7 @@ class Gameboard {
                 </button>
             </div>
         `;
-
+    
         $(fightTemplate).appendTo(".gameBoardContainer");
 
         $(function () {
@@ -671,20 +649,21 @@ class Gameboard {
             });
         });
 
-        if(typeof $('#fightTemplate'+notCurrentPlayer) != 'undefined') {
-            $('#fightTemplate'+notCurrentPlayer).remove();
+        if(typeof $('#fightTemplate'+notCurrentPlayer.id) != 'undefined') {
+            $('#fightTemplate'+notCurrentPlayer.id).remove();
         }
         
-        this.attackOrDefendAction(currentPlayer, notCurrentPlayerLife);
+        this.attackOrDefendAction(currentPlayer, notCurrentPlayer);
+
     }
 
-    attackOrDefendAction(currentPlayer, notCurrentPlayerLife) {
+    attackOrDefendAction(currentPlayer, notCurrentPlayer) {
             
-        let next = this.nextPlayer(currentPlayer.id);
+        //let next = this.nextPlayer(currentPlayer.id);
         
         let getDamage = currentPlayer.weaponOnHands[0].damage;
 
-        let winner = this.printWinnerPlayer(currentPlayer, this.players[Number(next)].name, notCurrentPlayerLife);
+        let winner = this.printWinnerPlayer(currentPlayer, notCurrentPlayer.name, notCurrentPlayer.life);
 
         let FinishGameTemplate = `
         <div class="fight" id="fightTemplate${currentPlayer.id}">
@@ -702,48 +681,53 @@ class Gameboard {
             </button>
         </div>
         `;
+        
+        //finir de corriger bug pour la vie des joueur 
+        // n'inflige pas les dommages au bon joueuur
 
         //si le joueur attaque alors inflige les dégat selon l'arme qu'il possède,
         $("#attackBtn" + currentPlayer.id).click((e) => {
             let actionAttack = true;
             
-             let newLife = this.setInfo(
+            let newLife = this.setInfo(
                 this.players,
                 "life",
-                this.players[Number(next)]["id"],
-                notCurrentPlayerLife - getDamage
+                notCurrentPlayer.id,
+                notCurrentPlayer.life - getDamage
             );
 
-            notCurrentPlayerLife = newLife;
-            newLife = notCurrentPlayerLife;
+            notCurrentPlayer.life = newLife;    
+            newLife = notCurrentPlayer.life;
 
-            $('#playerLifeInfo'+currentPlayer.id).html(
+            $('#playerLifeInfo' + notCurrentPlayer.id).html(
                 "Life : "+ newLife
             );
-            $('#playerPanelLifeInfo'+currentPlayer.id).html(
+
+            $('#playerPanelLifeInfo' + notCurrentPlayer.id).html(
                 "Life : "+ newLife
             );
-            $("#lifeBarPlayer"+currentPlayer.id).val(
-                newLife
-            );
-            $("#lifeBarPanelPlayer"+currentPlayer.id).val(
+
+            $("#lifeBarPlayer" + notCurrentPlayer.id).val(
                 newLife
             );
 
-            if(newLife <= 50) {
-                $('#lifeBarPlayer'+currentPlayer.id).addClass("redMidLife");
+            $("#lifeBarPanelPlayer" + notCurrentPlayer.id).val(
+                newLife
+            );
+
+            if(notCurrentPlayer.life <= 50) {
+                $('#lifeBarPlayer' + notCurrentPlayer.id).addClass("redMidLife");
             }
 
-            if(notCurrentPlayerLife <= 0) {
+            if(notCurrentPlayer.life <= 0) {
                 if(typeof $(`#fightTemplate${currentPlayer.id}`) != 'undefined' || 
-                   typeof $(`#fightTemplate${this.players[Number(next)].id}`) != 'undefined') {
+                   typeof $(`#fightTemplate${notCurrentPlayer.id}`) != 'undefined') {
                     $('.fight').remove();
                 }
                 $(FinishGameTemplate).appendTo(".gameBoardContainer");
             }
             
-            console.log('AVANT tour a tour current player ' + currentPlayer);
-            this.tourATourFight(currentPlayer, actionAttack);
+            this.tourATourFight(currentPlayer, actionAttack, notCurrentPlayer);
 
         });
 
@@ -754,39 +738,42 @@ class Gameboard {
             let newLife = this.setInfo(
                 this.players,
                 "life",
-                this.players[next]["id"],
-                notCurrentPlayerLife - getDamage / 2
+                notCurrentPlayer.id,
+                notCurrentPlayer.life - getDamage / 2
             );
 
-            notCurrentPlayerLife = newLife;
-            newLife = notCurrentPlayerLife;
+            notCurrentPlayer.life = newLife;
+            newLife = notCurrentPlayer.life;
 
-            $('#playerLifeInfo'+currentPlayer.id).html(
-                "Life : "+newLife
+            $('#playerLifeInfo' + notCurrentPlayer.id).html(
+                "Life : " + newLife
             );
-            $('#playerPanelLifeInfo'+currentPlayer.id).html(
-                "Life : "+newLife
+
+            $('#playerPanelLifeInfo' + notCurrentPlayer.id).html(
+                "Life : " + newLife
             );
-            $("#lifeBarPlayer"+currentPlayer.id).val(
+
+            $("#lifeBarPlayer" + currentPlayer.id).val(
                 newLife
             );
-            $("#lifeBarPanelPlayer"+currentPlayer.id).val(
+
+            $("#lifeBarPanelPlayer" + notCurrentPlayer.id).val(
                 newLife
             );
         
             if(newLife <= 50) {
-                $('#lifeBarPlayer'+currentPlayer.id).addClass("redMidLife");
+                $('#lifeBarPlayer' + notCurrentPlayer.id).addClass("redMidLife");
             }
 
-            if(notCurrentPlayerLife <= 0) {
+            if(notCurrentPlayer.life <= 0) {
                 if(typeof $(`#fightTemplate${currentPlayer.id}`) != 'undefined' || 
-                   typeof $(`#fightTemplate${this.players[Number(next)].id}`) != 'undefined') {
+                   typeof $(`#fightTemplate${notCurrentPlayer.id}`) != 'undefined') {
                     $('.fight').remove();
                 }
                 $(FinishGameTemplate).appendTo(".gameBoardContainer");
             }
 
-            this.tourATourFight(currentPlayer, actionDefend);
+            this.tourATourFight(currentPlayer, actionDefend, notCurrentPlayer);
 
         });
     }
@@ -802,7 +789,7 @@ class Gameboard {
 
     } 
 
-    fightAction(target, notCurrentPlayer) {
+    fightAction(target, notCurrentPlayerPosition, notCurrentPlayer) {
 
         this.players.map((el) => {
             if (target === el.position+1) {
@@ -841,11 +828,9 @@ class Gameboard {
                 } 
 
             } else if (target === el.position+10) {
-
                 this.fightDisplayEvent(el, notCurrentPlayer);
 
             } else if (target === el.position-10) {
-
                 this.fightDisplayEvent(el, notCurrentPlayer);
 
             } 

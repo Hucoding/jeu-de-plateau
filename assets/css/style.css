@@ -168,6 +168,16 @@ body {
     font-size: 25px;
 }
 
+.infoCurrentPlayerName1,
+.infoCurrentPlayerName2 {
+    
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    margin: 20px;    
+
+}
+
 .infoWeaponPlayer1,
 .infoWeaponPlayer2 {
 
