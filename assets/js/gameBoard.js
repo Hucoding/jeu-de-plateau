@@ -31,7 +31,6 @@ class Gameboard {
     }
 
     generateObstacles() {
-        //nombre maximum de cellules
         let maxCells = this.rows * this.columns - 1;
 
         let obstacleIndex = -1;
@@ -144,25 +143,21 @@ class Gameboard {
 
     }
 
-    //Cette fonction permet la création du formulaire d'entrée du nom du joueur de façon dynamique, on passe en paramètre l'id du joueur ainsi que son Nom par défaut
     createPlayerNameForm(player, playerId, playerName) {
         let playerNameClassId = "playerName" + playerId;
 
-        /* Création du form pour le joueur */
         let containerLeftOrRight = $("<div></div>");
         containerLeftOrRight.attr("class", "playerPanel" + playerId);
         containerLeftOrRight.attr("id", "playerName" + playerId);
 
         containerLeftOrRight.appendTo(".gameContainer");
 
-        /* Affichage du nom du joueur dans le form */
         let playerContainerStats = $("<h3></h3>");
         playerContainerStats.attr("class", playerNameClassId);
         playerContainerStats.attr("id", playerNameClassId);
 
         playerContainerStats.appendTo(containerLeftOrRight);
 
-        /* création de l'image du joueur dans le form */
         let imgPlayerInContainerStats = $("<img />");
         let imgPlayerUrlInContainerStats = "./assets/imgs/players/alien.png";
         imgPlayerInContainerStats.attr("class", "playerImg" + playerId);
@@ -172,12 +167,10 @@ class Gameboard {
         playerContainerStats.append(playerName);
         imgPlayerInContainerStats.appendTo(containerLeftOrRight);
 
-        /* création de la div qui contient l'input ou le joueur peut changer son pseudo */
         let createNameContainer = $("<div></div>");
         createNameContainer.attr("class", "createNameContainer");
         createNameContainer.attr("id", "createNameContainer" + playerId);
 
-        /* ajout de l'input dans la div */
         let inputChangePseudo = $("<input />");
         inputChangePseudo.attr("type", "text");
         inputChangePseudo.attr("class", "createName" + playerId);
@@ -185,7 +178,6 @@ class Gameboard {
         inputChangePseudo.attr("name", "createName" + playerId);
         inputChangePseudo.attr("placeholder", "Créer votre pseudo...");
 
-        /* ajout du bouton de validation du formulaire */
         let buttonValidateChange = $("<button></button>");
         buttonValidateChange.attr("class", "buttonCreateName");
         buttonValidateChange.attr("id", "buttonCreateName" + playerId);
@@ -194,47 +186,45 @@ class Gameboard {
         createNameContainer.appendTo(containerLeftOrRight);
         inputChangePseudo.appendTo(createNameContainer);
         buttonValidateChange.appendTo(createNameContainer);
-
-        /* si un player et undefined on ne créer pas de nouveau form joueur */
+        
+        
         if (player === undefined) {
             containerLeftOrRight.remove();
         }
     }
 
-    // Création d'une fonction de mise a jour du nom du joueur et du formulaire
     update(player, playerId, playerName) {
-        let self = this;
-        //ce premier bloc de code à pour but de mettre à jour et remplacer le nom du joueur par défaut lorsque l'utilisateur rentre un nom personnalisé pour le joueur
+
         $("#buttonCreateName" + playerId).click(
             function () {
                 
                 if ($("#createName" + playerId).val().length === 0) {
-                    // Si le joueur 1 n'a pas rentrer son pseudo
+
                     $("#createName" + playerId).css("border", "1px solid red");
+                    
                     $("#playerName" + playerId)
-                        .text("Entrez votre nom !")
-                        .css({
-                            //on affiche un message d'erreur
-                            color: "red",
-                            "font-weight": "bold",
-                        });
-                    } else {
+                    .text("Entrez votre nom !")
+                    .css({
+                        color: "red",
+                        "font-weight": "bold",
+                    });
 
-                        let playerClassAndIdName = "playerName" + playerId;
-                        let newPlayerName = $("#createName" + playerId).val();
+                } else {
+
+                    let playerClassAndIdName = "playerName" + playerId;
+                    let newPlayerName = $("#createName" + playerId).val();
+                    
+                    $(".playerName" + playerId).replaceWith(
+                        `<h3 class="${playerClassAndIdName}" id="${playerClassAndIdName}">" ${newPlayerName} "</h3>`
+                    );
                         
-                        $(".playerName" + playerId).replaceWith(
-                            `<h3 class="${playerClassAndIdName}" id="${playerClassAndIdName}">" ${newPlayerName} "</h3>`
-                        ); // Remplace player 1 par le nom du joueur
-                            
-                        //Mise à jour du nom du joueur dans l'objet
-                        playerName = newPlayerName;
-                        player.name = playerName;
+                    playerName = newPlayerName;
+                    player.name = playerName;
 
-
-                       let currentPlayerWeaponName = player.weaponOnHands[0].name;
+                    let currentPlayerWeaponName = player.weaponOnHands[0].name;
 
                     if (player.name === playerName) {
+
                         let mytemplate = `
                         <div class="playerNameChanged${player.id}" id="playerNameChanged${player.id}">
                             pseudo : ${player.name}
@@ -247,78 +237,70 @@ class Gameboard {
                         </div>
                         <progress class="lifeBarPlayer${player.id}" id="lifeBarPanelPlayer${player.id}" value="${player.life}" max="100">${player.life} %</progress>
                         `;
+
                         $(mytemplate).appendTo(".playerPanel" + player.id);
+
                     }
 
                     $("#createNameContainer" + playerId).fadeOut("3000");
 
-                    $("#createName" + playerId).val(""); // ici on remets l'input à zéro
-                    //Afficher player ici
+                    $("#createName" + playerId).val(""); 
+
                 }
             }
         );
     }
 
-    //le paramètre index :
     cellIsFree(index) {
+
         let isfree = true;
 
-        isfree =
-            this.obstacles.filter((ob) => ob.position === index).length > 0
-                ? false
-                : isfree;
-
-        isfree =
-            this.weapons.filter((wp) => wp.position === index).length > 0
-                ? false
-                : isfree;
-
-        isfree =
-            this.players.filter((pl) => pl.position === index).length > 0
-                ? false
-                : isfree;
+        isfree = this.obstacles.filter((ob) => ob.position === index).length > 0 ? false : isfree;
+        isfree = this.weapons.filter((wp) => wp.position === index).length > 0 ? false : isfree;
+        isfree = this.players.filter((pl) => pl.position === index).length > 0 ? false : isfree;
 
         return isfree;
+
     }
 
-    //cellIsMovable est une fonction qui permet de déterminer si les positions entre le joueur et les obstacles
     cellIsMovable(index) {
         let isMovable = true;
 
-        isMovable =
-            this.obstacles.filter((ob) => ob.position === index).length > 0
-                ? false
-                : isMovable;
-
-        isMovable =
-            this.players.filter((pl) => pl.position === index).length > 0
-                ? false
-                : isMovable;
+        isMovable = this.obstacles.filter((ob) => ob.position === index).length > 0 ? false : isMovable;
+        isMovable = this.players.filter((pl) => pl.position === index).length > 0 ? false : isMovable;
 
         return isMovable;
     }
 
     findMyCurrentPlayer(index, tablePlayers) {
+
         return tablePlayers[index];
+
     }
 
     nextPlayer(indexCurrentPlayer) {
+
         let newIndex = 0;
+
         let allPlayers = this.players;
+
         let index = indexCurrentPlayer - 1;
+
         if (typeof allPlayers[index + 1] !== "undefined") {
             newIndex = index + 1;
         }
+        
         return newIndex;
     }
 
     miseEnSurbrillance(currentPlayer) {
+
         let rightDirection;
         let leftDirection;
         let topDirection;
         let bottomDirection;
 
-        //ajout des cases de déplacement de droite quand cela est possible
+        //ajout des cases de déplacement de droite 
         for (let step = 1; step < numberMove; step++) {
             rightDirection = currentPlayer.position + step;
 
@@ -341,7 +323,7 @@ class Gameboard {
             }
         }
 
-        //ajout des cases de déplacement de gauche quand cela est possible
+        //ajout des cases de déplacement de gauche 
         for (let step = 1; step < numberMove; step++) {
             leftDirection = currentPlayer.position - step;
 
@@ -364,7 +346,7 @@ class Gameboard {
             }
         }
 
-        //ajout des cases de déplacement du haut quand cela est possible
+        //ajout des cases de déplacement du haut 
         for (let step = 1; step < numberMove; step++) {
             topDirection = currentPlayer.position - this.columns * step;
 
@@ -384,7 +366,7 @@ class Gameboard {
             }
         }
 
-        //ajout des cases de déplacement du bas quand cela est possible
+        //ajout des cases de déplacement du bas
         for (let step = 1; step < numberMove; step++) {
             bottomDirection = currentPlayer.position + this.columns * step;
 
@@ -408,18 +390,14 @@ class Gameboard {
             target = Number(e.target.id);
 
             do {
-                $(
-                    "td#" + currentPlayer.position + " .playerWithStartWeapon"
-                ).remove();
-                $(
-                    "td#" + currentPlayer.position + " .weaponStartThePlayer"
-                ).remove();
 
-                currentPlayer.position =
-                    currentPlayer.position +
-                    this.incrementationDeplacementJoueur(currentPlayer, target);
+                $("td#" + currentPlayer.position + " .playerWithStartWeapon").remove();
+                $("td#" + currentPlayer.position + " .weaponStartThePlayer").remove();
+
+                currentPlayer.position = currentPlayer.position + this.incrementationDeplacementJoueur(currentPlayer, target);
 
                 if (currentPlayer.position === target) {
+
                     let imgPlayer = $("<img />");
                     let imgPlayerUrl = "assets/imgs/players/alien.png";
 
@@ -434,12 +412,10 @@ class Gameboard {
                         $("td#" + index).unbind("click");
                     });
 
-                    //combat
                     this.fightAction(target, currentPlayer.position, currentPlayer);
 
                 }
 
-                //methode filter pour get les armes
                 this.updateWeapon(this.weapons, currentPlayer);
 
             } while (currentPlayer.position != target);
@@ -452,33 +428,28 @@ class Gameboard {
     }
 
     setInfo(tableObject, attrObject, idObject, newValue) {
+
         let theElement = tableObject.filter((ob) => ob.id === idObject);
 
-        if (
-            tableObject === "undefined" ||
-            attrObject === "undefined" ||
-            idObject === "undefined" ||
-            newValue === "undefined"
-        ) {
+        if (tableObject === "undefined" || attrObject === "undefined" || idObject === "undefined" || newValue === "undefined") {
             return null;
         } else {
             return (theElement[0][attrObject] = newValue);
         }
+
     }
 
     toutATour(currentPlayer, target) {
         if (currentPlayer.position === target) {
+
             let nextPlayer = 0;
 
-            if (currentPlayer.id == 1) {
-                nextPlayer = 1;
-            } else {
-                nextPlayer = 0;
-            }
+            currentPlayer.id == 1 ? nextPlayer = 1 : nextPlayer = 0;
 
             if (nextPlayer != currentPlayer.id) {
                 this.miseEnSurbrillance(this.players[nextPlayer]); 
             }
+
         }
     }
 
@@ -487,20 +458,11 @@ class Gameboard {
 
         if (target < currentPlayer.position) {
             //Vers la gauche, ou le haut
-            if (target <= currentPlayer.position - this.rows) {
-                incrementation = -this.rows;
-            } else {
-                incrementation = -1;
-            }
+            target <= currentPlayer.position - this.rows ? incrementation = -this.rows : incrementation = -1;
         } else {
             //Vers la droite, ou le bas
-            if (target >= currentPlayer.position + this.rows) {
-                incrementation = +this.rows;
-            } else {
-                incrementation = +1;
-            }
+            target >= currentPlayer.position + this.rows ? incrementation = +this.rows : incrementation = +1;
         }
-
         return incrementation;
     }
 
@@ -511,56 +473,25 @@ class Gameboard {
 
         tableWeapons.filter(function (weapon) {
 
-            // si la position de larme est égale à la position du joueur et que l'id de lancienne arme est différent de larme trouvée par terre
             if(weapon.position === currentPlayer.position && oldIdWeapon != weapon.id) {
 
-                //enregistrer la position actuelle du joueur, ajouter cette position à larme et pushé la propriété "position" à larme
                 currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["position"] = currentPlayer.position;
-                //console.log('create properties', currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["position"]);
-                
-                //larme à deposer par terre correspond à larme courante détenu par le joueur
-                //console.log('arme a deposer par terre', currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]);
 
-                //on place temporairement lancienne arme dans le tableau des armes
                 self.weapons.push(currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]);
 
-                //ici ajouter le code pour afficher le skin de larme au sol
-                //Si la position est égale à l'index de la case alors on ajoute le skin
                 let id = parseInt($("#" + weapon.position).attr("id"));
                 if(id == currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["position"]) {
-
-                    // suppression du skin de la nouvelle arme sur la case
-                    $("td#" + id).removeClass(
-                        weapon.name
-                    );
-                    
-                    // ajout du skin de la nouvelle arme au joueur
-                    $("td#" + id).addClass(
-                        currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]
-                    ); 
-
+                    $("td#" + id).removeClass(weapon.name);
+                    $("td#" + id).addClass(currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]); 
                 }
 
-                //nouvelle arme à pushé au joueur
                 let newWeaponOnHands = weapon;
 
-                //mise à jour de l'id de l'arme qui est égale à idWeapon (idWeapon id de larme associé au joueur)
-                //currentPlayer.idWeapon = weapon.id;
-
                 currentPlayer.weaponOnHands.splice(currentPlayer.weaponOnHands.length-1);
-
                 currentPlayer.weaponOnHands.push(newWeaponOnHands);
 
-                //ICI ajouter le code du nouveau skin de larme associé au joueur
-                //Si idWeapon est similaire à lid de la nouvelle arme alors on affiche le skin de la nouvelle arme
-                //if(currentPlayer.idWeapon == currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["id"]) {
-                    // ajout du skin de la nouvelle arme au joueur
-                    $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").addClass(
-                        "playWith" + currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]
-                    );
-                //}
+                $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").addClass("playWith" + currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]);
 
-                //ici on supprime la position de la nouvelle arme du joueur car nous en avons pas besoin nous avons la position du joueur (larme suis le joueur)
                 currentPlayer.weaponOnHands.forEach(function(newWeapon){ 
                     delete newWeapon.position; 
                 });
@@ -569,13 +500,9 @@ class Gameboard {
 
         });
 
-        $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").removeClass(
-            "playWithundefined"
-        );
+        $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").removeClass("playWithundefined");
 
-        $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").addClass(
-            "playWith" + currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]
-        );
+        $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").addClass("playWith" + currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]);
 
     }
 
@@ -593,23 +520,12 @@ class Gameboard {
 
     fightDisplayEvent(currentPlayer, notCurrentPlayer) {
 
-        //confusion avec notCurrentPlayer faire un clean propre 
-        // des fonction fightDisplayEvent / fightAction / $(.moveIsPossible) => this.fightAction
-
-        // current player  = joueur qui est en train de jouer
-        // notCurrentPlayer = joueur en attente de pouvoir effectuer une action d'attaque ou de défense 
-
-        //let next = this.nextPlayer(currentPlayer.id);
-
         let notCurrentPlayerName = notCurrentPlayer.name;
-
         let notCurrentPlayerLife = notCurrentPlayer.life;
         
-        // suppression plateau de jeu
         $("#gameBoard").remove();
         $("#createNameContainer" + currentPlayer.id).remove();
         $("#createNameContainer" + notCurrentPlayer.id).remove();
-
 
         let fightTemplate = `
             <div class="fight" id="fightTemplate${currentPlayer.id}">
@@ -644,26 +560,21 @@ class Gameboard {
         $(fightTemplate).appendTo(".gameBoardContainer");
 
         $(function () {
-            $("#lifeBarPlayer" + currentPlayer.id).progressbar({
-                value: notCurrentPlayerLife,
-            });
+            $("#lifeBarPlayer" + currentPlayer.id).progressbar({ value: notCurrentPlayerLife });
         });
 
         if(typeof $('#fightTemplate'+notCurrentPlayer.id) != 'undefined') {
             $('#fightTemplate'+notCurrentPlayer.id).remove();
         }
-        
+
         this.attackOrDefendAction(currentPlayer, notCurrentPlayer);
 
     }
 
     attackOrDefendAction(currentPlayer, notCurrentPlayer) {
-            
-        //let next = this.nextPlayer(currentPlayer.id);
-        
+                    
         let getDamage = currentPlayer.weaponOnHands[0].damage;
-
-        let winner = this.printWinnerPlayer(currentPlayer, notCurrentPlayer.name, notCurrentPlayer.life);
+        let winner = this.printWinnerPlayer(currentPlayer, notCurrentPlayer);
 
         let FinishGameTemplate = `
         <div class="fight" id="fightTemplate${currentPlayer.id}">
@@ -681,11 +592,7 @@ class Gameboard {
             </button>
         </div>
         `;
-        
-        //finir de corriger bug pour la vie des joueur 
-        // n'inflige pas les dommages au bon joueuur
 
-        //si le joueur attaque alors inflige les dégat selon l'arme qu'il possède,
         $("#attackBtn" + currentPlayer.id).click((e) => {
             let actionAttack = true;
             
@@ -699,24 +606,13 @@ class Gameboard {
             notCurrentPlayer.life = newLife;    
             newLife = notCurrentPlayer.life;
 
-            $('#playerLifeInfo' + notCurrentPlayer.id).html(
-                "Life : "+ newLife
-            );
-
-            $('#playerPanelLifeInfo' + notCurrentPlayer.id).html(
-                "Life : "+ newLife
-            );
-
-            $("#lifeBarPlayer" + notCurrentPlayer.id).val(
-                newLife
-            );
-
-            $("#lifeBarPanelPlayer" + notCurrentPlayer.id).val(
-                newLife
-            );
+            $('#playerLifeInfo' + notCurrentPlayer.id).html("Life : "+ newLife);
+            $('#playerPanelLifeInfo' + notCurrentPlayer.id).html("Life : "+ newLife);
+            $("#lifeBarPlayer" + notCurrentPlayer.id).val(newLife);
+            $("#lifeBarPanelPlayer" + notCurrentPlayer.id).val(newLife);
 
             if(notCurrentPlayer.life <= 50) {
-                $('#lifeBarPlayer' + notCurrentPlayer.id).addClass("redMidLife");
+                $('#lifeBarPlayer' + currentPlayer.id).addClass("redMidLife");
             }
 
             if(notCurrentPlayer.life <= 0) {
@@ -731,7 +627,6 @@ class Gameboard {
 
         });
 
-        // si le joueur se défend alors inflige 50% des dégats
         $("#defendBtn" + currentPlayer.id).click((e) => {
             let actionDefend = true;           
             
@@ -745,24 +640,16 @@ class Gameboard {
             notCurrentPlayer.life = newLife;
             newLife = notCurrentPlayer.life;
 
-            $('#playerLifeInfo' + notCurrentPlayer.id).html(
-                "Life : " + newLife
-            );
+            $('#playerLifeInfo' + notCurrentPlayer.id).html("Life : " + newLife);
 
-            $('#playerPanelLifeInfo' + notCurrentPlayer.id).html(
-                "Life : " + newLife
-            );
+            $('#playerPanelLifeInfo' + notCurrentPlayer.id).html("Life : " + newLife);
 
-            $("#lifeBarPlayer" + currentPlayer.id).val(
-                newLife
-            );
+            $("#lifeBarPlayer" + currentPlayer.id).val(newLife);
 
-            $("#lifeBarPanelPlayer" + notCurrentPlayer.id).val(
-                newLife
-            );
+            $("#lifeBarPanelPlayer" + notCurrentPlayer.id).val(newLife);
         
             if(newLife <= 50) {
-                $('#lifeBarPlayer' + notCurrentPlayer.id).addClass("redMidLife");
+                $('#lifeBarPlayer' + currentPlayer.id).addClass("redMidLife");
             }
 
             if(notCurrentPlayer.life <= 0) {
@@ -778,12 +665,11 @@ class Gameboard {
         });
     }
 
-    printWinnerPlayer(currentPlayer, notCurrentPlayer, notCurrentPlayerLife) {
+    printWinnerPlayer(currentPlayer, notCurrentPlayer) {
 
-        //on affiche le nom du gagnant en fonction des points de vie des joueur
-        if(currentPlayer.life < notCurrentPlayerLife ) {
+        if(currentPlayer.life < notCurrentPlayer.life ) {
             return notCurrentPlayer;
-        } else if (notCurrentPlayerLife < currentPlayer.life) {
+        } else if (notCurrentPlayer.life < currentPlayer.life) {
             return currentPlayer.name;
         }
 
@@ -795,9 +681,7 @@ class Gameboard {
             if (target === el.position+1) {
 
                 for( let step = 1; step < 2; step++) {
-                    let rightDirection;
-
-                    rightDirection = el.position + step;
+                    let rightDirection = el.position + step;
 
                     let currentRow = Number.parseInt(el.position / this.rows);
                     let limitMap = Number.parseInt(rightDirection / this.rows);
@@ -813,9 +697,7 @@ class Gameboard {
 
                 for( let step = 1; step < 2; step++) {
 
-                    let leftDirection;
-
-                    leftDirection  = el.position - step;
+                    let leftDirection  = el.position - step;
 
                     let currentRow = Number.parseInt(el.position / this.rows);
                     let limitMap = Number.parseInt(leftDirection / this.rows);
@@ -849,8 +731,6 @@ class Gameboard {
             this.indexCurrentPlayer,
             this.players
         );
-
-        console.log('players ', this.players);
 
         this.miseEnSurbrillance(currentPlayer);
         this.incrementationDeplacementJoueur(currentPlayer, target);
