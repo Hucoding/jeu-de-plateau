@@ -25,7 +25,6 @@ class Gameboard {
                 td.setAttribute("class", "cell");
                 tr.appendChild(td);
                 this.numberOfCell++;
-                cellsIndex.push(this.numberOfCell - 1);
             }
         }
     }
@@ -412,7 +411,7 @@ class Gameboard {
                         $("td#" + index).unbind("click");
                     });
 
-                    this.fightAction(target, currentPlayer.position, currentPlayer);
+                    this.fightAction(target, currentPlayer);
 
                 }
 
@@ -501,7 +500,6 @@ class Gameboard {
         });
 
         $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").removeClass("playWithundefined");
-
         $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").addClass("playWith" + currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]);
 
     }
@@ -522,6 +520,9 @@ class Gameboard {
 
         let notCurrentPlayerName = notCurrentPlayer.name;
         let notCurrentPlayerLife = notCurrentPlayer.life;
+
+        let winner = this.printWinnerPlayer(currentPlayer, notCurrentPlayer);
+
         
         $("#gameBoard").remove();
         $("#createNameContainer" + currentPlayer.id).remove();
@@ -556,11 +557,43 @@ class Gameboard {
                 </button>
             </div>
         `;
+
+
+        let FinishGameTemplate = `
+        <div class="fight" id="fightTemplate${currentPlayer.id}">
+            <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">
+                ${winner} win the game ! <i class="fas fa-trophy winIcon"></i>
+            </h3>
+            <button class="replayGame${currentPlayer.id}" onclick="location.reload()"; id="replayGame${currentPlayer.id}">
+                <i class="fas fa-redo"></i> Replay the game
+            </button>
+            <button class="stopGame${currentPlayer.id}" id="stopGame${currentPlayer.id}">
+                <i class="far fa-hand-paper"></i> Stop the game
+            </button>
+        </div>
+        `;
     
         $(fightTemplate).appendTo(".gameBoardContainer");
 
+
         $(function () {
             $("#lifeBarPlayer" + currentPlayer.id).progressbar({ value: notCurrentPlayerLife });
+
+            if(notCurrentPlayer.life <= 50) {
+                if(typeof $("#lifeBarPanelPlayer" + currentPlayer.id) != 'undefined') {
+                    $('#lifeBarPanelPlayer'+currentPlayer.id).addClass("redMidLife");
+                }
+                $('#lifeBarPlayer'+currentPlayer.id).addClass("redMidLife");
+            }
+
+            if(notCurrentPlayer.life <= 0) {
+                if(typeof $("#fightTemplate" + currentPlayer.id) != 'undefined' || 
+                typeof $("#fightTemplate" + notCurrentPlayer.id) != 'undefined') {
+                    $('.fight').remove();
+                }
+                $(FinishGameTemplate).appendTo(".gameBoardContainer");
+            }
+
         });
 
         if(typeof $('#fightTemplate'+notCurrentPlayer.id) != 'undefined') {
@@ -574,25 +607,8 @@ class Gameboard {
     attackOrDefendAction(currentPlayer, notCurrentPlayer) {
                     
         let getDamage = currentPlayer.weaponOnHands[0].damage;
-        let winner = this.printWinnerPlayer(currentPlayer, notCurrentPlayer);
 
-        let FinishGameTemplate = `
-        <div class="fight" id="fightTemplate${currentPlayer.id}">
-            <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">
-                ${currentPlayer.name} lose the game !  <i class="fas fa-times-circle looseIcon"></i>
-            </h3>
-            <h3 class="fightingMessage${currentPlayer.id}" id="fightingMessage${currentPlayer.id}">
-                ${winner} win the game ! <i class="fas fa-trophy winIcon"></i>
-            </h3>
-            <button class="replayGame${currentPlayer.id}" onclick="location.reload()"; id="replayGame${currentPlayer.id}">
-                <i class="fas fa-redo"></i> Replay the game
-            </button>
-            <button class="stopGame${currentPlayer.id}" id="stopGame${currentPlayer.id}">
-                <i class="far fa-hand-paper"></i> Stop the game
-            </button>
-        </div>
-        `;
-
+        //Bouton d'attaque
         $("#attackBtn" + currentPlayer.id).click((e) => {
             let actionAttack = true;
             
@@ -606,27 +622,16 @@ class Gameboard {
             notCurrentPlayer.life = newLife;    
             newLife = notCurrentPlayer.life;
 
-            $('#playerLifeInfo' + notCurrentPlayer.id).html("Life : "+ newLife);
-            $('#playerPanelLifeInfo' + notCurrentPlayer.id).html("Life : "+ newLife);
+            $('#playerLifeInfo' + notCurrentPlayer.id).html("Life : " + newLife);
+            $('#playerPanelLifeInfo' + notCurrentPlayer.id).html("Life : " + newLife);
             $("#lifeBarPlayer" + notCurrentPlayer.id).val(newLife);
             $("#lifeBarPanelPlayer" + notCurrentPlayer.id).val(newLife);
 
-            if(notCurrentPlayer.life <= 50) {
-                $('#lifeBarPlayer' + currentPlayer.id).addClass("redMidLife");
-            }
-
-            if(notCurrentPlayer.life <= 0) {
-                if(typeof $(`#fightTemplate${currentPlayer.id}`) != 'undefined' || 
-                   typeof $(`#fightTemplate${notCurrentPlayer.id}`) != 'undefined') {
-                    $('.fight').remove();
-                }
-                $(FinishGameTemplate).appendTo(".gameBoardContainer");
-            }
-            
             this.tourATourFight(currentPlayer, actionAttack, notCurrentPlayer);
-
+            
         });
 
+        //Bouton se défendre
         $("#defendBtn" + currentPlayer.id).click((e) => {
             let actionDefend = true;           
             
@@ -641,41 +646,28 @@ class Gameboard {
             newLife = notCurrentPlayer.life;
 
             $('#playerLifeInfo' + notCurrentPlayer.id).html("Life : " + newLife);
-
             $('#playerPanelLifeInfo' + notCurrentPlayer.id).html("Life : " + newLife);
-
             $("#lifeBarPlayer" + currentPlayer.id).val(newLife);
-
             $("#lifeBarPanelPlayer" + notCurrentPlayer.id).val(newLife);
-        
-            if(newLife <= 50) {
-                $('#lifeBarPlayer' + currentPlayer.id).addClass("redMidLife");
-            }
-
-            if(notCurrentPlayer.life <= 0) {
-                if(typeof $(`#fightTemplate${currentPlayer.id}`) != 'undefined' || 
-                   typeof $(`#fightTemplate${notCurrentPlayer.id}`) != 'undefined') {
-                    $('.fight').remove();
-                }
-                $(FinishGameTemplate).appendTo(".gameBoardContainer");
-            }
 
             this.tourATourFight(currentPlayer, actionDefend, notCurrentPlayer);
 
         });
+
     }
 
     printWinnerPlayer(currentPlayer, notCurrentPlayer) {
-
-        if(currentPlayer.life < notCurrentPlayer.life ) {
-            return notCurrentPlayer;
-        } else if (notCurrentPlayer.life < currentPlayer.life) {
+       
+        //on compare la vie des joueur pour définir le gagnant de la partie
+        if(currentPlayer.life > notCurrentPlayer.life) {
             return currentPlayer.name;
+        } else {
+            return notCurrentPlayer.name;
         }
 
     } 
 
-    fightAction(target, notCurrentPlayerPosition, notCurrentPlayer) {
+    fightAction(target, notCurrentPlayer) {
 
         this.players.map((el) => {
             if (target === el.position+1) {
