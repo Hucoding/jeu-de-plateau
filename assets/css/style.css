@@ -253,6 +253,14 @@ body {
     margin: 20px;  
 }
 
+.errorMessage2,
+.errorMessage1 {
+    color: red;
+    font-family: 'Bangers', cursive;
+    font-size: 15px;
+    margin: 20px;  
+}
+
 progress {
     background-color: green;
 }

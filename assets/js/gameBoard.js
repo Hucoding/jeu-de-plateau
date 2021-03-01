@@ -90,7 +90,6 @@ class Gameboard {
                 playerId,
                 playerName,
                 playerIndex,
-                weaponId,
                 this.playerWeaponOnHands = new Weapon(
                     weaponId,
                     playerIndex,
@@ -196,14 +195,12 @@ class Gameboard {
                 
                 if ($("#createName" + playerId).val().length === 0) {
 
-                    $("#createName" + playerId).css("border", "1px solid red");
-                    
-                    $("#playerName" + playerId)
-                    .text("Entrez votre nom !")
-                    .css({
-                        color: "red",
-                        "font-weight": "bold",
-                    });
+                    let errorMessage = $("<p></p>");
+                    errorMessage.attr("class", "errorMessage" + playerId);
+                    errorMessage.attr("id", "errorMessage" + playerId);
+                    errorMessage.append("Entrez votre nom !");
+
+                    $("#playerName" + playerId).append(errorMessage);
 
                 } else {
 
@@ -226,7 +223,7 @@ class Gameboard {
                             pseudo : ${player.name}
                         </div>
                         <div class="playerWeaponInfo" id="playerWeaponInfo${player.id}">
-                            Weapon : ${currentPlayerWeaponName}
+                            <p id="weaponName${player.id}"> Weapon : ${currentPlayerWeaponName} </p>
                         </div>
                         <div class="playerLifeInfo${player.id}" id="playerPanelLifeInfo${player.id}">
                             Life : ${player.life}
@@ -235,6 +232,10 @@ class Gameboard {
                         `;
 
                         $(mytemplate).appendTo(".playerPanel" + player.id);
+
+                        if(typeof $('#errorMessage' + player.id) != 'undefined') {
+                            $('#errorMessage' + player.id).remove();
+                        }
 
                     }
 
@@ -419,7 +420,6 @@ class Gameboard {
             this.miseEnSurbrillance(
                 this.players[this.nextPlayer(currentPlayer.id)]
             );
-
         });
     }
 
@@ -432,7 +432,6 @@ class Gameboard {
         } else {
             return (theElement[0][attrObject] = newValue);
         }
-
     }
 
     toutATour(currentPlayer, target) {
@@ -445,7 +444,6 @@ class Gameboard {
             if (nextPlayer != currentPlayer.id) {
                 this.miseEnSurbrillance(this.players[nextPlayer]); 
             }
-
         }
     }
 
@@ -465,11 +463,9 @@ class Gameboard {
     updateWeapon(tableWeapons, currentPlayer) {
         let self = this;
 
-        let oldIdWeapon = currentPlayer.idWeapon;
-
         tableWeapons.filter(function (weapon) {
 
-            if(weapon.position === currentPlayer.position && oldIdWeapon != weapon.id) {
+            if(weapon.position === currentPlayer.position) {
 
                 currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["position"] = currentPlayer.position;
 
@@ -487,6 +483,15 @@ class Gameboard {
                 currentPlayer.weaponOnHands.push(newWeaponOnHands);
 
                 $("td#" + currentPlayer.position + " > img.playerWithStartWeapon").addClass("playWith" + currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]);
+
+                if(typeof $('#playerWeaponInfo' + currentPlayer.id) != 'undefined') {
+                    $('#weaponName' + currentPlayer.id).empty();
+                    let newWeaponName = $('<p></p>');
+                    newWeaponName.attr("class", "weaponName" + currentPlayer.id);
+                    newWeaponName.attr("id", "weaponName" + currentPlayer.id);
+
+                    $('#weaponName' + currentPlayer.id).append('Weapon : ' + currentPlayer.weaponOnHands[currentPlayer.weaponOnHands.length-1]["name"]);
+                }
 
                 currentPlayer.weaponOnHands.forEach(function(newWeapon){ 
                     delete newWeapon.position; 
@@ -520,7 +525,6 @@ class Gameboard {
 
         let winner = this.printWinnerPlayer(currentPlayer, notCurrentPlayer);
 
-        
         $("#gameBoard").remove();
         $("#createNameContainer" + currentPlayer.id).remove();
         $("#createNameContainer" + notCurrentPlayer.id).remove();
@@ -564,8 +568,8 @@ class Gameboard {
             <button class="replayGame${currentPlayer.id}" onclick="location.reload()"; id="replayGame${currentPlayer.id}">
                 <i class="fas fa-redo"></i> Replay the game
             </button>
-            <button class="stopGame${currentPlayer.id}" id="stopGame${currentPlayer.id}">
-                <i class="far fa-hand-paper"></i> Stop the game
+            <button onclick='window.open("https://google.com","_self","","")' class="stopGame${currentPlayer.id}" id="stopGame${currentPlayer.id}">
+                <i class="far fa-hand-paper"></i> Quit the game
             </button>
         </div>
         `;

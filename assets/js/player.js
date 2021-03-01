@@ -1,9 +1,8 @@
 class Player {
-    constructor(id, name, position, idWeapon, weaponOnHands){
+    constructor(id, name, position, weaponOnHands){
         this.id = id; 
         this.name = name; 
         this.position = position; 
-        this.idWeapon = idWeapon;
         this.weaponOnHands = [weaponOnHands];
         this.life = maxLife;
         this.isLife = true;
