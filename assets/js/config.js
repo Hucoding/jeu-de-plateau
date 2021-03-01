@@ -14,12 +14,6 @@ let numberOfPlayers = 2;
 let maxLife = 100;
 
 let numberMove = 4;
-
-//Nom du skin utilisé par le joueur
-let playerSkin = "alien-fork";
-
-//Couleur de fond des joueurs
-let playerBackgroundColor = ["royalblue", "#ff3333"]; //blue , red
  
 function randomNumberWeapon() {
     return Math.floor(Math.random() * Math.floor(numberOfWeapons));
@@ -31,7 +25,3 @@ let cellsObsctacles = [];
 let cellsPlayers = [];
 
 let target;
-
-let tourOfPlayer = 0;
-
-let defaultIdWeapon = 5;

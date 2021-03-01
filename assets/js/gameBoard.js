@@ -32,9 +32,8 @@ class Gameboard {
     generateObstacles() {
         let maxCells = this.rows * this.columns - 1;
 
-        let obstacleIndex = -1;
-
         for (let i = 0; i < numberOfObstacles; i++) {
+            let obstacleIndex = -1;
             do {
                 //nombre aléatoire * nombre maximum de cellules
                 obstacleIndex = Math.round(Math.random() * maxCells);
@@ -56,9 +55,8 @@ class Gameboard {
     generateWeapons() {
         let maxCells = this.rows * this.columns - 1;
 
-        let weaponIndex = -1;
-
         for (let i = 0; i < numberOfWeapons; i++) {
+            let weaponIndex = -1;
             do {
                 weaponIndex = Math.round(Math.random() * maxCells);
             } while (!this.cellIsFree(weaponIndex));
@@ -76,17 +74,16 @@ class Gameboard {
 
         let maxCells = this.rows * this.columns - 1;
 
-        let playerIndex = -1;
-
         for (let i = 0; i < numberOfPlayers; i++) {
+            let playerIndex = -1;
             do {
                 playerIndex = Math.round(Math.random() * maxCells);
             } while (!this.cellIsFree(playerIndex));
 
             let firstWeapon = "Fork";
-            let firstWeaponDamage = 5;
+            let firstWeaponDamage = 10;
             let playerId = i+1;
-            let playerName = "Joueur" + "_" + `${playerId}`;
+            let playerName = "Joueur_" + `${playerId}`;
             let weaponId = this.weapons.length;
 
             let player = new Player(
@@ -580,15 +577,15 @@ class Gameboard {
             $("#lifeBarPlayer" + currentPlayer.id).progressbar({ value: notCurrentPlayerLife });
 
             if(notCurrentPlayer.life <= 50) {
-                if(typeof $("#lifeBarPanelPlayer" + currentPlayer.id) != 'undefined') {
-                    $('#lifeBarPanelPlayer'+currentPlayer.id).addClass("redMidLife");
+                if(typeof $("#lifeBarPanelPlayer" + notCurrentPlayer.id) != 'undefined' ||
+                typeof $("#lifeBarPanelPlayer" + currentPlayer.id) != 'undefined') {
+                    $('#lifeBarPanelPlayer' + notCurrentPlayer.id).addClass("redMidLife");
                 }
-                $('#lifeBarPlayer'+currentPlayer.id).addClass("redMidLife");
+                $('#lifeBarPlayer' + currentPlayer.id).addClass("redMidLife");
             }
 
-            if(notCurrentPlayer.life <= 0) {
-                if(typeof $("#fightTemplate" + currentPlayer.id) != 'undefined' || 
-                typeof $("#fightTemplate" + notCurrentPlayer.id) != 'undefined') {
+            if(notCurrentPlayer.life <= 0 || currentPlayer.life <= 0) {
+                if(typeof $("#fightTemplate" + currentPlayer.id) != 'undefined') {
                     $('.fight').remove();
                 }
                 $(FinishGameTemplate).appendTo(".gameBoardContainer");
@@ -667,6 +664,7 @@ class Gameboard {
 
     } 
 
+    //fonction qui permet le déclenchement d'un combat
     fightAction(target, notCurrentPlayer) {
 
         this.players.map((el) => {

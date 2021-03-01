@@ -6,19 +6,19 @@ class Weapon {
         this.name = name;
         switch(this.id) {
             case 0:
-                this.damage = 5;
+                this.damage = 10;
                 this.name = "Fork";
             break;
             case 1:
-                this.damage = 10;
+                this.damage = 15;
                 this.name = "Lazer";
             break;
             case 2:
-                this.damage = 15;
+                this.damage = 20;
                 this.name = "Maxi";
             break;
             case 3:
-                this.damage = 20;
+                this.damage = 25;
                 this.name = "Mega";
             break;
 
